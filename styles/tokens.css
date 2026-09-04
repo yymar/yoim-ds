@@ -1,0 +1,459 @@
+/* @yoim/ds: tokens. Eén waarheid voor kleur, typografie, maten, thema en
+   de Tailwind-koppeling. Apps importeren dit na `@import "tailwindcss"`. */
+
+/*
+ * Designtokens, overgenomen uit de Liquid Glass-overdracht
+ * (design_handoff_liquid_glass_v5/globals-tokens.css). Dit is de enige plek
+ * waar kleuren, typografie, maten en tijden worden vastgelegd; componenten
+ * verwijzen altijd naar een token en nooit naar een losse hex-waarde.
+ *
+ * Thema: de app volgt de telefoon, tenzij iemand in de zijbalk licht of donker
+ * kiest. Die keuze zet `data-thema` op `<html>`. Eén scherm gaat daar weer
+ * overheen, en dat is het inlogscherm: dat volgt het uur, want daar gaat het
+ * over. Het zet `data-thema` op zijn eigen `main`, en de `:has()`-regels
+ * hieronder halen dat naar `:root` toe. Dat moet via `:root`, want tokens die
+ * daar staan zijn al uitgerekend tegen de tijd dat een kind ze gebruikt.
+ */
+
+/* ---- tokens/colors.css — light ---- */
+:root {
+  /* Olive-linen neutrals — warm, botanical, no cold grey. */
+  --surface:#f7f6f1;
+  --surface-raised:#ffffff;
+  --surface-sunken:#eceae1;
+  --border:#dcd9cb;
+  --border-strong:#c9c6b4;
+  --text:#1c1e18;
+  --text-muted:#6f7266;
+  --text-subtle:#9a9c8f;
+
+  /* The one action colour. */
+  --accent:#6b7f4b;
+  --accent-hover:#566639;
+  --accent-fg:#ffffff;
+  --accent-soft:#e8eddc;
+
+  --danger:#c0392b;
+  --success:#3f7a58;
+
+  /* Support tones — quiet emphasis, and the butter-gold used sparingly for warmth. */
+  --olijf-diep:#4c5c35;
+  --botergoud:#c2941f;
+  --botergoud-soft:#f7ecd2;
+
+  /* Horizon planes for the login screen — one resolved colour per moment of the day, because
+  mixing a support tone into --surface flips direction between the two themes. */
+  --lucht-dageraad:#f7e7cd;
+  --lucht-ochtend:#f5ecd6;
+  --lucht-middag:#f0e9d2;
+  --lucht-schemer:#f1e0c6;
+  --lucht-avond:#efe4cc;
+  --lucht-nacht:#e6e4da;
+  --lucht-lijn:#ddd0ac;
+  /* At dawn and dusk the horizon line is the brightest thing in the sky; at night it
+  is almost gone. One property, most of the difference. */
+  --lucht-lijn-fel:#d3bf8c;
+  --lucht-lijn-stil:#dedbcd;
+  /* The low light, as an rgb triplet so each moment can set its own alpha. Position
+  and strength live in the moment table, not here: they are geometry, not colour. */
+  --lucht-gloed:194 148 31;
+
+  /* Category colours, taken from the Notion page so the list looks familiar.
+  Each pair is text + background. */
+  --cat-green:#2e7d55;   --cat-green-bg:#e3f1e8;
+  --cat-red:#c0392b;     --cat-red-bg:#fbe6e3;
+  --cat-yellow:#9a7209;  --cat-yellow-bg:#fcf1d8;
+  --cat-gray:#5f5851;    --cat-gray-bg:#eeeae6;
+  --cat-blue:#2563a8;    --cat-blue-bg:#e2edf9;
+  --cat-brown:#8a5a34;   --cat-brown-bg:#f4e8dd;
+  --cat-pink:#a83a70;    --cat-pink-bg:#fbe4ef;
+  --cat-purple:#6b46a8;  --cat-purple-bg:#ece4f9;
+  --cat-orange:#b5591a;  --cat-orange-bg:#fbeadd;
+
+  /* Macro's, in de lijn van MyFitnessPal maar in onze hue en verzadiging. Amber
+     is een stap donkerder dan de eerste keus: op 14px semibold moet 4,5:1 gehaald
+     worden en #a8761a bleef op 3,98 steken. */
+  --macro-kcal:#2563a8;
+  --macro-koolhydraten:#2b7d74;
+  --macro-eiwit:#8f6410;
+  --macro-vet:#6f4d95;
+
+  /* Household members — from the allowlist in
+  supabase/migrations/20260820200000_profiles_and_allowlist.sql */
+  --member-yoran:#3d7dff;
+  --member-imke:#ff6b3d;
+
+  /* App-icoon - het merkteken is een vlak plus een markkleur, per thema
+  vastgelegd. Licht = "Linnen . olijf diep", donker = "Olijf . donker".
+  Zie brand/AppIcon.html in het design system. */
+  --icon-bg:#eceae1;
+  --icon-mark:#4c5c35;
+
+  /* PWA theme colours */
+  --theme-light:#f7f6f1;
+  --theme-dark:#131511;
+}
+
+  /* ---- tokens/typography.css ---- */
+:root {
+  /* One family: Instrument Sans. No display face, no serif, no mono. */
+  --font-sans:var(--font-app-sans),ui-sans-serif,system-ui,sans-serif;
+
+  --weight-regular:400;
+  --weight-medium:500;
+  --weight-semibold:600;
+
+  /* The sizes the app actually uses (Tailwind steps, written out). */
+  --text-wordmark:4.25rem;  /* 68px — the login wordmark, and nothing else */
+  --lh-wordmark:1;
+  --text-hero:2.25rem;      /* text-4xl — login title */
+  --lh-hero:1.1;
+  --text-title:1.875rem;    /* text-3xl — page titles */
+  --lh-title:1.15;
+  --text-heading:1.25rem;   /* text-xl — section headings */
+  --lh-heading:1.3;
+  --text-lead:1rem;         /* text-base — body and controls */
+  --lh-lead:1.625;
+  --text-body:0.9375rem;    /* text-[15px] — list rows */
+  --lh-body:1.5;
+  --text-small:0.875rem;    /* text-sm — helper text */
+  --lh-small:1.45;
+  --text-caption:0.8125rem; /* text-[13px] — provenance lines */
+  --lh-caption:1.35;
+  --text-nav:0.6875rem;     /* text-[0.6875rem] — bottom-nav labels */
+  --lh-nav:1.2;
+
+  --tracking-tight:-0.02em;
+  --tracking-wide:0.025em;
+}
+
+  /* ---- tokens/spacing.css ---- */
+:root {
+  /* Tailwind's 4px scale, as used in the app. */
+  --space-1:0.25rem;--space-2:0.5rem;--space-3:0.75rem;--space-4:1rem;
+  --space-5:1.25rem;--space-6:1.5rem;--space-8:2rem;--space-10:2.5rem;--space-12:3rem;
+
+  /* Concentric, continuous geometry. Shapes are poured, not cut: a control nested
+  inside a surface takes the parent radius minus the padding between them
+  (--radius-inset), so the two curves stay concentric. Controls are capsules. */
+  --radius-sm:0.625rem;
+  --radius:1.125rem;
+  --radius-lg:1.5rem;
+  --radius-xl:1.75rem;   /* sheets */
+  --radius-2xl:2.375rem; /* the screen's own corner, 390x844 standalone */
+  --radius-full:999px;
+  --radius-capsule:999px; /* buttons, chips, segmented controls */
+  --radius-inset:0.25rem; /* subtract per nesting level */
+
+  /* Minimum tap size. This list is used standing, one-handed, in a supermarket;
+  everything touchable meets it. */
+  --tap:3rem;
+
+  /* Layout: the app is one narrow column, centred. */
+  --content-max:32rem;   /* max-w-lg — list and week screens */
+  --content-narrow:24rem; /* max-w-sm — auth screens */
+  --gutter:1.5rem;       /* px-6 */
+  /* Bottom-nav height. Three things need to know it: the bar itself, the space under the
+  layout, and the input bar that sits exactly on top of it. `--nav-h` is the name the app
+  uses; `--nav-height` is kept as an alias. */
+  /* Breakpoints. Layout only — behaviour (hover, keyboard) is gated on capability
+  queries, because an iPad with a keyboard in a narrow window is not a phone.
+  Below --bp-breed nothing changes: the phone design is the source of truth. */
+  --bp-breed:745px;    /* OnderNavigatie becomes ZijNavigatie; column stays centred */
+  --bp-plannen:1120px; /* the planning view unlocks — Week + Recepten only */
+  /* 63,2px, gemeten aan de capsule zelf: 6px padding + 1px rand + 6px padding + 22px
+  icoon + 3px gap + 13,2px label + 5px padding + 1px rand + 6px padding. De balk maat
+  zichzelf naar zijn inhoud; dit token reserveert alleen de ruimte eronder, dus het moet
+  de gemeten hoogte zijn en niet een rond getal. Stond op 3,875rem (62px): die telling
+  nam 11px voor de labelregel, maar dat is de font-size en de regel is 11 x 1,2 = 13,2px
+  hoog, en de twee randen ontbraken. Nagemeten in de browser: 63,19px. */
+  --nav-h:3.95rem;
+  --rail-b:15rem;      /* ZijNavigatie width — label beside the icon, plus room for the voet */
+  /* The condensed tab bar: glass shrinks to a capsule of icons on scroll. */
+  /* 50px, op dezelfde manier gemeten als --nav-h: 6px padding + 1px rand + 6px
+  padding + 22px icoon + 3px gap + 5px padding + 1px rand + 6px padding. Het
+  label is weg maar blijft een flexitem, dus de gap van 3px telt gewoon mee.
+  Stond op 2,75rem (44px) en dat is nooit nagemeten; net als bij --nav-h
+  reserveert dit token alleen de ruimte eronder, dus het moet de gemeten hoogte
+  zijn en geen rond getal. */
+  --nav-h-klein:3.125rem;
+  --nav-height:var(--nav-h);
+}
+
+  /* ---- tokens/elevation.css ---- */
+:root {
+  --shadow-card:0 1px 2px rgb(28 30 24 / 0.05),0 1px 3px rgb(28 30 24 / 0.04);
+  --shadow-raised:0 4px 16px rgb(28 30 24 / 0.10);
+  --ring-focus:0 0 0 3px color-mix(in srgb,var(--accent) 32%,transparent);
+  --blur-nav:blur(8px);
+}
+
+  /* ---- tokens/motion.css ---- */
+:root {
+  /* Motion is the material behaving, not animation added on top. Glass morphs,
+  condenses and grows out of whatever summoned it; everything else still holds
+  still. Two curves only: --ease for colour, --ease-glas for geometry. */
+  --dur-fast:150ms;
+  --dur-base:200ms;
+  --dur-glas:300ms;
+  --dur-morf:420ms;
+  --ease:cubic-bezier(.4,0,.2,1);
+  --ease-glas:cubic-bezier(.32,.72,0,1);
+  --ease-morf:cubic-bezier(.2,.9,.1,1);
+  /* Physical press: the surface flexes under the finger. */
+  --press-scale:0.97;
+}
+@media (prefers-reduced-motion: reduce) {
+  :root {
+  --dur-fast:0ms;
+  --dur-base:0ms;
+  --dur-glas:0ms;
+  --dur-morf:0ms;
+  --press-scale:1;
+  }}
+
+  /* ---- tokens/glass.css — light ---- */
+:root {
+  /* Tier 1 — thin. Chips, segmented controls, small floating buttons: surfaces
+  small enough that you read what is behind them. */
+  --glass-thin:rgb(255 255 255 / 0.52);
+  --glass-blur-thin:saturate(1.8) blur(12px);
+  /* Tier 2 — regular. The default: bottom navigation, invoerbalk, floating bars. */
+  --glass-tint:rgb(255 255 255 / 0.72);
+  --glass-blur:saturate(1.8) blur(24px);
+  /* Tier 3 — thick. Sheets and anything with type over busy content. */
+  --glass-tint-strong:rgb(255 255 255 / 0.78);
+  --glass-blur-thick:saturate(1.8) blur(40px);
+  /* The one action colour, as glass. Never a second accent. */
+  --glass-accent:rgb(107 127 75 / 0.86);
+
+  /* Depth through light, not shadow: a bright specular rim on top, a faint
+  returning light underneath, and a 1px lensed edge around the whole shape. */
+  --glass-border:rgb(220 217 203 / 0.70);
+  --glass-highlight:inset 0 1px 0 rgb(255 255 255 / 0.70);
+  --glass-rim:inset 0 1px 0 rgb(255 255 255 / 0.70),inset 0 -1px 0 rgb(255 255 255 / 0.22);
+  --glass-sheen:linear-gradient(180deg,rgb(255 255 255 / 0.22) 0%,rgb(255 255 255 / 0.04) 42%,rgb(255 255 255 / 0) 100%);
+  /* Ambient depth, three tiers deep. Elevation is refraction first, these second. */
+  --glass-lift-1:0 2px 10px rgb(28 30 24 / 0.06);
+  --glass-shadow:0 8px 28px rgb(28 30 24 / 0.10);
+  --glass-lift-3:0 -2px 40px rgb(28 30 24 / 0.16);
+  --glass-veil:rgb(28 30 24 / 0.18);
+  /* Ambient depth for the content plane. Glass over one flat colour is
+  indistinguishable from an opaque bar, so the canvas carries a very soft
+  large-scale linen wash for the blur to sample. Subtle enough that rows stay
+  flat and legible on top; this is not a decorative gradient. */
+  --canvas-wash:radial-gradient(130% 90% at 18% -8%,#fdfcf8 0%,#f6f4ec 42%,#efece0 100%),radial-gradient(60% 45% at 88% 26%,rgb(194 148 31 / 0.05),rgb(194 148 31 / 0) 70%);
+}
+
+/* De donkere kant, in drie gevallen: de telefoon staat op donker en niemand
+   koos anders, iemand koos donker in de zijbalk, of een scherm dwingt donker af.
+   De regels staan uitgeschreven omdat CSS een blok nu eenmaal niet kan delen
+   tussen een media query en een gewone selector.
+
+   Een scherm dat het thema zet wint van de keuze in de zijbalk: het inlogscherm
+   volgt het uur, en dat is geen voorkeur maar het decor van dat ene scherm. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-thema="licht"]):not(:has([data-thema="licht"])) {
+    --surface:#131511;
+    --surface-raised:#1d201a;
+    --surface-sunken:#0e100d;
+    --border:#2c3026;
+    --border-strong:#3d4235;
+    --text:#eff1ea;
+    --text-muted:#9aa091;
+    --text-subtle:#767c6d;
+
+    --accent:#9cb573;
+    --accent-hover:#b3ca8b;
+    --accent-fg:#161a12;
+    --accent-soft:#212617;
+
+    --danger:#ef7767;
+    --success:#68b389;
+
+    --olijf-diep:#c3d6a1;
+    --botergoud:#d9b458;
+    --botergoud-soft:#2b2515;
+
+    --lucht-dageraad:#2e2618;
+    --lucht-ochtend:#2a2519;
+    --lucht-middag:#262619;
+    --lucht-schemer:#2a2114;
+    --lucht-avond:#241f14;
+    --lucht-nacht:#0f120d;
+    --lucht-lijn:#3a3324;
+    --lucht-lijn-fel:#4d4029;
+    --lucht-lijn-stil:#23261f;
+    --lucht-gloed:214 172 74;
+
+    --cat-green:#6ec295;   --cat-green-bg:#1b2a22;
+    --cat-red:#ef8a7c;     --cat-red-bg:#2e1d1a;
+    --cat-yellow:#d6b45c;  --cat-yellow-bg:#2b2517;
+    --cat-gray:#a9a099;    --cat-gray-bg:#241f1b;
+    --cat-blue:#75aae4;    --cat-blue-bg:#1a2331;
+    --cat-brown:#c99a6f;   --cat-brown-bg:#2a2018;
+    --cat-pink:#e389b5;    --cat-pink-bg:#2d1c26;
+    --cat-purple:#ab8fe0;  --cat-purple-bg:#241e33;
+    --cat-orange:#e9945f;  --cat-orange-bg:#2d1f16;
+
+    --macro-kcal:#8ab6e8;
+    --macro-koolhydraten:#6fc2b8;
+    --macro-eiwit:#dbb35f;
+    --macro-vet:#a892d6;
+
+    --icon-bg:#131511;
+    --icon-mark:#9cb573;
+
+    --shadow-card:0 1px 2px rgb(0 0 0 / 0.4),0 1px 3px rgb(0 0 0 / 0.3);
+    --shadow-raised:0 4px 16px rgb(0 0 0 / 0.5);
+
+    --glass-thin:rgb(29 32 26 / 0.48);
+    --glass-blur-thin:saturate(1.8) blur(12px);
+    --glass-tint:rgb(29 32 26 / 0.66);
+    --glass-blur:saturate(1.8) blur(24px);
+    --glass-tint-strong:rgb(29 32 26 / 0.76);
+    --glass-blur-thick:saturate(1.8) blur(40px);
+    --glass-accent:rgb(156 181 115 / 0.82);
+    --glass-border:rgb(255 255 255 / 0.12);
+    --glass-highlight:inset 0 1px 0 rgb(255 255 255 / 0.16);
+    --glass-rim:inset 0 1px 0 rgb(255 255 255 / 0.16),inset 0 -1px 0 rgb(255 255 255 / 0.05);
+    --glass-sheen:linear-gradient(180deg,rgb(255 255 255 / 0.08) 0%,rgb(255 255 255 / 0.02) 42%,rgb(255 255 255 / 0) 100%);
+    --glass-lift-1:0 2px 10px rgb(0 0 0 / 0.35);
+    --glass-shadow:0 8px 28px rgb(0 0 0 / 0.55);
+    --glass-lift-3:0 -2px 40px rgb(0 0 0 / 0.62);
+    --glass-veil:rgb(0 0 0 / 0.34);
+    --canvas-wash:radial-gradient(130% 90% at 18% -8%,#1b1f19 0%,#15170f 46%,#101208 100%),radial-gradient(60% 45% at 88% 26%,rgb(156 181 115 / 0.07),rgb(156 181 115 / 0) 70%);
+  }
+}
+
+:root[data-thema="donker"]:not(:has([data-thema="licht"])),
+:root:has([data-thema="donker"]) {
+  --surface:#131511;
+  --surface-raised:#1d201a;
+  --surface-sunken:#0e100d;
+  --border:#2c3026;
+  --border-strong:#3d4235;
+  --text:#eff1ea;
+  --text-muted:#9aa091;
+  --text-subtle:#767c6d;
+
+  --accent:#9cb573;
+  --accent-hover:#b3ca8b;
+  --accent-fg:#161a12;
+  --accent-soft:#212617;
+
+  --danger:#ef7767;
+  --success:#68b389;
+
+  --olijf-diep:#c3d6a1;
+  --botergoud:#d9b458;
+  --botergoud-soft:#2b2515;
+
+  --lucht-dageraad:#2e2618;
+  --lucht-ochtend:#2a2519;
+  --lucht-middag:#262619;
+  --lucht-schemer:#2a2114;
+  --lucht-avond:#241f14;
+  --lucht-nacht:#0f120d;
+  --lucht-lijn:#3a3324;
+  --lucht-lijn-fel:#4d4029;
+  --lucht-lijn-stil:#23261f;
+  --lucht-gloed:214 172 74;
+
+  --cat-green:#6ec295;   --cat-green-bg:#1b2a22;
+  --cat-red:#ef8a7c;     --cat-red-bg:#2e1d1a;
+  --cat-yellow:#d6b45c;  --cat-yellow-bg:#2b2517;
+  --cat-gray:#a9a099;    --cat-gray-bg:#241f1b;
+  --cat-blue:#75aae4;    --cat-blue-bg:#1a2331;
+  --cat-brown:#c99a6f;   --cat-brown-bg:#2a2018;
+  --cat-pink:#e389b5;    --cat-pink-bg:#2d1c26;
+  --cat-purple:#ab8fe0;  --cat-purple-bg:#241e33;
+  --cat-orange:#e9945f;  --cat-orange-bg:#2d1f16;
+
+  --macro-kcal:#8ab6e8;
+  --macro-koolhydraten:#6fc2b8;
+  --macro-eiwit:#dbb35f;
+  --macro-vet:#a892d6;
+
+  --icon-bg:#131511;
+  --icon-mark:#9cb573;
+
+  --shadow-card:0 1px 2px rgb(0 0 0 / 0.4),0 1px 3px rgb(0 0 0 / 0.3);
+  --shadow-raised:0 4px 16px rgb(0 0 0 / 0.5);
+
+  --glass-thin:rgb(29 32 26 / 0.48);
+  --glass-blur-thin:saturate(1.8) blur(12px);
+  --glass-tint:rgb(29 32 26 / 0.66);
+  --glass-blur:saturate(1.8) blur(24px);
+  --glass-tint-strong:rgb(29 32 26 / 0.76);
+  --glass-blur-thick:saturate(1.8) blur(40px);
+  --glass-accent:rgb(156 181 115 / 0.82);
+  --glass-border:rgb(255 255 255 / 0.12);
+  --glass-highlight:inset 0 1px 0 rgb(255 255 255 / 0.16);
+  --glass-rim:inset 0 1px 0 rgb(255 255 255 / 0.16),inset 0 -1px 0 rgb(255 255 255 / 0.05);
+  --glass-sheen:linear-gradient(180deg,rgb(255 255 255 / 0.08) 0%,rgb(255 255 255 / 0.02) 42%,rgb(255 255 255 / 0) 100%);
+  --glass-lift-1:0 2px 10px rgb(0 0 0 / 0.35);
+  --glass-shadow:0 8px 28px rgb(0 0 0 / 0.55);
+  --glass-lift-3:0 -2px 40px rgb(0 0 0 / 0.62);
+  --glass-veil:rgb(0 0 0 / 0.34);
+  --canvas-wash:radial-gradient(130% 90% at 18% -8%,#1b1f19 0%,#15170f 46%,#101208 100%),radial-gradient(60% 45% at 88% 26%,rgb(156 181 115 / 0.07),rgb(156 181 115 / 0) 70%);
+}
+
+/* Tokens die de app zelf nodig heeft en die niet uit het design system komen.
+   Ze staan apart zodat een volgende export van globals-tokens.css ze niet
+   meeneemt en ook niet wegvaagt. */
+:root {
+  /* De zwevende chrome onderaan: hoe ver hij van de rand staat, hoeveel ruimte
+     de inhoud eronder vrijlaat, en hoe hoog de navigatie op dit moment is. */
+  --onder-b: 0.75rem;
+  --onder-ruimte: 13rem;
+  --nav-nu: var(--nav-h);
+  /* De ingeklapte capsule: drie items van 22px icoon plus 2x14px padding, en
+     2x6px om de balk heen. Als vaste maat, want `width: auto` is niet te
+     interpoleren en dan springt de balk in plaats van te krimpen. De padding
+     van de items staat vast, zodat er bij het inklappen maar één maat beweegt. */
+  --nav-b-klein: 10.125rem;
+
+  /* De tray op het inlogscherm en onder een recept: 34px met 8px padding, dus
+     de knop van 52px komt op 26 uit en dat is precies een capsule. De
+     overdracht noemt die twee getallen in tekst maar niet als token. */
+  --radius-tray: 2.125rem;
+  --radius-tray-knop: 1.625rem;
+
+  /* De ingeklapte balk bovenaan: 44px knop plus 2x 10px padding. Schermen
+     waar die balk altijd staat, zoals het recept, moeten er ruim onderdoor. */
+  --kop-h: 4rem;
+}
+
+/* De twee layoutbreekpunten als variant, zodat een component ze met een
+   gewone utility kan aanspreken (`plannen:hidden`, `hidden plannen:flex`) in
+   plaats van met een eigen klasse die tegen de utilities in moet vechten.
+   Tailwind kan geen var() in een media query, dus de waarden staan hier
+   letterlijk; ze horen gelijk te blijven aan --bp-breed en --bp-plannen. */
+@custom-variant breed (@media (min-width: 745px));
+@custom-variant plannen (@media (min-width: 1120px));
+
+@theme inline {
+  --color-surface: var(--surface);
+  --color-surface-raised: var(--surface-raised);
+  --color-surface-sunken: var(--surface-sunken);
+  --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
+  --color-text: var(--text);
+  --color-text-muted: var(--text-muted);
+  --color-text-subtle: var(--text-subtle);
+
+  --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
+  --color-accent-fg: var(--accent-fg);
+  --color-accent-soft: var(--accent-soft);
+  --color-danger: var(--danger);
+  --color-success: var(--success);
+
+  --radius-sm: var(--radius-sm);
+  --radius-DEFAULT: var(--radius);
+  --radius-lg: var(--radius-lg);
+  --radius-xl: var(--radius-xl);
+
+  --font-sans: var(--font-app-sans), ui-sans-serif, system-ui, sans-serif;
+}

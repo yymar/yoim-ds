@@ -1,0 +1,348 @@
+/* @yoim/ds: de materiaallaag en de generieke schermonderdelen. */
+
+/*
+ * De materiaallaag. Alle chrome is glas; dit is de enige plek waar het
+ * uitgeschreven staat.
+ *
+ * Deze klassen staan in @layer components zodat een Tailwind-utility ze kan
+ * overrulen. `.sheen` zet position: relative alleen om zijn ::before ergens
+ * aan op te hangen, en mag nooit winnen van een `fixed` of `absolute` die het
+ * oppervlak zelf positioneert.
+ *
+ * NOOIT een buitenschaduw op een oppervlak met backdrop-filter. De schaduw
+ * vergroot de paint-bounds en Chromium smeert de geblurde achtergrond over die
+ * grotere rechthoek uit, wat zichtbaar scheurt wat erachter ligt. --glass-rim
+ * is inset en kost niets. Ambient schaduwen (--glass-lift-1) alleen op
+ * dekkende contentkaarten.
+ */
+@layer components {
+  .sheen {
+    position: relative;
+  }
+
+  .sheen::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: var(--glass-sheen);
+    pointer-events: none;
+  }
+
+  /* Alleen de standaard `backdrop-filter`, nooit `-webkit-backdrop-filter`
+     erbij. Lightning CSS beheert prefixes zelf op basis van de browsertargets;
+     schrijf je hem er met de hand achter, dan ziet hij twee keer dezelfde
+     property en houdt hij alleen de prefixversie over. Chrome honoreert die
+     niet meer, en dan is alle chrome een vlakke doorzichtige plaat zonder blur.
+     De overdracht zegt dat je de prefix er altijd naast moet zetten; met deze
+     toolchain doet dat precies het omgekeerde. */
+  .glas,
+  .glas-dun,
+  .glas-dik {
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--glass-rim);
+  }
+
+  .glas {
+    background: var(--glass-tint);
+    backdrop-filter: var(--glass-blur);
+  }
+
+  .glas-dun {
+    background: var(--glass-thin);
+    backdrop-filter: var(--glass-blur-thin);
+  }
+
+  .glas-dik {
+    background: var(--glass-tint-strong);
+    backdrop-filter: var(--glass-blur-thick);
+  }
+
+  /* De inhoudslaag: dekkend, met een ambient schaduw omdat daar geen blur
+     onder zit. Rijen worden gescheiden door een haarlijn, nooit door gaten. */
+  .kaart {
+    background: var(--surface-raised);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--glass-lift-1);
+    overflow: hidden;
+  }
+
+  .rij {
+    display: flex;
+    align-items: center;
+    gap: 0.875rem;
+    min-height: var(--tap);
+    padding: 0.6875rem 0.875rem;
+    border-top: 1px solid var(--border);
+    text-align: left;
+    transition: background var(--dur-fast) var(--ease);
+  }
+
+  .rij:first-child {
+    border-top: 0;
+  }
+
+  .rij:active {
+    background: var(--surface-sunken);
+  }
+
+  /* Een 11px signpost-kop: categoriekoppen, "In de kar", receptkoppen,
+     macrolabels. Niets wat je leest is uppercase, en niets boven 11px ooit. */
+  .kop {
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  /* De sheet groeit uit wat hem opriep; een fade vertelt niets. */
+  .morf[data-state="open"] {
+    animation: groeien var(--dur-morf) var(--ease-morf) both;
+  }
+
+  .opkomst {
+    animation: opkomen var(--dur-glas) var(--ease-glas) both;
+  }
+}
+
+@keyframes groeien {
+  from {
+    transform: translateY(28px) scale(0.92);
+    opacity: 0;
+  }
+  to {
+    transform: none;
+    opacity: 1;
+  }
+}
+
+@keyframes opkomen {
+  from {
+    transform: translateY(8px) scale(0.96);
+    opacity: 0;
+  }
+  to {
+    transform: none;
+    opacity: 1;
+  }
+}
+
+/* Het inlogscherm.
+
+   De tray zit in de DOM bij het woordmerk, want op een breed scherm hoort hij
+   daar ook te staan: direct onder "Twee telefoons, een huishouden", gelijk met
+   het woordmerk. Op de telefoon hoort hij onderaan, onder je duim, en daar
+   maakt `fixed` hem los van dat blok.
+
+   De waarde hieronder is --bp-breed; CSS kan geen var() in een media query. */
+.postertray {
+  position: fixed;
+  right: 1rem;
+  bottom: calc(1rem + env(safe-area-inset-bottom));
+  left: 1rem;
+  margin-inline: auto;
+  max-width: calc(var(--content-narrow) + 2rem);
+}
+
+@media (min-width: 745px) {
+  /* `relative` en niet `static`: in de flow doen ze hetzelfde, maar `.sheen`
+     hangt zijn ::before aan de eerstvolgende gepositioneerde ouder. Op static
+     valt het glansverloop terug op het woordmerkblok en ligt het als afgerond
+     paneel over YoIm heen. */
+  .postertray {
+    position: relative;
+    /* Terugzetten op auto is hier geen opruimwerk maar noodzaak: bij
+       `relative` is `left` een verschuiving en geen anker, dus de 1rem van de
+       telefoon zou de tray 16px naar rechts duwen en scheef onder het
+       woordmerk zetten. */
+    inset: auto;
+    /* Het woordmerkblok is sinds het merkteken een flexkolom met gap. Die gap
+       telt hier mee, want op deze breedte staat de tray in de flow, dus hij
+       gaat van de marge af. Anders zakt de tray 12px verder weg dan ontworpen. */
+    margin-top: calc(var(--space-8) - var(--space-3));
+    max-width: none;
+  }
+}
+
+/* De ene gecentreerde kolom van een scherm. */
+.schermkolom {
+  width: 100%;
+  max-width: var(--content-max);
+  margin-inline: auto;
+  padding-inline: 1.25rem;
+  padding-top: calc(env(safe-area-inset-top) + 1rem);
+  padding-bottom: calc(var(--onder-ruimte) + env(safe-area-inset-bottom));
+}
+
+/* De ingeklapte balk bovenaan. Hij hangt aan de werkruimte en niet aan het
+   venster: naast de zijbalk zou hij anders gecentreerd staan op iets wat de
+   inhoud niet is, en dan valt de titel links van de kolom. */
+.vastekop {
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  z-index: 20;
+  padding-top: env(safe-area-inset-top);
+}
+
+.vastekop-binnen {
+  display: flex;
+  gap: 0.75rem;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-inline: auto;
+  max-width: var(--content-max);
+  padding: 0.625rem 1.25rem;
+}
+
+@media (min-width: 745px) {
+  .vastekop {
+    /* Een app met een zijrail zet --rail-nu op --rail-b vanaf --bp-breed. */
+    left: var(--rail-nu, 0px);
+  }
+
+  .vastekop-binnen {
+    max-width: none;
+    padding-inline: 1.75rem;
+  }
+}
+
+/* Het ene overlaypatroon, met twee ankers (gebroken-regels §9). Onder --bp-breed
+   is dit exact de bottom sheet die er was; vanaf --bp-breed laat dezelfde
+   overlay de onderrand los en centreert hij. Zelfde inhoud, zelfde dikke
+   glaslaag, --radius-xl nu rondom, en een maximale breedte per inhoud via
+   --overlay-b. Geen buitenschaduw: glas met backdrop-filter draagt alleen
+   --glass-rim, de scrim levert de scheiding.
+
+   Dit blok staat met opzet na .sheen: die zet position:relative en mag nooit
+   winnen van de positionering hier.
+
+   De waarden hieronder zijn --bp-breed en --bp-plannen; CSS kan geen var() in
+   een media query. */
+@layer components {
+  .overlay {
+    position: fixed;
+    right: 0.5rem;
+    bottom: 0.5rem;
+    left: 0.5rem;
+    z-index: 50;
+    margin-inline: auto;
+    width: auto;
+    max-width: var(--content-max);
+    max-height: 85dvh;
+    border-radius: var(--radius-xl);
+    padding: 0.625rem 1rem calc(1.25rem + env(safe-area-inset-bottom));
+  }
+}
+
+@media (min-width: 745px) {
+  .overlay {
+    top: 50%;
+    right: auto;
+    bottom: auto;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    max-width: var(--overlay-b, 26rem);
+    /* Geen 60%-klem: de lange lijst groeit tot de vensterhoogte min 96px. */
+    max-height: calc(100dvh - 6rem);
+    padding: 1.25rem;
+  }
+
+  /* De morf eindigt op de centreertransform in plaats van op `none`, anders
+     springt de modal na de animatie naar linksboven. */
+  .overlay.morf[data-state='open'] {
+    animation-name: groeien-midden;
+  }
+}
+
+@keyframes groeien-midden {
+  from {
+    transform: translate(-50%, -50%) translateY(28px) scale(0.92);
+    opacity: 0;
+  }
+  to {
+    transform: translate(-50%, -50%);
+    opacity: 1;
+  }
+}
+
+/* Hover hangt aan een capability query en nooit aan een breedte: een iPad met
+   toetsenbord in een smal venster is geen telefoon. En hover is alleen een
+   tint, geen lift, geen scale, geen andere schaduw. */
+@media (hover: hover) and (pointer: fine) {
+  .rij:hover,
+  .zweeftint:hover {
+    background: var(--surface-sunken);
+  }
+}
+
+/* Tailwind v4 heeft `cursor: pointer` uit zijn preflight gehaald, dus een knop
+   staat op de browserstandaard en verandert de cursor niet. Links hebben dat
+   vanzelf; alles wat wij zelf tot besturing maken krijgt het hier. In @layer
+   base, zodat een cursor-utility er nog overheen kan. */
+@layer base {
+  button:not(:disabled),
+  select:not(:disabled),
+  summary,
+  [role="button"]:not([aria-disabled="true"]) {
+    cursor: pointer;
+  }
+}
+
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+html {
+  /* Voorkomt dat iOS inzoomt op invoervelden met een kleiner lettertype. */
+  -webkit-text-size-adjust: 100%;
+}
+
+/* Een element dat een thema scopet moet `color` opnieuw declareren. De regel
+   hierboven lost `var(--text)` op bij `<body>`, dus buiten elke thema-scope, en
+   die uitgerekende waarde erft door naar binnen. Zet een subtree dan het andere
+   thema, dan komt elke `currentColor` uit het verkeerde palet: witte chevrons
+   op een witte kaart. */
+[data-thema] {
+  color: var(--text);
+}
+
+body {
+  background: var(--surface);
+  background-image: var(--canvas-wash);
+  background-attachment: fixed;
+  color: var(--text);
+  font-family: var(--font-app-sans), ui-sans-serif, system-ui, sans-serif;
+  overscroll-behavior-y: contain;
+}
+
+:focus-visible {
+  outline: none;
+  box-shadow: var(--ring-focus);
+}
+
+/* Tekstvelden niet. Een ring om een veld tekent een harde rechthoek, en de
+   invoerbalk en het zoekveld zijn kale inputs zonder eigen radius in een
+   glazen capsule: daar staat die rechthoek midden in het oppervlak. Focus is
+   hier de accentrand van het veld zelf. */
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  box-shadow: none;
+  border-color: var(--accent);
+}
+
+/* En bij een kaal veld licht de capsule eromheen op, want het veld heeft geen
+   rand om te laten kleuren. Nergens een ring van 3px: dat zou op glas ook nog
+   een buitenschaduw zijn. Zie gebroken regel 8. */
+.capsuleveld:has(:focus-visible) {
+  border-color: var(--accent);
+}
+
+::selection {
+  background: var(--accent-soft);
+  color: var(--text);
+}
