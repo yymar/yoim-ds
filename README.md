@@ -7,7 +7,7 @@ compileert de TypeScript en CSS zelf.
 ## Gebruiken in een app
 
 ```bash
-npm i github:yymar/yoim-ds#v0.1.0
+npm i github:yymar/yoim-ds#v0.2.0
 ```
 
 ```ts
@@ -20,6 +20,13 @@ const nextConfig: NextConfig = { transpilePackages: ['@yoim/ds'] }
 @import "tailwindcss";
 @import "@yoim/ds/styles/tokens.css";
 @import "@yoim/ds/styles/glas.css";
+```
+
+```bash
+# .env: alleen op Vercel invullen, lokaal leeg laten. Hiermee geldt de
+# sessiecookie voor alle subdomeinen en log je één keer in voor yoim.nl,
+# energ.yoim.nl en home.yoim.nl samen.
+NEXT_PUBLIC_COOKIE_DOMEIN=.yoim.nl
 ```
 
 ```ts
@@ -53,7 +60,7 @@ export default async function Login(props: PageProps<'/auth/login'>) {
   `.rij`, `.kop`, `.schermkolom`, `.vastekop`, `.postertray`, `.overlay`, en de
   basisregels voor body, focus en selectie.
 - `auth/`: `proxy`, `createServerSupabase`, `createBrowserSupabase`,
-  `inlog-fout`, `moment`.
+  `cookieOptions`, `inlog-fout`, `moment`.
 - `components/`: `InlogPagina`, `InlogTray`, `GoogleKnop`, `Klok`, `Merk`.
 - `thema.ts`: `SURFACE`, `THEMA_SCRIPT`, `THEMA_SLEUTEL`.
 

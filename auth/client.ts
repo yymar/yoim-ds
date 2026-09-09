@@ -1,5 +1,7 @@
 import { createBrowserClient } from '@supabase/ssr'
 
+import { cookieOptions } from './cookie'
+
 /**
  * Supabase-client voor client components. RLS is de enige autorisatielaag;
  * er is bewust geen service-role client aan de browserkant.
@@ -17,6 +19,9 @@ export function createBrowserSupabase<
   return createBrowserClient<Db, S>(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    schema ? { db: { schema } } : undefined,
+    {
+      cookieOptions,
+      db: schema ? { schema } : undefined,
+    },
   )
 }

@@ -1,6 +1,8 @@
 import { cookies } from 'next/headers'
 import { createServerClient } from '@supabase/ssr'
 
+import { cookieOptions } from './cookie'
+
 /**
  * Supabase-client voor server components, route handlers en server actions.
  *
@@ -25,6 +27,7 @@ export async function createServerSupabase<
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
     {
+      cookieOptions,
       db: schema ? { schema } : undefined,
       cookies: {
         getAll() {
