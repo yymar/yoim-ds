@@ -18,6 +18,13 @@ const nextConfig: NextConfig = { transpilePackages: ['@yoim/ds'] }
 ```css
 /* app/globals.css */
 @import "tailwindcss";
+
+/* Verplicht. Tailwind v4 scant node_modules niet, en de componenten hieronder
+   staan daar. Zonder deze regel komen de tokens en het glas wel door, maar
+   worden de utility-klassen uit dit pakket nooit gegenereerd en valt de layout
+   van het inlogscherm plat. */
+@source "../node_modules/@yoim/ds";
+
 @import "@yoim/ds/styles/tokens.css";
 @import "@yoim/ds/styles/glas.css";
 ```

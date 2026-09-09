@@ -7,7 +7,9 @@ Design system en inloglaag van de yoim-apps. Zie `README.md` voor gebruik.
 - **Dit is de enige plek voor tokens, glas en auth.** Een app stylt nooit
   buiten de tokens om en kopieert nooit iets hieruit.
 - **Geen build, geen bundel.** Bronbestanden met relatieve imports; de app
-  transpileert via `transpilePackages`.
+  transpileert via `transpilePackages` en scant dit pakket met
+  `@source "../node_modules/@yoim/ds"` in zijn `globals.css`. Zonder dat laatste
+  genereert Tailwind de utility-klassen uit dit pakket niet.
 - **Nooit een buitenschaduw op een oppervlak met `backdrop-filter`.** Zie de
   toelichting in `styles/glas.css`.
 - **Elke wijziging is een versie.** Tag na elke merge die apps raakt; apps
