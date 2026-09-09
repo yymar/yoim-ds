@@ -1,6 +1,6 @@
 {
   "name": "@yoim/ds",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "private": true,
   "description": "Het design system en de inloglaag van de yoim-apps: tokens, glas, auth, inlogscherm.",
   "exports": {

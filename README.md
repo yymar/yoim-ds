@@ -7,7 +7,7 @@ compileert de TypeScript en CSS zelf.
 ## Gebruiken in een app
 
 ```bash
-npm i github:yymar/yoim-ds#v0.2.0
+npm i github:yymar/yoim-ds#v0.2.1
 ```
 
 ```ts
@@ -67,7 +67,7 @@ export default async function Login(props: PageProps<'/auth/login'>) {
 ## Tweaken en uitrollen
 
 Wijzig hier, `npm test`, commit, tag (`git tag v0.2.0 && git push --tags`).
-Per app: `npm i github:yymar/yoim-ds#v0.2.0`, build, deploy. Een app die je
+Per app: `npm i github:yymar/yoim-ds#v0.2.1`, build, deploy. Een app die je
 niet bijwerkt blijft op zijn versie.
 
 Ontwerpwerk gebeurt in Claude Design op de bestaande kit en landt hier als
