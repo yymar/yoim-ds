@@ -13,9 +13,11 @@ ontwerpt landt daar als token of component, en rolt van daaruit naar alle apps.
 
 Eén huishouden (Yoran en Imke, Molenberg 2a), één Google-login, meerdere apps op subdomeinen:
 
-- **yoim.nl**: nu de boodschappen-, recepten- en weekplanning-app. Wordt later de
-  startpagina: het inlogscherm plus een raster met tegels per app (een app picker). De
-  huidige app verhuist dan naar een eigen subdomein, naam nog te kiezen.
+- **yoim.nl**: de hub. Het inlogscherm plus een raster met een paneel per app. Elk paneel
+  toont de cijfers van dat domein die er nu toe doen en is in zijn geheel een link naar het
+  subdomein. De hub toont en linkt, hij stuurt niets aan.
+- **weekl.yoim.nl**: boodschappen, recepten en de weekplanning. Sinds 9 september 2026 op
+  een eigen subdomein; deze app stond eerst op yoim.nl.
 - **energ.yoim.nl**: energiedashboard. Dynamisch stroomcontract per kwartier, gas per dag,
   de Tesla die thuis laadt, een spaarpotje tegen de jaarafrekening. Mobile-first, wordt op
   de telefoon bekeken.
@@ -67,8 +69,14 @@ opgeleverd als iets dat één op één naar `tokens.css`, `glas.css` of een comp
    (potje versus verwachte bijbetaling, met projectie); invoer voor bedragen en datums
    (ledger). Datavisualisatie-kleuren ontbreken nog in de tokens: sequentieel en
    categorisch, licht en donker, met contrast dat op 13px leesbaar blijft.
-2. **Startpagina (yoim.nl)**: de app-tegel. Naam, één regel, één live getal of status,
-   het merk van de app. Raster op telefoon en desktop.
+2. **Startpagina (yoim.nl)**: het domeinpaneel. Naam, één regel die zegt wat het domein is,
+   en daaronder de cijfers: twee tot vier waarden met hun label, plus één klein beeld (een
+   weekstrip van zeven dagen, een sparkline van een dagcurve). Het hele paneel is een link.
+   Raster op telefoon en desktop; er moet een vierde paneel bij kunnen.
+   Twee dingen die het ontwerp moet oplossen. Ten eerste: een domein waarvan de bron nog niet
+   bestaat krijgt geen paneel met nullen maar een kaart met alleen naam en link, en die twee
+   vormen moeten naast elkaar in hetzelfde raster kloppen. Ten tweede: de sparkline draait nu
+   op de accentkleur, want datavisualisatie-kleuren staan nog open in punt 1 hierboven.
 3. **Huis (home.yoim.nl)**: het zijpaneel naast de 3D-scene per objectsoort (lamp:
    aan/uit, helderheid, kleur, scènes; auto: laadstatus, laad nu, goedkoopste venster;
    meter: vermogen per fase); een verbindingsindicator (thuis, remote, geen verbinding);

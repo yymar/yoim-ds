@@ -14,7 +14,7 @@ Design system en inloglaag van de yoim-apps. Zie `README.md` voor gebruik.
   toelichting in `styles/glas.css`.
 - **Elke wijziging is een versie.** Tag na elke merge die apps raakt; apps
   pinnen een tag, nooit `main`.
-- **`auth/*.test.ts` blijft groen** (`npm test`) en `npm run typecheck` schoon
+- **De tests blijven groen** (`npm test`) en `npm run typecheck` schoon
   voor elke tag.
 
 ## Schrijfstijl

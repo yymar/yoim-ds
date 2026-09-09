@@ -1,13 +1,13 @@
 # @yoim/ds
 
 Eén waarheid voor look en feel én voor inloggen, voor alle yoim-apps
-(yoim.nl, energ.yoim.nl, home.yoim.nl). Bronbestanden, geen build: de app
-compileert de TypeScript en CSS zelf.
+(yoim.nl, weekl.yoim.nl, energ.yoim.nl, home.yoim.nl). Bronbestanden, geen
+build: de app compileert de TypeScript en CSS zelf.
 
 ## Gebruiken in een app
 
 ```bash
-npm i github:yymar/yoim-ds#v0.2.1
+npm i github:yymar/yoim-ds#v0.3.0
 ```
 
 ```ts
@@ -32,7 +32,7 @@ const nextConfig: NextConfig = { transpilePackages: ['@yoim/ds'] }
 ```bash
 # .env: alleen op Vercel invullen, lokaal leeg laten. Hiermee geldt de
 # sessiecookie voor alle subdomeinen en log je één keer in voor yoim.nl,
-# energ.yoim.nl en home.yoim.nl samen.
+# weekl.yoim.nl, energ.yoim.nl en home.yoim.nl samen.
 NEXT_PUBLIC_COOKIE_DOMEIN=.yoim.nl
 ```
 
@@ -70,11 +70,14 @@ export default async function Login(props: PageProps<'/auth/login'>) {
   `cookieOptions`, `inlog-fout`, `moment`.
 - `components/`: `InlogPagina`, `InlogTray`, `GoogleKnop`, `Klok`, `Merk`.
 - `thema.ts`: `SURFACE`, `THEMA_SCRIPT`, `THEMA_SLEUTEL`.
+- `week.ts`: de week van dit huishouden, zaterdag tot en met vrijdag. Zit hier
+  en niet in een app omdat weekl.yoim.nl en de hub op yoim.nl allebei dezelfde
+  week moeten tonen; twee kopieen lopen uit elkaar.
 
 ## Tweaken en uitrollen
 
-Wijzig hier, `npm test`, commit, tag (`git tag v0.2.0 && git push --tags`).
-Per app: `npm i github:yymar/yoim-ds#v0.2.1`, build, deploy. Een app die je
+Wijzig hier, `npm test`, commit, tag (`git tag v0.3.0 && git push --tags`).
+Per app: `npm i github:yymar/yoim-ds#v0.3.0`, build, deploy. Een app die je
 niet bijwerkt blijft op zijn versie.
 
 Ontwerpwerk gebeurt in Claude Design op de bestaande kit en landt hier als
