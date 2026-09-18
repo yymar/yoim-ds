@@ -83,7 +83,11 @@
     border-top: 0;
   }
 
-  .rij:active {
+  /* Alleen wat ook echt te bedienen is; zie de hoverregel onderaan. */
+  a.rij:active,
+  button.rij:active,
+  label.rij:active,
+  .rij[role="button"]:active {
     background: var(--surface-sunken);
   }
 
@@ -273,7 +277,13 @@
    toetsenbord in een smal venster is geen telefoon. En hover is alleen een
    tint, geen lift, geen scale, geen andere schaduw. */
 @media (hover: hover) and (pointer: fine) {
-  .rij:hover,
+  /* Alleen wat ook echt te bedienen is. `.rij` is ook de vorm van een regel die
+     alleen iets toont ("Ingelogd als"), en die lichtte mee op en drukte mee in
+     terwijl er niets gebeurde. */
+  a.rij:hover,
+  button.rij:hover,
+  label.rij:hover,
+  .rij[role="button"]:hover,
   .zweeftint:hover {
     background: var(--surface-sunken);
   }
@@ -322,6 +332,17 @@ body {
 :focus-visible {
   outline: none;
   box-shadow: var(--ring-focus);
+}
+
+/* Hoog contrast in Windows dwingt het systeempalet af: een box-shadow verdwijnt
+   en een background wordt Canvas. Zonder dit blok bleef er van de focusring
+   niets over, en van een markering die alleen een vulling is ook niet. Een
+   outline overleeft het wel. */
+@media (forced-colors: active) {
+  :focus-visible {
+    outline: 2px solid;
+    outline-offset: 2px;
+  }
 }
 
 /* Tekstvelden niet. Een ring om een veld tekent een harde rechthoek, en de
