@@ -1,0 +1,13 @@
+# Regeleindes zijn LF, overal en op elke machine.
+#
+# Zonder dit bestand bepaalt `core.autocrlf` per machine wat er bij het uitchecken
+# gebeurt, en op Windows staat die standaard op `true`. De index was daardoor wel
+# overal LF, maar de werkmap half CRLF: bestanden die git had uitgecheckt kregen
+# CRLF, bestanden die npm of een editor had geschreven bleven LF. Dat levert geen
+# diff op, maar wel de waarschuwing in GitHub Desktop en het risico dat een tool
+# een bestand een keer helemaal herschrijft.
+#
+# `text=auto` laat git zelf zien wat tekst is en wat binair, `eol=lf` zegt wat er
+# in de werkmap komt te staan. Dit bestand staat in de repo en gaat dus mee naar
+# elke machine; het wint ook van een `core.autocrlf` die ergens nog aan staat.
+* text=auto eol=lf
