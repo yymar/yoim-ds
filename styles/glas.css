@@ -83,11 +83,15 @@
     border-top: 0;
   }
 
-  /* Alleen wat ook echt te bedienen is; zie de hoverregel onderaan. */
+  /* Alleen wat ook echt te bedienen is, en alleen zolang het dat is; zie de
+     hoverregel onderaan. `li.rij` vangt de regel die zijn taptarget binnenin
+     heeft: :active en :hover slaan ook op de voorouder aan. */
   a.rij:active,
-  button.rij:active,
+  button.rij:not(:disabled):active,
   label.rij:active,
-  .rij[role="button"]:active {
+  summary.rij:active,
+  li.rij:has(a, button:not(:disabled)):active,
+  .rij[role="button"]:not([aria-disabled="true"]):active {
     background: var(--surface-sunken);
   }
 
@@ -281,9 +285,11 @@
      alleen iets toont ("Ingelogd als"), en die lichtte mee op en drukte mee in
      terwijl er niets gebeurde. */
   a.rij:hover,
-  button.rij:hover,
+  button.rij:not(:disabled):hover,
   label.rij:hover,
-  .rij[role="button"]:hover,
+  summary.rij:hover,
+  li.rij:has(a, button:not(:disabled)):hover,
+  .rij[role="button"]:not([aria-disabled="true"]):hover,
   .zweeftint:hover {
     background: var(--surface-sunken);
   }
@@ -335,13 +341,13 @@ body {
 }
 
 /* Hoog contrast in Windows dwingt het systeempalet af: een box-shadow verdwijnt
-   en een background wordt Canvas. Zonder dit blok bleef er van de focusring
-   niets over, en van een markering die alleen een vulling is ook niet. Een
-   outline overleeft het wel. */
+   en zonder dit blok bleef er van de focusring niets over. Een outline overleeft
+   het wel, naar binnen omdat `.kaart` clipt. Hover en active zijn alleen een
+   vulling en overleven het nog steeds niet. */
 @media (forced-colors: active) {
   :focus-visible {
     outline: 2px solid;
-    outline-offset: 2px;
+    outline-offset: -2px;
   }
 }
 
