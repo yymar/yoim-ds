@@ -1,0 +1,45 @@
+/* Specificiteit is hier opgehoogd omdat deze file naast de bestaande tokens laadt; in
+   tokens/colors.css en dark.css vervangen de waarden gewoon de bestaande regels.
+   @yoim/ds v0.4: tokens die mone nodig heeft. Een op een naar tokens/colors.css en
+   tokens/dark.css, inclusief de [data-thema] spiegels.
+
+   --cat-red krijgt een eigen tint. Hij had de waarde van --danger, en dan kan een
+   categorie niet meer van een signaal worden onderscheiden. De nieuwe tint ligt een
+   stap richting framboos (hue 355 tegen 6 voor --danger) en blijft rood genoeg
+   voor de Notion-lijst. Melding toon="fout" gaat daarom naar --danger zelf.
+
+   --heat-0..3 zijn letterlijke waarden, geen color-mix: een var() in een custom
+   property lost op waar hij gedeclareerd wordt (zie glass.css). Ze volgen het accent,
+   omdat uitgeven geen goed of fout is. Op niveau 3 hoort --heat-3-fg. */
+:root:root,[data-thema="licht"][data-thema]{
+  --cat-red:#a8434a;   --cat-red-bg:#f8e3e4;
+  --cat-teal:#2b7d74;  --cat-teal-bg:#e0efed;
+  --cat-olijf:#4c5c35; --cat-olijf-bg:#e9ecdf;
+  --heat-0:#eceae1;
+  --heat-1:#dadfd2;
+  --heat-2:#aeb99c;
+  --heat-3:#6b7f4b;
+  --heat-3-fg:#ffffff;
+}
+@media (prefers-color-scheme:dark){
+  :root:root{
+    --cat-red:#e58a92;   --cat-red-bg:#2e1b1e;
+    --cat-teal:#6fc2b8;  --cat-teal-bg:#172a27;
+    --cat-olijf:#c3d6a1; --cat-olijf-bg:#22281a;
+    --heat-0:#262a22;
+    --heat-1:#3d4530;
+    --heat-2:#63724b;
+    --heat-3:#9cb573;
+    --heat-3-fg:#161a12;
+  }
+}
+[data-thema="donker"][data-thema]{
+  --cat-red:#e58a92;   --cat-red-bg:#2e1b1e;
+  --cat-teal:#6fc2b8;  --cat-teal-bg:#172a27;
+  --cat-olijf:#c3d6a1; --cat-olijf-bg:#22281a;
+  --heat-0:#262a22;
+  --heat-1:#3d4530;
+  --heat-2:#63724b;
+  --heat-3:#9cb573;
+  --heat-3-fg:#161a12;
+}

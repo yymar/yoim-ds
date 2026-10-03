@@ -1,0 +1,622 @@
+<!-- @dsCard group="mone.yoim" viewport="2460x5400" name="Onderdelen v0.4" subtitle="Navigation, StatusLine, LeegStaat met icoon, Bar, heatmap, categoriekleuren, DonutList en Amount, licht en donker" -->
+<!doctype html><html lang="nl"><head><meta charset="utf-8"><title>Onderdelen v0.4 · mone.yoim</title>
+<link rel="stylesheet" href="../styles.css">
+<link rel="stylesheet" href="mone-tokens.css">
+<style>body{margin:0;display:flex;align-items:flex-start;width:max-content;background:#5f5f58}.vak{flex:0 0 auto}.vak>div{min-height:0!important}</style>
+</head><body><div class="vak"><div data-thema="licht" style="min-height:100vh;background:var(--surface);color:var(--text);font-family:var(--font-sans);padding:40px 24px 80px;box-sizing:border-box">
+<div style="max-width:1180px;margin:0 auto;display:flex;flex-direction:column;gap:56px">
+<header style="display:flex;flex-direction:column;gap:8px;max-width:44rem">
+<p style="margin:0;font-size:11px;letter-spacing:.08em;text-transform:uppercase;font-weight:600;color:var(--text-subtle)">mone.yoim.nl · @yoim/ds v0.4</p>
+<h1 style="margin:0;font-size:30px;font-weight:600;letter-spacing:-.02em;line-height:1.15">Wat mone van het design system nodig heeft</h1>
+<p style="margin:0;font-size:15px;line-height:1.5;color:var(--text-muted);text-wrap:pretty">Acht onderdelen, elk een aanvulling op de bestaande kit. Niets hier is van mone alleen: energ, weekl en de hub kunnen ze ook gebruiken. Tokens staan in mone-tokens.css, de bouwspec in PROMPT-claude-code.md.</p>
+</header>
+
+<section data-screen-label="01 Navigatie" style="display:flex;flex-direction:column;gap:20px">
+<div style="display:flex;flex-direction:column;gap:6px;max-width:44rem"><p style="margin:0;font-size:13px;font-weight:600;color:var(--accent)">1 · Navigatie</p><h2 style="margin:0;font-size:20px;font-weight:600;letter-spacing:-.01em">Capsule onder de 745px, rail erboven</h2><p style="margin:0;font-size:15px;line-height:1.5;color:var(--text-muted);text-wrap:pretty">Eén onderdeel met drie tot vijf routes. Het merk is een slot: elke app zet er zijn eigen woordmerk in. Account zit in de voet van de rail; op de telefoon is het de avatar rechts in de kop.</p></div>
+<div style="display:flex;flex-wrap:wrap;gap:24px;align-items:flex-start">
+<div style="position:relative;width:390px;height:300px;flex:0 0 auto;border-radius:var(--radius-2xl);overflow:hidden;border:1px solid var(--border);background:var(--canvas-wash),var(--surface)">
+<div style="display:flex;align-items:center;justify-content:space-between;padding:20px 16px 0 24px"><b style="font-size:30px;font-weight:600;letter-spacing:-.02em">Overzicht</b><span style="width:48px;height:48px;display:grid;place-items:center"><span style="width:36px;height:36px;border-radius:999px;background:var(--member-yoran);color:#fff;display:grid;place-items:center;font-size:14px;font-weight:600">Y</span></span></div>
+<div style="margin:16px 24px 0;display:flex;flex-direction:column;gap:10px"><span style="height:14px;width:62%;border-radius:999px;background:var(--surface-sunken)"></span><span style="height:14px;width:44%;border-radius:999px;background:var(--surface-sunken)"></span></div>
+<nav style="position:absolute;left:16px;right:16px;bottom:12px;border-radius:999px;background:var(--glass-tint);backdrop-filter:var(--glass-blur);border:1px solid var(--glass-border);box-shadow:var(--glass-highlight)">
+<div style="position:relative;display:flex;padding:4px">
+<span aria-hidden="true" style="position:absolute;top:4px;bottom:4px;left:4px;width:calc((100% - 8px) / 3);border-radius:999px;background:var(--glass-tint-strong);border:1px solid var(--glass-border);box-shadow:var(--glass-rim);box-sizing:border-box"></span>
+
+<span style="position:relative;flex:1;min-width:0;min-height:48px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;padding:6px 0;font-size:11px;font-weight:500;color:var(--accent)"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-layout-dashboard" aria-hidden="true" style="flex:0 0 auto"><rect width="7" height="9" x="3" y="3" rx="1"></rect><rect width="7" height="5" x="14" y="3" rx="1"></rect><rect width="7" height="9" x="14" y="12" rx="1"></rect><rect width="7" height="5" x="3" y="16" rx="1"></rect></svg><span style="white-space:nowrap">Overzicht</span></span>
+
+<span style="position:relative;flex:1;min-width:0;min-height:48px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;padding:6px 0;font-size:11px;font-weight:500;color:var(--text-muted)"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-list-checks" aria-hidden="true" style="flex:0 0 auto"><path d="M13 5h8"></path><path d="M13 12h8"></path><path d="M13 19h8"></path><path d="m3 17 2 2 4-4"></path><path d="m3 7 2 2 4-4"></path></svg><span style="white-space:nowrap">Nakijken</span><span style="position:absolute;top:4px;left:calc(50% + 6px);min-width:16px;height:16px;padding:0 4px;box-sizing:border-box;border-radius:999px;background:var(--accent);color:var(--accent-fg);font-size:10px;font-weight:600;display:grid;place-items:center">4</span></span>
+
+<span style="position:relative;flex:1;min-width:0;min-height:48px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;padding:6px 0;font-size:11px;font-weight:500;color:var(--text-muted)"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-landmark" aria-hidden="true" style="flex:0 0 auto"><path d="M10 18v-7"></path><path d="M11.119 2.205a2 2 0 0 1 1.762 0l7.84 3.846A.5.5 0 0 1 20.5 7h-17a.5.5 0 0 1-.22-.949z"></path><path d="M14 18v-7"></path><path d="M18 18v-7"></path><path d="M3 22h18"></path><path d="M6 18v-7"></path></svg><span style="white-space:nowrap">Rekeningen</span></span>
+
+
+
+</div>
+</nav>
+</div>
+<div style="position:relative;width:760px;max-width:100%;height:460px;flex:0 1 auto;border-radius:var(--radius-lg);overflow:hidden;border:1px solid var(--border);background:var(--canvas-wash),var(--surface)">
+<nav style="position:absolute;top:0;bottom:0;left:0;width:240px;box-sizing:border-box;display:flex;flex-direction:column;gap:16px;padding:20px 12px 16px;background:var(--glass-tint);backdrop-filter:var(--glass-blur);border-right:1px solid var(--glass-border);box-shadow:var(--glass-highlight)">
+<span style="height:44px;border:1px dashed var(--border-strong);border-radius:var(--radius);display:flex;align-items:center;padding:0 12px;font-size:13px;color:var(--text-muted)">merk: woordmerk van de app</span>
+<div style="position:relative;display:flex;flex-direction:column;gap:6px">
+<span aria-hidden="true" style="position:absolute;left:0;right:0;top:0;height:48px;border-radius:var(--radius-lg);background:var(--glass-tint-strong);border:1px solid var(--glass-border);box-shadow:var(--glass-rim);box-sizing:border-box"></span>
+
+<span style="position:relative;height:48px;display:flex;align-items:center;gap:12px;padding:0 12px;font-size:15px;font-weight:500;color:var(--accent)"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-layout-dashboard" aria-hidden="true" style="flex:0 0 auto"><rect width="7" height="9" x="3" y="3" rx="1"></rect><rect width="7" height="5" x="14" y="3" rx="1"></rect><rect width="7" height="9" x="14" y="12" rx="1"></rect><rect width="7" height="5" x="3" y="16" rx="1"></rect></svg>Overzicht</span>
+
+<span style="position:relative;height:48px;display:flex;align-items:center;gap:12px;padding:0 12px;font-size:15px;font-weight:500;color:var(--text-muted)"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-list-checks" aria-hidden="true" style="flex:0 0 auto"><path d="M13 5h8"></path><path d="M13 12h8"></path><path d="M13 19h8"></path><path d="m3 17 2 2 4-4"></path><path d="m3 7 2 2 4-4"></path></svg>Nakijken<span style="margin-left:auto;padding:2px 8px;border-radius:999px;background:var(--accent-soft);color:var(--accent-hover);font-size:13px;font-weight:600">4</span></span>
+
+<span style="position:relative;height:48px;display:flex;align-items:center;gap:12px;padding:0 12px;font-size:15px;font-weight:500;color:var(--text-muted)"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-landmark" aria-hidden="true" style="flex:0 0 auto"><path d="M10 18v-7"></path><path d="M11.119 2.205a2 2 0 0 1 1.762 0l7.84 3.846A.5.5 0 0 1 20.5 7h-17a.5.5 0 0 1-.22-.949z"></path><path d="M14 18v-7"></path><path d="M18 18v-7"></path><path d="M3 22h18"></path><path d="M6 18v-7"></path></svg>Rekeningen</span>
+
+
+
+</div>
+<div style="margin-top:auto;display:flex;flex-direction:column;gap:8px">
+<div style="display:flex;gap:2px;padding:3px;border-radius:999px;background:var(--glass-thin);border:1px solid var(--glass-border);box-shadow:var(--glass-rim)">
+<span style="flex:1;height:32px;border-radius:999px;display:flex;align-items:center;justify-content:center;gap:4px;font-size:13px;font-weight:500;color:var(--text);background:var(--glass-tint-strong);box-shadow:var(--glass-rim)"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-sun" aria-hidden="true" style="flex:0 0 auto"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2"></path><path d="M12 20v2"></path><path d="m4.93 4.93 1.41 1.41"></path><path d="m17.66 17.66 1.41 1.41"></path><path d="M2 12h2"></path><path d="M20 12h2"></path><path d="m6.34 17.66-1.41 1.41"></path><path d="m19.07 4.93-1.41 1.41"></path></svg>Licht</span>
+<span style="flex:1;height:32px;border-radius:999px;display:flex;align-items:center;justify-content:center;gap:4px;font-size:13px;font-weight:500;color:var(--text-muted);background:transparent;box-shadow:none"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-moon" aria-hidden="true" style="flex:0 0 auto"><path d="M20.985 12.486a9 9 0 1 1-9.473-9.472c.405-.022.617.46.402.803a6 6 0 0 0 8.268 8.268c.344-.215.825-.004.803.401"></path></svg>Donker</span>
+</div>
+<div style="display:flex;align-items:center;gap:8px;min-height:48px;padding-left:6px">
+<span style="flex:0 0 auto;width:32px;height:32px;border-radius:999px;background:var(--member-yoran);color:#fff;display:grid;place-items:center;font-size:14px;font-weight:600">Y</span>
+<span style="flex:1;min-width:0;display:flex;flex-direction:column"><b style="font-size:14px;font-weight:600;line-height:1.2">Yoran</b><em style="font-style:normal;font-size:11px;color:var(--text-muted);line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Huishouden van Yoran en Imke</em></span>
+<span aria-label="Uitloggen" style="flex:0 0 auto;width:48px;height:48px;border-radius:999px;display:grid;place-items:center;color:var(--text-muted)"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-log-out" aria-hidden="true" style="flex:0 0 auto"><path d="m16 17 5-5-5-5"></path><path d="M21 12H9"></path><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path></svg></span>
+</div>
+</div>
+</nav>
+<div style="position:absolute;left:240px;right:0;top:0;padding:24px 32px;display:flex;flex-direction:column;gap:20px">
+<div style="display:flex;align-items:center;gap:10px;min-height:48px;padding:0 14px 0 8px;border-radius:999px;background:var(--glass-thin);backdrop-filter:var(--glass-blur-thin);border:1px solid var(--glass-border);box-shadow:var(--glass-rim)"><span style="flex:0 0 auto;width:30px;height:30px;border-radius:999px;display:grid;place-items:center;background:var(--botergoud-soft);color:var(--botergoud)"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-clock" aria-hidden="true" style="flex:0 0 auto"><circle cx="12" cy="12" r="10"></circle><path d="M12 6v6l4 2"></path></svg></span><span style="flex:1;min-width:0;font-size:14px">Bankkoppeling verloopt over 6 dagen.</span><span style="font-size:14px;font-weight:600;color:var(--accent)">Vernieuwen</span></div>
+<b style="font-size:30px;font-weight:600;letter-spacing:-.02em">Overzicht</b>
+<div style="display:flex;flex-direction:column;gap:10px"><span style="height:14px;width:58%;border-radius:999px;background:var(--surface-sunken)"></span><span style="height:14px;width:40%;border-radius:999px;background:var(--surface-sunken)"></span></div>
+</div>
+</div>
+</div>
+</section>
+
+<section data-screen-label="02 Statusregel" style="display:flex;flex-direction:column;gap:20px">
+<div style="display:flex;flex-direction:column;gap:6px;max-width:44rem"><p style="margin:0;font-size:13px;font-weight:600;color:var(--accent)">2 · StatusRegel</p><h2 style="margin:0;font-size:20px;font-weight:600;letter-spacing:-.01em">Alleen als er iets is, hooguit één tegelijk</h2><p style="margin:0;font-size:15px;line-height:1.5;color:var(--text-muted);text-wrap:pretty">Thin glas boven de inhoud. De hele regel is de knop, dus 48px hoog. De kleur zit in het rondje; de tekst blijft tekstkleur, behalve bij gedempt.</p></div>
+<div style="display:flex;flex-direction:column;gap:12px;max-width:560px;padding:20px;border-radius:var(--radius-lg);background:var(--canvas-wash),var(--surface);border:1px solid var(--border)">
+<div style="display:flex;align-items:center;gap:10px;min-height:48px;padding:0 14px;border-radius:999px;border:1px dashed var(--border-strong);font-size:14px;color:var(--text-muted)">Alles goed: geen regel</div>
+
+<div style="display:flex;align-items:center;gap:10px;min-height:48px;padding:0 14px 0 8px;border-radius:999px;background:var(--glass-thin);backdrop-filter:var(--glass-blur-thin);border:1px solid var(--glass-border);box-shadow:var(--glass-rim)"><span style="flex:0 0 auto;width:30px;height:30px;border-radius:999px;display:grid;place-items:center;background:var(--botergoud-soft);color:var(--botergoud)"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-clock" aria-hidden="true" style="flex:0 0 auto"><circle cx="12" cy="12" r="10"></circle><path d="M12 6v6l4 2"></path></svg></span><span style="flex:1;min-width:0;font-size:14px;line-height:1.35;padding:6px 0;color:var(--text)">Bankkoppeling verloopt over 6 dagen.</span><span style="flex:0 0 auto;font-size:14px;font-weight:600;color:var(--accent);white-space:nowrap">Vernieuwen</span></div>
+
+<div style="display:flex;align-items:center;gap:10px;min-height:48px;padding:0 14px 0 8px;border-radius:999px;background:var(--glass-thin);backdrop-filter:var(--glass-blur-thin);border:1px solid var(--glass-border);box-shadow:var(--glass-rim)"><span style="flex:0 0 auto;width:30px;height:30px;border-radius:999px;display:grid;place-items:center;background:var(--danger);color:var(--surface-raised)"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-alert lucide-alert-circle" aria-hidden="true" style="flex:0 0 auto"><circle cx="12" cy="12" r="10"></circle><line x1="12" x2="12" y1="8" y2="12"></line><line x1="12" x2="12.01" y1="16" y2="16"></line></svg></span><span style="flex:1;min-width:0;font-size:14px;line-height:1.35;padding:6px 0;color:var(--text)">Bankkoppeling verlopen. Nieuwe transacties komen niet binnen.</span><span style="flex:0 0 auto;font-size:14px;font-weight:600;color:var(--accent);white-space:nowrap">Opnieuw koppelen</span></div>
+
+<div style="display:flex;align-items:center;gap:10px;min-height:48px;padding:0 14px 0 8px;border-radius:999px;background:var(--glass-thin);backdrop-filter:var(--glass-blur-thin);border:1px solid var(--glass-border);box-shadow:var(--glass-rim)"><span style="flex:0 0 auto;width:30px;height:30px;border-radius:999px;display:grid;place-items:center;background:var(--surface-sunken);color:var(--text-muted)"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-cloud-off" aria-hidden="true" style="flex:0 0 auto"><path d="M10.94 5.274A7 7 0 0 1 15.71 10h1.79a4.5 4.5 0 0 1 4.222 6.057"></path><path d="M18.796 18.81A4.5 4.5 0 0 1 17.5 19H9A7 7 0 0 1 5.79 5.78"></path><path d="m2 2 20 20"></path></svg></span><span style="flex:1;min-width:0;font-size:14px;line-height:1.35;padding:6px 0;color:var(--text-muted)">Ophalen mislukt om 07:12. Straks gaat het vanzelf opnieuw.</span><span style="flex:0 0 auto;font-size:14px;font-weight:600;color:var(--accent);white-space:nowrap">Nu ophalen</span></div>
+
+</div>
+</section>
+
+<section data-screen-label="03 Lege staat" style="display:flex;flex-direction:column;gap:20px">
+<div style="display:flex;flex-direction:column;gap:6px;max-width:44rem"><p style="margin:0;font-size:13px;font-weight:600;color:var(--accent)">3 · LeegStaat</p><h2 style="margin:0;font-size:20px;font-weight:600;letter-spacing:-.01em">Icoon, een zin, eventueel een knop</h2><p style="margin:0;font-size:15px;line-height:1.5;color:var(--text-muted);text-wrap:pretty">De bestaande LeegStaat krijgt een optioneel icoon: 28px in tekst-subtiel, zonder plaat. Het icoon zegt waar je bent, niet wat er mist. De knop blijft stil, nooit accentgevuld.</p></div>
+<div style="display:flex;flex-wrap:wrap;gap:24px">
+<div style="flex:1 1 300px;max-width:420px;display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center;padding:48px 24px;border-radius:var(--radius-lg);background:var(--surface-raised);border:1px solid var(--border);box-shadow:var(--shadow-card)"><span style="color:var(--text-subtle);margin-bottom:6px"><svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-list-checks" aria-hidden="true" style="flex:0 0 auto"><path d="M13 5h8"></path><path d="M13 12h8"></path><path d="M13 19h8"></path><path d="m3 17 2 2 4-4"></path><path d="m3 7 2 2 4-4"></path></svg></span><b style="font-size:16px;font-weight:500">Niets na te kijken.</b><p style="margin:0;font-size:15px;line-height:1.5;color:var(--text-muted);max-width:17rem;text-wrap:pretty">Nieuwe transacties staan hier zodra de bank ze doorgeeft.</p></div>
+<div style="flex:1 1 300px;max-width:420px;display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center;padding:48px 24px;border-radius:var(--radius-lg);background:var(--surface-raised);border:1px solid var(--border);box-shadow:var(--shadow-card)"><span style="color:var(--text-subtle);margin-bottom:6px"><svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-landmark" aria-hidden="true" style="flex:0 0 auto"><path d="M10 18v-7"></path><path d="M11.119 2.205a2 2 0 0 1 1.762 0l7.84 3.846A.5.5 0 0 1 20.5 7h-17a.5.5 0 0 1-.22-.949z"></path><path d="M14 18v-7"></path><path d="M18 18v-7"></path><path d="M3 22h18"></path><path d="M6 18v-7"></path></svg></span><b style="font-size:16px;font-weight:500">Nog geen rekening gekoppeld.</b><p style="margin:0;font-size:15px;line-height:1.5;color:var(--text-muted);max-width:17rem;text-wrap:pretty">Koppel er een en de transacties halen zichzelf op.</p><span style="margin-top:12px;min-height:48px;padding:0 20px;border-radius:999px;background:var(--surface-sunken);display:flex;align-items:center;font-size:15px;font-weight:500">Rekening koppelen</span></div>
+</div>
+</section>
+
+<section data-screen-label="04 Balk met markering" style="display:flex;flex-direction:column;gap:20px">
+<div style="display:flex;flex-direction:column;gap:6px;max-width:44rem"><p style="margin:0;font-size:13px;font-weight:600;color:var(--accent)">4 · Balk</p><h2 style="margin:0;font-size:20px;font-weight:600;letter-spacing:-.01em">Voortgang met een streepje erop</h2><p style="margin:0;font-size:15px;line-height:1.5;color:var(--text-muted);text-wrap:pretty">Het streepje is vandaag in de periode, of het gemiddelde. Binnen is accent, bijna op (90 tot 100 procent) botergoud, over is danger. Precies 100 procent telt als binnen. Bij over schaalt de balk naar het bedrag en wordt het streepje het einde van het budget.</p></div>
+<div style="max-width:560px;display:flex;flex-direction:column;padding:8px 20px;border-radius:var(--radius-lg);background:var(--surface-raised);border:1px solid var(--border);box-shadow:var(--shadow-card)">
+
+<div style="display:flex;flex-direction:column;gap:8px;padding:14px 0;border-top:none">
+<div style="display:flex;align-items:baseline;justify-content:space-between;gap:12px"><b style="font-size:15px;font-weight:500">Boodschappen</b><span style="font-size:14px;color:var(--text-muted);font-variant-numeric:tabular-nums;white-space:nowrap">€ 268,20 van € 600,00</span></div>
+<div style="position:relative;height:8px;border-radius:999px;background:var(--surface-sunken)"><span style="position:absolute;left:0;top:0;bottom:0;width:44.7%;border-radius:999px;background:var(--accent)"></span><span aria-hidden="true" style="position:absolute;top:-4px;width:2px;height:16px;margin-left:-1px;left:53.3%;border-radius:1px;background:var(--text);box-shadow:0 0 0 2px var(--surface-raised)"></span></div>
+<div style="display:flex;justify-content:space-between;gap:12px;font-size:13px"><span style="color:var(--text-muted);font-variant-numeric:tabular-nums">nog € 331,80</span><span style="color:var(--text-subtle)">streep: vandaag</span></div>
+</div>
+
+<div style="display:flex;flex-direction:column;gap:8px;padding:14px 0;border-top:1px solid var(--border)">
+<div style="display:flex;align-items:baseline;justify-content:space-between;gap:12px"><b style="font-size:15px;font-weight:500">Uit eten</b><span style="font-size:14px;color:var(--text-muted);font-variant-numeric:tabular-nums;white-space:nowrap">€ 141,00 van € 150,00</span></div>
+<div style="position:relative;height:8px;border-radius:999px;background:var(--surface-sunken)"><span style="position:absolute;left:0;top:0;bottom:0;width:94%;border-radius:999px;background:var(--botergoud)"></span><span aria-hidden="true" style="position:absolute;top:-4px;width:2px;height:16px;margin-left:-1px;left:53.3%;border-radius:1px;background:var(--text);box-shadow:0 0 0 2px var(--surface-raised)"></span></div>
+<div style="display:flex;justify-content:space-between;gap:12px;font-size:13px"><span style="color:var(--text-muted);font-variant-numeric:tabular-nums">nog € 9,00, bijna op</span><span style="color:var(--text-subtle)">streep: vandaag</span></div>
+</div>
+
+<div style="display:flex;flex-direction:column;gap:8px;padding:14px 0;border-top:1px solid var(--border)">
+<div style="display:flex;align-items:baseline;justify-content:space-between;gap:12px"><b style="font-size:15px;font-weight:500">Abonnementen</b><span style="font-size:14px;color:var(--text-muted);font-variant-numeric:tabular-nums;white-space:nowrap">€ 64,97 van € 64,97</span></div>
+<div style="position:relative;height:8px;border-radius:999px;background:var(--surface-sunken)"><span style="position:absolute;left:0;top:0;bottom:0;width:100%;border-radius:999px;background:var(--accent)"></span><span aria-hidden="true" style="position:absolute;top:-4px;width:2px;height:16px;margin-left:-1px;left:53.3%;border-radius:1px;background:var(--text);box-shadow:0 0 0 2px var(--surface-raised)"></span></div>
+<div style="display:flex;justify-content:space-between;gap:12px;font-size:13px"><span style="color:var(--text-muted);font-variant-numeric:tabular-nums">precies op</span><span style="color:var(--text-subtle)">streep: vandaag</span></div>
+</div>
+
+<div style="display:flex;flex-direction:column;gap:8px;padding:14px 0;border-top:1px solid var(--border)">
+<div style="display:flex;align-items:baseline;justify-content:space-between;gap:12px"><b style="font-size:15px;font-weight:500">Kleding</b><span style="font-size:14px;color:var(--text-muted);font-variant-numeric:tabular-nums;white-space:nowrap">€ 128,50 van € 100,00</span></div>
+<div style="position:relative;height:8px;border-radius:999px;background:var(--surface-sunken)"><span style="position:absolute;left:0;top:0;bottom:0;width:100%;border-radius:999px;background:var(--danger)"></span><span aria-hidden="true" style="position:absolute;top:-4px;width:2px;height:16px;margin-left:-1px;left:77.8%;border-radius:1px;background:var(--text);box-shadow:0 0 0 2px var(--surface-raised)"></span></div>
+<div style="display:flex;justify-content:space-between;gap:12px;font-size:13px"><span style="color:var(--danger);font-variant-numeric:tabular-nums">€ 28,50 over</span><span style="color:var(--text-subtle)">streep: einde budget</span></div>
+</div>
+
+<div style="display:flex;flex-direction:column;gap:8px;padding:14px 0;border-top:1px solid var(--border)">
+<div style="display:flex;align-items:baseline;justify-content:space-between;gap:12px"><b style="font-size:15px;font-weight:500">Deze periode</b><span style="font-size:14px;color:var(--text-muted);font-variant-numeric:tabular-nums;white-space:nowrap">€ 2.184,30</span></div>
+<div style="position:relative;height:8px;border-radius:999px;background:var(--surface-sunken)"><span style="position:absolute;left:0;top:0;bottom:0;width:72.5%;border-radius:999px;background:var(--accent)"></span><span aria-hidden="true" style="position:absolute;top:-4px;width:2px;height:16px;margin-left:-1px;left:80%;border-radius:1px;background:var(--text);box-shadow:0 0 0 2px var(--surface-raised)"></span></div>
+<div style="display:flex;justify-content:space-between;gap:12px;font-size:13px"><span style="color:var(--text-muted);font-variant-numeric:tabular-nums">€ 225,70 onder het gemiddelde</span><span style="color:var(--text-subtle)">streep: gemiddeld</span></div>
+</div>
+
+</div>
+</section>
+
+<section data-screen-label="05 Heatmap" style="display:flex;flex-direction:column;gap:20px">
+<div style="display:flex;flex-direction:column;gap:6px;max-width:44rem"><p style="margin:0;font-size:13px;font-weight:600;color:var(--accent)">5 · --heat-0 tot --heat-3</p><h2 style="margin:0;font-size:20px;font-weight:600;letter-spacing:-.01em">Vier stappen, op het accent</h2><p style="margin:0;font-size:15px;line-height:1.5;color:var(--text-muted);text-wrap:pretty">Uitgeven is geen goed of fout, dus olijf en geen groen of rood. Niveau 0 is niets uitgegeven; 1 tot 3 zijn de terciles van de dagen met uitgaven in de periode. Op niveau 3 hoort --heat-3-fg.</p></div>
+<div style="display:flex;flex-wrap:wrap;gap:24px;align-items:flex-start">
+<div style="display:flex;flex-direction:column;gap:8px">
+
+<div style="display:flex;align-items:center;gap:12px"><span style="width:40px;height:40px;border-radius:var(--radius-sm);background:var(--heat-0);border:1px solid var(--border)"></span><span style="display:flex;flex-direction:column"><b style="font-size:14px;font-weight:600">--heat-0</b><span style="font-size:13px;color:var(--text-muted)">niets uitgegeven</span></span></div>
+
+<div style="display:flex;align-items:center;gap:12px"><span style="width:40px;height:40px;border-radius:var(--radius-sm);background:var(--heat-1);border:1px solid var(--border)"></span><span style="display:flex;flex-direction:column"><b style="font-size:14px;font-weight:600">--heat-1</b><span style="font-size:13px;color:var(--text-muted)">laagste derde</span></span></div>
+
+<div style="display:flex;align-items:center;gap:12px"><span style="width:40px;height:40px;border-radius:var(--radius-sm);background:var(--heat-2);border:1px solid var(--border)"></span><span style="display:flex;flex-direction:column"><b style="font-size:14px;font-weight:600">--heat-2</b><span style="font-size:13px;color:var(--text-muted)">middelste derde</span></span></div>
+
+<div style="display:flex;align-items:center;gap:12px"><span style="width:40px;height:40px;border-radius:var(--radius-sm);background:var(--heat-3);border:1px solid var(--border)"></span><span style="display:flex;flex-direction:column"><b style="font-size:14px;font-weight:600">--heat-3</b><span style="font-size:13px;color:var(--text-muted)">hoogste derde</span></span></div>
+
+</div>
+<div style="width:340px;display:flex;flex-direction:column;gap:10px;padding:20px;border-radius:var(--radius-lg);background:var(--surface-raised);border:1px solid var(--border);box-shadow:var(--shadow-card)">
+<b style="font-size:15px;font-weight:600">September</b>
+<div style="display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px;font-size:11px;color:var(--text-subtle);text-align:center"><span>ma</span><span>di</span><span>wo</span><span>do</span><span>vr</span><span>za</span><span>zo</span></div>
+<div style="display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px">
+
+<span style="grid-column-start:2;aspect-ratio:1;border-radius:var(--radius-sm);background:var(--heat-2);color:var(--text);display:grid;place-items:center;font-size:13px;font-weight:500;font-variant-numeric:tabular-nums">1</span>
+
+<span style="grid-column-start:auto;aspect-ratio:1;border-radius:var(--radius-sm);background:var(--heat-0);color:var(--text-muted);display:grid;place-items:center;font-size:13px;font-weight:500;font-variant-numeric:tabular-nums">2</span>
+
+<span style="grid-column-start:auto;aspect-ratio:1;border-radius:var(--radius-sm);background:var(--heat-1);color:var(--text);display:grid;place-items:center;font-size:13px;font-weight:500;font-variant-numeric:tabular-nums">3</span>
+
+<span style="grid-column-start:auto;aspect-ratio:1;border-radius:var(--radius-sm);background:var(--heat-3);color:var(--heat-3-fg);display:grid;place-items:center;font-size:13px;font-weight:500;font-variant-numeric:tabular-nums">4</span>
+
+<span style="grid-column-start:auto;aspect-ratio:1;border-radius:var(--radius-sm);background:var(--heat-1);color:var(--text);display:grid;place-items:center;font-size:13px;font-weight:500;font-variant-numeric:tabular-nums">5</span>
+
+<span style="grid-column-start:auto;aspect-ratio:1;border-radius:var(--radius-sm);background:var(--heat-3);color:var(--heat-3-fg);display:grid;place-items:center;font-size:13px;font-weight:500;font-variant-numeric:tabular-nums">6</span>
+
+<span style="grid-column-start:auto;aspect-ratio:1;border-radius:var(--radius-sm);background:var(--heat-0);color:var(--text-muted);display:grid;place-items:center;font-size:13px;font-weight:500;font-variant-numeric:tabular-nums">7</span>
+
+<span style="grid-column-start:auto;aspect-ratio:1;border-radius:var(--radius-sm);background:var(--heat-2);color:var(--text);display:grid;place-items:center;font-size:13px;font-weight:500;font-variant-numeric:tabular-nums">8</span>
+
+<span style="grid-column-start:auto;aspect-ratio:1;border-radius:var(--radius-sm);background:var(--heat-0);color:var(--text-muted);display:grid;place-items:center;font-size:13px;font-weight:500;font-variant-numeric:tabular-nums">9</span>
+
+<span style="grid-column-start:auto;aspect-ratio:1;border-radius:var(--radius-sm);background:var(--heat-2);color:var(--text);display:grid;place-items:center;font-size:13px;font-weight:500;font-variant-numeric:tabular-nums">10</span>
+
+<span style="grid-column-start:auto;aspect-ratio:1;border-radius:var(--radius-sm);background:var(--heat-1);color:var(--text);display:grid;place-items:center;font-size:13px;font-weight:500;font-variant-numeric:tabular-nums">11</span>
+
+<span style="grid-column-start:auto;aspect-ratio:1;border-radius:var(--radius-sm);background:var(--heat-2);color:var(--text);display:grid;place-items:center;font-size:13px;font-weight:500;font-variant-numeric:tabular-nums">12</span>
+
+<span style="grid-column-start:auto;aspect-ratio:1;border-radius:var(--radius-sm);background:var(--heat-3);color:var(--heat-3-fg);display:grid;place-items:center;font-size:13px;font-weight:500;font-variant-numeric:tabular-nums">13</span>
+
+<span style="grid-column-start:auto;aspect-ratio:1;border-radius:var(--radius-sm);background:var(--heat-0);color:var(--text-muted);display:grid;place-items:center;font-size:13px;font-weight:500;font-variant-numeric:tabular-nums">14</span>
+
+<span style="grid-column-start:auto;aspect-ratio:1;border-radius:var(--radius-sm);background:var(--heat-1);color:var(--text);display:grid;place-items:center;font-size:13px;font-weight:500;font-variant-numeric:tabular-nums">15</span>
+
+<span style="grid-column-start:auto;aspect-ratio:1;border-radius:var(--radius-sm);background:var(--heat-0);color:var(--text-muted);display:grid;place-items:center;font-size:13px;font-weight:500;font-variant-numeric:tabular-nums">16</span>
+
+<span style="grid-column-start:auto;aspect-ratio:1;border-radius:var(--radius-sm);background:var(--heat-3);color:var(--heat-3-fg);display:grid;place-items:center;font-size:13px;font-weight:500;font-variant-numeric:tabular-nums">17</span>
+
+<span style="grid-column-start:auto;aspect-ratio:1;border-radius:var(--radius-sm);background:var(--heat-1);color:var(--text);display:grid;place-items:center;font-size:13px;font-weight:500;font-variant-numeric:tabular-nums">18</span>
+
+<span style="grid-column-start:auto;aspect-ratio:1;border-radius:var(--radius-sm);background:var(--heat-2);color:var(--text);display:grid;place-items:center;font-size:13px;font-weight:500;font-variant-numeric:tabular-nums">19</span>
+
+<span style="grid-column-start:auto;aspect-ratio:1;border-radius:var(--radius-sm);background:var(--heat-3);color:var(--heat-3-fg);display:grid;place-items:center;font-size:13px;font-weight:500;font-variant-numeric:tabular-nums">20</span>
+
+<span style="grid-column-start:auto;aspect-ratio:1;border-radius:var(--radius-sm);background:var(--heat-0);color:var(--text-muted);display:grid;place-items:center;font-size:13px;font-weight:500;font-variant-numeric:tabular-nums">21</span>
+
+<span style="grid-column-start:auto;aspect-ratio:1;border-radius:var(--radius-sm);background:var(--heat-1);color:var(--text);display:grid;place-items:center;font-size:13px;font-weight:500;font-variant-numeric:tabular-nums">22</span>
+
+<span style="grid-column-start:auto;aspect-ratio:1;border-radius:var(--radius-sm);background:var(--heat-0);color:var(--text-muted);display:grid;place-items:center;font-size:13px;font-weight:500;font-variant-numeric:tabular-nums">23</span>
+
+<span style="grid-column-start:auto;aspect-ratio:1;border-radius:var(--radius-sm);background:var(--heat-2);color:var(--text);display:grid;place-items:center;font-size:13px;font-weight:500;font-variant-numeric:tabular-nums">24</span>
+
+<span style="grid-column-start:auto;aspect-ratio:1;border-radius:var(--radius-sm);background:var(--heat-3);color:var(--heat-3-fg);display:grid;place-items:center;font-size:13px;font-weight:500;font-variant-numeric:tabular-nums">25</span>
+
+<span style="grid-column-start:auto;aspect-ratio:1;border-radius:var(--radius-sm);background:var(--heat-1);color:var(--text);display:grid;place-items:center;font-size:13px;font-weight:500;font-variant-numeric:tabular-nums">26</span>
+
+<span style="grid-column-start:auto;aspect-ratio:1;border-radius:var(--radius-sm);background:var(--heat-3);color:var(--heat-3-fg);display:grid;place-items:center;font-size:13px;font-weight:500;font-variant-numeric:tabular-nums">27</span>
+
+<span style="grid-column-start:auto;aspect-ratio:1;border-radius:var(--radius-sm);background:var(--heat-0);color:var(--text-muted);display:grid;place-items:center;font-size:13px;font-weight:500;font-variant-numeric:tabular-nums">28</span>
+
+<span style="grid-column-start:auto;aspect-ratio:1;border-radius:var(--radius-sm);background:var(--heat-2);color:var(--text);display:grid;place-items:center;font-size:13px;font-weight:500;font-variant-numeric:tabular-nums">29</span>
+
+<span style="grid-column-start:auto;aspect-ratio:1;border-radius:var(--radius-sm);background:var(--heat-3);color:var(--heat-3-fg);display:grid;place-items:center;font-size:13px;font-weight:500;font-variant-numeric:tabular-nums">30</span>
+
+</div>
+</div>
+</div>
+</section>
+
+<section data-screen-label="06 Categoriekleuren" style="display:flex;flex-direction:column;gap:20px">
+<div style="display:flex;flex-direction:column;gap:6px;max-width:44rem"><p style="margin:0;font-size:13px;font-weight:600;color:var(--accent)">6 · --cat-*</p><h2 style="margin:0;font-size:20px;font-weight:600;letter-spacing:-.01em">Elf paren, en rood is niet meer danger</h2><p style="margin:0;font-size:15px;line-height:1.5;color:var(--text-muted);text-wrap:pretty">Teal en olijf komen erbij, op de waarden van --macro-koolhydraten en --olijf-diep. --cat-red krijgt een eigen tint, een stap richting framboos: een categorie mag nooit verward worden met een signaal. Melding fout gaat naar --danger zelf.</p></div>
+<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;max-width:900px">
+
+<div style="display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:var(--radius);background:var(--surface-raised);border:1px solid var(--border)"><span style="padding:4px 10px;border-radius:999px;background:var(--cat-green-bg);color:var(--cat-green);font-size:13px;font-weight:600">Groen</span><span style="font-size:12px;color:var(--text-muted)"></span></div>
+
+<div style="display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:var(--radius);background:var(--surface-raised);border:1px solid var(--border)"><span style="padding:4px 10px;border-radius:999px;background:var(--cat-red-bg);color:var(--cat-red);font-size:13px;font-weight:600">Rood</span><span style="font-size:12px;color:var(--text-muted)">nieuwe tint</span></div>
+
+<div style="display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:var(--radius);background:var(--surface-raised);border:1px solid var(--border)"><span style="padding:4px 10px;border-radius:999px;background:var(--cat-yellow-bg);color:var(--cat-yellow);font-size:13px;font-weight:600">Geel</span><span style="font-size:12px;color:var(--text-muted)"></span></div>
+
+<div style="display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:var(--radius);background:var(--surface-raised);border:1px solid var(--border)"><span style="padding:4px 10px;border-radius:999px;background:var(--cat-gray-bg);color:var(--cat-gray);font-size:13px;font-weight:600">Grijs</span><span style="font-size:12px;color:var(--text-muted)"></span></div>
+
+<div style="display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:var(--radius);background:var(--surface-raised);border:1px solid var(--border)"><span style="padding:4px 10px;border-radius:999px;background:var(--cat-blue-bg);color:var(--cat-blue);font-size:13px;font-weight:600">Blauw</span><span style="font-size:12px;color:var(--text-muted)"></span></div>
+
+<div style="display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:var(--radius);background:var(--surface-raised);border:1px solid var(--border)"><span style="padding:4px 10px;border-radius:999px;background:var(--cat-brown-bg);color:var(--cat-brown);font-size:13px;font-weight:600">Bruin</span><span style="font-size:12px;color:var(--text-muted)"></span></div>
+
+<div style="display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:var(--radius);background:var(--surface-raised);border:1px solid var(--border)"><span style="padding:4px 10px;border-radius:999px;background:var(--cat-pink-bg);color:var(--cat-pink);font-size:13px;font-weight:600">Roze</span><span style="font-size:12px;color:var(--text-muted)"></span></div>
+
+<div style="display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:var(--radius);background:var(--surface-raised);border:1px solid var(--border)"><span style="padding:4px 10px;border-radius:999px;background:var(--cat-purple-bg);color:var(--cat-purple);font-size:13px;font-weight:600">Paars</span><span style="font-size:12px;color:var(--text-muted)"></span></div>
+
+<div style="display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:var(--radius);background:var(--surface-raised);border:1px solid var(--border)"><span style="padding:4px 10px;border-radius:999px;background:var(--cat-orange-bg);color:var(--cat-orange);font-size:13px;font-weight:600">Oranje</span><span style="font-size:12px;color:var(--text-muted)"></span></div>
+
+<div style="display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:var(--radius);background:var(--surface-raised);border:1px solid var(--border)"><span style="padding:4px 10px;border-radius:999px;background:var(--cat-teal-bg);color:var(--cat-teal);font-size:13px;font-weight:600">Teal</span><span style="font-size:12px;color:var(--text-muted)">nieuw</span></div>
+
+<div style="display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:var(--radius);background:var(--surface-raised);border:1px solid var(--border)"><span style="padding:4px 10px;border-radius:999px;background:var(--cat-olijf-bg);color:var(--cat-olijf);font-size:13px;font-weight:600">Olijf</span><span style="font-size:12px;color:var(--text-muted)">nieuw</span></div>
+
+</div>
+<div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;font-size:13px;color:var(--text-muted)"><span style="display:flex;align-items:center;gap:8px"><span style="width:28px;height:28px;border-radius:999px;background:var(--cat-red)"></span>--cat-red</span><span style="display:flex;align-items:center;gap:8px"><span style="width:28px;height:28px;border-radius:999px;background:var(--danger)"></span>--danger</span><span>Naast elkaar: verwant, maar niet meer gelijk.</span></div>
+</section>
+
+<section data-screen-label="07 Donut met lijst" style="display:flex;flex-direction:column;gap:20px">
+<div style="display:flex;flex-direction:column;gap:6px;max-width:44rem"><p style="margin:0;font-size:13px;font-weight:600;color:var(--accent)">7 · DonutLijst</p><h2 style="margin:0;font-size:20px;font-weight:600;letter-spacing:-.01em">De donut is klein, de lijst is de hoofdzaak</h2><p style="margin:0;font-size:15px;line-height:1.5;color:var(--text-muted);text-wrap:pretty">Donut van 112px op de telefoon, 160px vanaf breed. 2px lucht tussen de stukken, geen labels in de ring. Per rij een kleurstip, het icoon, de naam en het bedrag; met een budget komt de balk uit punt 4 eronder.</p></div>
+<div style="width:390px;max-width:100%;box-sizing:border-box;display:flex;flex-direction:column;padding:20px;border-radius:var(--radius-lg);background:var(--surface-raised);border:1px solid var(--border);box-shadow:var(--shadow-card)">
+<div style="display:flex;align-items:center;gap:20px;padding-bottom:12px"><svg width="112" height="112" viewBox="0 0 112 112" aria-hidden="true" style="flex:0 0 auto"><circle cx="56" cy="56" r="48" fill="none" stroke="var(--cat-blue)" stroke-width="14" stroke-dasharray="114.67170080080759 301.59289474462014" stroke-dashoffset="0" transform="rotate(-90 56 56)"></circle><circle cx="56" cy="56" r="48" fill="none" stroke="var(--cat-green)" stroke-width="14" stroke-dasharray="82.55591665137818 301.59289474462014" stroke-dashoffset="-116.67170080080759" transform="rotate(-90 56 56)"></circle><circle cx="56" cy="56" r="48" fill="none" stroke="var(--cat-teal)" stroke-width="14" stroke-dasharray="27.630469812844147 301.59289474462014" stroke-dashoffset="-201.22761745218577" transform="rotate(-90 56 56)"></circle><circle cx="56" cy="56" r="48" fill="none" stroke="var(--cat-orange)" stroke-width="14" stroke-dasharray="17.46829563658446 301.59289474462014" stroke-dashoffset="-230.85808726502992" transform="rotate(-90 56 56)"></circle><circle cx="56" cy="56" r="48" fill="none" stroke="var(--cat-red)" stroke-width="14" stroke-dasharray="15.742382902844703 301.59289474462014" stroke-dashoffset="-250.32638290161438" transform="rotate(-90 56 56)"></circle><circle cx="56" cy="56" r="48" fill="none" stroke="var(--cat-gray)" stroke-width="14" stroke-dasharray="14.503867925113052 301.59289474462014" stroke-dashoffset="-268.0687658044591" transform="rotate(-90 56 56)"></circle><circle cx="56" cy="56" r="48" fill="none" stroke="var(--cat-purple)" stroke-width="14" stroke-dasharray="6.970604024885761 301.59289474462014" stroke-dashoffset="-284.57263372957215" transform="rotate(-90 56 56)"></circle><circle cx="56" cy="56" r="48" fill="none" stroke="var(--cat-olijf)" stroke-width="14" stroke-dasharray="6.049656990162227 301.59289474462014" stroke-dashoffset="-293.5432377544579" transform="rotate(-90 56 56)"></circle></svg><span style="display:flex;flex-direction:column;gap:2px"><span style="font-size:13px;color:var(--text-muted)">Uitgegeven in september</span><b style="font-size:28px;font-weight:600;letter-spacing:-.02em;font-variant-numeric:tabular-nums;white-space:nowrap">€ 2.184,30</b></span></div>
+
+<div style="display:flex;flex-direction:column;gap:8px;padding:12px 0;border-top:1px solid var(--border)">
+<div style="display:flex;align-items:center;gap:10px;min-height:24px"><span style="flex:0 0 auto;width:8px;height:8px;border-radius:999px;background:var(--cat-blue)"></span><span style="color:var(--text-muted);display:flex"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-house lucide-home" aria-hidden="true" style="flex:0 0 auto"><path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"></path><path d="M3 10a2 2 0 0 1 .709-1.528l7-6a2 2 0 0 1 2.582 0l7 6A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg></span><span style="flex:1;min-width:0;font-size:15px">Wonen</span><span style="font-size:15px;font-variant-numeric:tabular-nums">€ 845,00</span></div>
+
+</div>
+
+<div style="display:flex;flex-direction:column;gap:8px;padding:12px 0;border-top:1px solid var(--border)">
+<div style="display:flex;align-items:center;gap:10px;min-height:24px"><span style="flex:0 0 auto;width:8px;height:8px;border-radius:999px;background:var(--cat-green)"></span><span style="color:var(--text-muted);display:flex"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-shopping-basket" aria-hidden="true" style="flex:0 0 auto"><path d="m15 11-1 9"></path><path d="m19 11-4-7"></path><path d="M2 11h20"></path><path d="m3.5 11 1.6 7.4a2 2 0 0 0 2 1.6h9.8a2 2 0 0 0 2-1.6l1.7-7.4"></path><path d="M4.5 15.5h15"></path><path d="m5 11 4-7"></path><path d="m9 11 1 9"></path></svg></span><span style="flex:1;min-width:0;font-size:15px">Boodschappen</span><span style="font-size:15px;font-variant-numeric:tabular-nums">€ 612,40</span></div>
+<div style="position:relative;height:6px;margin-left:46px;border-radius:999px;background:var(--surface-sunken)"><span style="position:absolute;left:0;top:0;bottom:0;width:87.5%;border-radius:999px;background:var(--accent)"></span><span aria-hidden="true" style="position:absolute;top:-3px;width:2px;height:12px;margin-left:-1px;left:53.3%;border-radius:1px;background:var(--text);box-shadow:0 0 0 2px var(--surface-raised)"></span></div>
+</div>
+
+<div style="display:flex;flex-direction:column;gap:8px;padding:12px 0;border-top:1px solid var(--border)">
+<div style="display:flex;align-items:center;gap:10px;min-height:24px"><span style="flex:0 0 auto;width:8px;height:8px;border-radius:999px;background:var(--cat-teal)"></span><span style="color:var(--text-muted);display:flex"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-car" aria-hidden="true" style="flex:0 0 auto"><path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2"></path><circle cx="7" cy="17" r="2"></circle><path d="M9 17h6"></path><circle cx="17" cy="17" r="2"></circle></svg></span><span style="flex:1;min-width:0;font-size:15px">Vervoer</span><span style="font-size:15px;font-variant-numeric:tabular-nums">€ 214,60</span></div>
+
+</div>
+
+<div style="display:flex;flex-direction:column;gap:8px;padding:12px 0;border-top:1px solid var(--border)">
+<div style="display:flex;align-items:center;gap:10px;min-height:24px"><span style="flex:0 0 auto;width:8px;height:8px;border-radius:999px;background:var(--cat-orange)"></span><span style="color:var(--text-muted);display:flex"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-utensils lucide-fork-knife" aria-hidden="true" style="flex:0 0 auto"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"></path><path d="M7 2v20"></path><path d="M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7"></path></svg></span><span style="flex:1;min-width:0;font-size:15px">Uit eten</span><span style="font-size:15px;font-variant-numeric:tabular-nums">€ 141,00</span></div>
+<div style="position:relative;height:6px;margin-left:46px;border-radius:999px;background:var(--surface-sunken)"><span style="position:absolute;left:0;top:0;bottom:0;width:94%;border-radius:999px;background:var(--botergoud)"></span><span aria-hidden="true" style="position:absolute;top:-3px;width:2px;height:12px;margin-left:-1px;left:53.3%;border-radius:1px;background:var(--text);box-shadow:0 0 0 2px var(--surface-raised)"></span></div>
+</div>
+
+<div style="display:flex;flex-direction:column;gap:8px;padding:12px 0;border-top:1px solid var(--border)">
+<div style="display:flex;align-items:center;gap:10px;min-height:24px"><span style="flex:0 0 auto;width:8px;height:8px;border-radius:999px;background:var(--cat-red)"></span><span style="color:var(--text-muted);display:flex"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-shirt" aria-hidden="true" style="flex:0 0 auto"><path d="M20.38 3.46 16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z"></path></svg></span><span style="flex:1;min-width:0;font-size:15px">Kleding</span><span style="font-size:15px;font-variant-numeric:tabular-nums">€ 128,50</span></div>
+<div style="position:relative;height:6px;margin-left:46px;border-radius:999px;background:var(--surface-sunken)"><span style="position:absolute;left:0;top:0;bottom:0;width:100%;border-radius:999px;background:var(--danger)"></span><span aria-hidden="true" style="position:absolute;top:-3px;width:2px;height:12px;margin-left:-1px;left:77.8%;border-radius:1px;background:var(--text);box-shadow:0 0 0 2px var(--surface-raised)"></span></div>
+</div>
+
+<div style="display:flex;flex-direction:column;gap:8px;padding:12px 0;border-top:1px solid var(--border)">
+<div style="display:flex;align-items:center;gap:10px;min-height:24px"><span style="flex:0 0 auto;width:8px;height:8px;border-radius:999px;background:var(--cat-gray)"></span><span style="color:var(--text-muted);display:flex"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-ellipsis lucide-more-horizontal" aria-hidden="true" style="flex:0 0 auto"><circle cx="12" cy="12" r="1"></circle><circle cx="19" cy="12" r="1"></circle><circle cx="5" cy="12" r="1"></circle></svg></span><span style="flex:1;min-width:0;font-size:15px">Overig</span><span style="font-size:15px;font-variant-numeric:tabular-nums">€ 119,53</span></div>
+
+</div>
+
+<div style="display:flex;flex-direction:column;gap:8px;padding:12px 0;border-top:1px solid var(--border)">
+<div style="display:flex;align-items:center;gap:10px;min-height:24px"><span style="flex:0 0 auto;width:8px;height:8px;border-radius:999px;background:var(--cat-purple)"></span><span style="color:var(--text-muted);display:flex"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-repeat" aria-hidden="true" style="flex:0 0 auto"><path d="m17 2 4 4-4 4"></path><path d="M3 11v-1a4 4 0 0 1 4-4h14"></path><path d="m7 22-4-4 4-4"></path><path d="M21 13v1a4 4 0 0 1-4 4H3"></path></svg></span><span style="flex:1;min-width:0;font-size:15px">Abonnementen</span><span style="font-size:15px;font-variant-numeric:tabular-nums">€ 64,97</span></div>
+
+</div>
+
+<div style="display:flex;flex-direction:column;gap:8px;padding:12px 0;border-top:1px solid var(--border)">
+<div style="display:flex;align-items:center;gap:10px;min-height:24px"><span style="flex:0 0 auto;width:8px;height:8px;border-radius:999px;background:var(--cat-olijf)"></span><span style="color:var(--text-muted);display:flex"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-sprout" aria-hidden="true" style="flex:0 0 auto"><path d="M14 9.536V7a4 4 0 0 1 4-4h1.5a.5.5 0 0 1 .5.5V5a4 4 0 0 1-4 4 4 4 0 0 0-4 4c0 2 1 3 1 5a5 5 0 0 1-1 3"></path><path d="M4 9a5 5 0 0 1 8 4 5 5 0 0 1-8-4"></path><path d="M5 21h14"></path></svg></span><span style="flex:1;min-width:0;font-size:15px">Tuin</span><span style="font-size:15px;font-variant-numeric:tabular-nums">€ 58,30</span></div>
+
+</div>
+
+</div>
+</section>
+
+<section data-screen-label="08 Geldbedragen" style="display:flex;flex-direction:column;gap:20px">
+<div style="display:flex;flex-direction:column;gap:6px;max-width:44rem"><p style="margin:0;font-size:13px;font-weight:600;color:var(--accent)">8 · Bedrag</p><h2 style="margin:0;font-size:20px;font-weight:600;letter-spacing:-.01em">Eén schrijfwijze voor geld</h2><p style="margin:0;font-size:15px;line-height:1.5;color:var(--text-muted);text-wrap:pretty">€, harde spatie, punt voor duizendtallen, komma en altijd twee decimalen. Tabelcijfers, rechts uitgelijnd. Het teken staat voor het euroteken, zodat een kolom op het teken lijnt: een echte min (U+2212) in tekstkleur voor een uitgave, plus in --success voor inkomsten. Rood nooit voor een gewone uitgave. Wat niet meetelt is gedempt en zonder teken.</p></div>
+<div style="display:flex;flex-wrap:wrap;gap:24px;align-items:flex-start">
+<div style="width:390px;max-width:100%;box-sizing:border-box;display:flex;flex-direction:column;padding:4px 20px;border-radius:var(--radius-lg);background:var(--surface-raised);border:1px solid var(--border);box-shadow:var(--shadow-card)">
+
+<div style="display:flex;align-items:center;gap:12px;min-height:56px;border-top:none"><span style="flex:1;min-width:0;display:flex;flex-direction:column;gap:1px"><span style="font-size:15px;color:var(--text)">Jumbo Utrecht</span><span style="font-size:13px;color:var(--text-muted)">Boodschappen · vandaag</span></span><span style="font-size:15px;font-weight:500;font-variant-numeric:tabular-nums;white-space:nowrap;color:var(--text)">−€ 42,18</span></div>
+
+<div style="display:flex;align-items:center;gap:12px;min-height:56px;border-top:1px solid var(--border)"><span style="flex:1;min-width:0;display:flex;flex-direction:column;gap:1px"><span style="font-size:15px;color:var(--text)">Salaris</span><span style="font-size:13px;color:var(--text-muted)">Inkomen · 25 sep</span></span><span style="font-size:15px;font-weight:500;font-variant-numeric:tabular-nums;white-space:nowrap;color:var(--success)">+€ 2.400,00</span></div>
+
+<div style="display:flex;align-items:center;gap:12px;min-height:56px;border-top:1px solid var(--border)"><span style="flex:1;min-width:0;display:flex;flex-direction:column;gap:1px"><span style="font-size:15px;color:var(--text)">Tikkie van Imke</span><span style="font-size:13px;color:var(--text-muted)">Terugbetaling · 24 sep</span></span><span style="font-size:15px;font-weight:500;font-variant-numeric:tabular-nums;white-space:nowrap;color:var(--success)">+€ 18,50</span></div>
+
+<div style="display:flex;align-items:center;gap:12px;min-height:56px;border-top:1px solid var(--border)"><span style="flex:1;min-width:0;display:flex;flex-direction:column;gap:1px"><span style="font-size:15px;color:var(--text-muted)">Naar spaarrekening</span><span style="font-size:13px;color:var(--text-muted)">Eigen rekening · telt niet mee</span></span><span style="font-size:15px;font-weight:500;font-variant-numeric:tabular-nums;white-space:nowrap;color:var(--text-subtle)">€ 500,00</span></div>
+
+</div>
+<div style="display:flex;flex-direction:column;gap:14px;padding:20px;border-radius:var(--radius-lg);background:var(--surface-raised);border:1px solid var(--border);box-shadow:var(--shadow-card)">
+<div style="display:flex;flex-direction:column;gap:2px"><span style="font-size:13px;color:var(--text-muted)">groot · 30px, semibold</span><b style="font-size:30px;font-weight:600;letter-spacing:-.02em;font-variant-numeric:tabular-nums">€ 1.234,56</b></div>
+<div style="display:flex;flex-direction:column;gap:2px"><span style="font-size:13px;color:var(--text-muted)">regel · 15px, medium</span><span style="font-size:15px;font-weight:500;font-variant-numeric:tabular-nums">€ 1.234,56</span></div>
+<div style="display:flex;flex-direction:column;gap:2px"><span style="font-size:13px;color:var(--text-muted)">klein · 13px, regular</span><span style="font-size:13px;font-variant-numeric:tabular-nums">€ 1.234,56</span></div>
+</div>
+</div>
+</section>
+</div>
+</div></div><div class="vak"><div data-thema="donker" style="min-height:100vh;background:var(--surface);color:var(--text);font-family:var(--font-sans);padding:40px 24px 80px;box-sizing:border-box">
+<div style="max-width:1180px;margin:0 auto;display:flex;flex-direction:column;gap:56px">
+<header style="display:flex;flex-direction:column;gap:8px;max-width:44rem">
+<p style="margin:0;font-size:11px;letter-spacing:.08em;text-transform:uppercase;font-weight:600;color:var(--text-subtle)">mone.yoim.nl · @yoim/ds v0.4</p>
+<h1 style="margin:0;font-size:30px;font-weight:600;letter-spacing:-.02em;line-height:1.15">Wat mone van het design system nodig heeft</h1>
+<p style="margin:0;font-size:15px;line-height:1.5;color:var(--text-muted);text-wrap:pretty">Acht onderdelen, elk een aanvulling op de bestaande kit. Niets hier is van mone alleen: energ, weekl en de hub kunnen ze ook gebruiken. Tokens staan in mone-tokens.css, de bouwspec in PROMPT-claude-code.md.</p>
+</header>
+
+<section data-screen-label="01 Navigatie" style="display:flex;flex-direction:column;gap:20px">
+<div style="display:flex;flex-direction:column;gap:6px;max-width:44rem"><p style="margin:0;font-size:13px;font-weight:600;color:var(--accent)">1 · Navigatie</p><h2 style="margin:0;font-size:20px;font-weight:600;letter-spacing:-.01em">Capsule onder de 745px, rail erboven</h2><p style="margin:0;font-size:15px;line-height:1.5;color:var(--text-muted);text-wrap:pretty">Eén onderdeel met drie tot vijf routes. Het merk is een slot: elke app zet er zijn eigen woordmerk in. Account zit in de voet van de rail; op de telefoon is het de avatar rechts in de kop.</p></div>
+<div style="display:flex;flex-wrap:wrap;gap:24px;align-items:flex-start">
+<div style="position:relative;width:390px;height:300px;flex:0 0 auto;border-radius:var(--radius-2xl);overflow:hidden;border:1px solid var(--border);background:var(--canvas-wash),var(--surface)">
+<div style="display:flex;align-items:center;justify-content:space-between;padding:20px 16px 0 24px"><b style="font-size:30px;font-weight:600;letter-spacing:-.02em">Overzicht</b><span style="width:48px;height:48px;display:grid;place-items:center"><span style="width:36px;height:36px;border-radius:999px;background:var(--member-yoran);color:#fff;display:grid;place-items:center;font-size:14px;font-weight:600">Y</span></span></div>
+<div style="margin:16px 24px 0;display:flex;flex-direction:column;gap:10px"><span style="height:14px;width:62%;border-radius:999px;background:var(--surface-sunken)"></span><span style="height:14px;width:44%;border-radius:999px;background:var(--surface-sunken)"></span></div>
+<nav style="position:absolute;left:16px;right:16px;bottom:12px;border-radius:999px;background:var(--glass-tint);backdrop-filter:var(--glass-blur);border:1px solid var(--glass-border);box-shadow:var(--glass-highlight)">
+<div style="position:relative;display:flex;padding:4px">
+<span aria-hidden="true" style="position:absolute;top:4px;bottom:4px;left:4px;width:calc((100% - 8px) / 3);border-radius:999px;background:var(--glass-tint-strong);border:1px solid var(--glass-border);box-shadow:var(--glass-rim);box-sizing:border-box"></span>
+
+<span style="position:relative;flex:1;min-width:0;min-height:48px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;padding:6px 0;font-size:11px;font-weight:500;color:var(--accent)"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-layout-dashboard" aria-hidden="true" style="flex:0 0 auto"><rect width="7" height="9" x="3" y="3" rx="1"></rect><rect width="7" height="5" x="14" y="3" rx="1"></rect><rect width="7" height="9" x="14" y="12" rx="1"></rect><rect width="7" height="5" x="3" y="16" rx="1"></rect></svg><span style="white-space:nowrap">Overzicht</span></span>
+
+<span style="position:relative;flex:1;min-width:0;min-height:48px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;padding:6px 0;font-size:11px;font-weight:500;color:var(--text-muted)"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-list-checks" aria-hidden="true" style="flex:0 0 auto"><path d="M13 5h8"></path><path d="M13 12h8"></path><path d="M13 19h8"></path><path d="m3 17 2 2 4-4"></path><path d="m3 7 2 2 4-4"></path></svg><span style="white-space:nowrap">Nakijken</span><span style="position:absolute;top:4px;left:calc(50% + 6px);min-width:16px;height:16px;padding:0 4px;box-sizing:border-box;border-radius:999px;background:var(--accent);color:var(--accent-fg);font-size:10px;font-weight:600;display:grid;place-items:center">4</span></span>
+
+<span style="position:relative;flex:1;min-width:0;min-height:48px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;padding:6px 0;font-size:11px;font-weight:500;color:var(--text-muted)"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-landmark" aria-hidden="true" style="flex:0 0 auto"><path d="M10 18v-7"></path><path d="M11.119 2.205a2 2 0 0 1 1.762 0l7.84 3.846A.5.5 0 0 1 20.5 7h-17a.5.5 0 0 1-.22-.949z"></path><path d="M14 18v-7"></path><path d="M18 18v-7"></path><path d="M3 22h18"></path><path d="M6 18v-7"></path></svg><span style="white-space:nowrap">Rekeningen</span></span>
+
+
+
+</div>
+</nav>
+</div>
+<div style="position:relative;width:760px;max-width:100%;height:460px;flex:0 1 auto;border-radius:var(--radius-lg);overflow:hidden;border:1px solid var(--border);background:var(--canvas-wash),var(--surface)">
+<nav style="position:absolute;top:0;bottom:0;left:0;width:240px;box-sizing:border-box;display:flex;flex-direction:column;gap:16px;padding:20px 12px 16px;background:var(--glass-tint);backdrop-filter:var(--glass-blur);border-right:1px solid var(--glass-border);box-shadow:var(--glass-highlight)">
+<span style="height:44px;border:1px dashed var(--border-strong);border-radius:var(--radius);display:flex;align-items:center;padding:0 12px;font-size:13px;color:var(--text-muted)">merk: woordmerk van de app</span>
+<div style="position:relative;display:flex;flex-direction:column;gap:6px">
+<span aria-hidden="true" style="position:absolute;left:0;right:0;top:0;height:48px;border-radius:var(--radius-lg);background:var(--glass-tint-strong);border:1px solid var(--glass-border);box-shadow:var(--glass-rim);box-sizing:border-box"></span>
+
+<span style="position:relative;height:48px;display:flex;align-items:center;gap:12px;padding:0 12px;font-size:15px;font-weight:500;color:var(--accent)"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-layout-dashboard" aria-hidden="true" style="flex:0 0 auto"><rect width="7" height="9" x="3" y="3" rx="1"></rect><rect width="7" height="5" x="14" y="3" rx="1"></rect><rect width="7" height="9" x="14" y="12" rx="1"></rect><rect width="7" height="5" x="3" y="16" rx="1"></rect></svg>Overzicht</span>
+
+<span style="position:relative;height:48px;display:flex;align-items:center;gap:12px;padding:0 12px;font-size:15px;font-weight:500;color:var(--text-muted)"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-list-checks" aria-hidden="true" style="flex:0 0 auto"><path d="M13 5h8"></path><path d="M13 12h8"></path><path d="M13 19h8"></path><path d="m3 17 2 2 4-4"></path><path d="m3 7 2 2 4-4"></path></svg>Nakijken<span style="margin-left:auto;padding:2px 8px;border-radius:999px;background:var(--accent-soft);color:var(--accent-hover);font-size:13px;font-weight:600">4</span></span>
+
+<span style="position:relative;height:48px;display:flex;align-items:center;gap:12px;padding:0 12px;font-size:15px;font-weight:500;color:var(--text-muted)"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-landmark" aria-hidden="true" style="flex:0 0 auto"><path d="M10 18v-7"></path><path d="M11.119 2.205a2 2 0 0 1 1.762 0l7.84 3.846A.5.5 0 0 1 20.5 7h-17a.5.5 0 0 1-.22-.949z"></path><path d="M14 18v-7"></path><path d="M18 18v-7"></path><path d="M3 22h18"></path><path d="M6 18v-7"></path></svg>Rekeningen</span>
+
+
+
+</div>
+<div style="margin-top:auto;display:flex;flex-direction:column;gap:8px">
+<div style="display:flex;gap:2px;padding:3px;border-radius:999px;background:var(--glass-thin);border:1px solid var(--glass-border);box-shadow:var(--glass-rim)">
+<span style="flex:1;height:32px;border-radius:999px;display:flex;align-items:center;justify-content:center;gap:4px;font-size:13px;font-weight:500;color:var(--text-muted);background:transparent;box-shadow:none"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-sun" aria-hidden="true" style="flex:0 0 auto"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2"></path><path d="M12 20v2"></path><path d="m4.93 4.93 1.41 1.41"></path><path d="m17.66 17.66 1.41 1.41"></path><path d="M2 12h2"></path><path d="M20 12h2"></path><path d="m6.34 17.66-1.41 1.41"></path><path d="m19.07 4.93-1.41 1.41"></path></svg>Licht</span>
+<span style="flex:1;height:32px;border-radius:999px;display:flex;align-items:center;justify-content:center;gap:4px;font-size:13px;font-weight:500;color:var(--text);background:var(--glass-tint-strong);box-shadow:var(--glass-rim)"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-moon" aria-hidden="true" style="flex:0 0 auto"><path d="M20.985 12.486a9 9 0 1 1-9.473-9.472c.405-.022.617.46.402.803a6 6 0 0 0 8.268 8.268c.344-.215.825-.004.803.401"></path></svg>Donker</span>
+</div>
+<div style="display:flex;align-items:center;gap:8px;min-height:48px;padding-left:6px">
+<span style="flex:0 0 auto;width:32px;height:32px;border-radius:999px;background:var(--member-yoran);color:#fff;display:grid;place-items:center;font-size:14px;font-weight:600">Y</span>
+<span style="flex:1;min-width:0;display:flex;flex-direction:column"><b style="font-size:14px;font-weight:600;line-height:1.2">Yoran</b><em style="font-style:normal;font-size:11px;color:var(--text-muted);line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Huishouden van Yoran en Imke</em></span>
+<span aria-label="Uitloggen" style="flex:0 0 auto;width:48px;height:48px;border-radius:999px;display:grid;place-items:center;color:var(--text-muted)"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-log-out" aria-hidden="true" style="flex:0 0 auto"><path d="m16 17 5-5-5-5"></path><path d="M21 12H9"></path><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path></svg></span>
+</div>
+</div>
+</nav>
+<div style="position:absolute;left:240px;right:0;top:0;padding:24px 32px;display:flex;flex-direction:column;gap:20px">
+<div style="display:flex;align-items:center;gap:10px;min-height:48px;padding:0 14px 0 8px;border-radius:999px;background:var(--glass-thin);backdrop-filter:var(--glass-blur-thin);border:1px solid var(--glass-border);box-shadow:var(--glass-rim)"><span style="flex:0 0 auto;width:30px;height:30px;border-radius:999px;display:grid;place-items:center;background:var(--botergoud-soft);color:var(--botergoud)"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-clock" aria-hidden="true" style="flex:0 0 auto"><circle cx="12" cy="12" r="10"></circle><path d="M12 6v6l4 2"></path></svg></span><span style="flex:1;min-width:0;font-size:14px">Bankkoppeling verloopt over 6 dagen.</span><span style="font-size:14px;font-weight:600;color:var(--accent)">Vernieuwen</span></div>
+<b style="font-size:30px;font-weight:600;letter-spacing:-.02em">Overzicht</b>
+<div style="display:flex;flex-direction:column;gap:10px"><span style="height:14px;width:58%;border-radius:999px;background:var(--surface-sunken)"></span><span style="height:14px;width:40%;border-radius:999px;background:var(--surface-sunken)"></span></div>
+</div>
+</div>
+</div>
+</section>
+
+<section data-screen-label="02 Statusregel" style="display:flex;flex-direction:column;gap:20px">
+<div style="display:flex;flex-direction:column;gap:6px;max-width:44rem"><p style="margin:0;font-size:13px;font-weight:600;color:var(--accent)">2 · StatusRegel</p><h2 style="margin:0;font-size:20px;font-weight:600;letter-spacing:-.01em">Alleen als er iets is, hooguit één tegelijk</h2><p style="margin:0;font-size:15px;line-height:1.5;color:var(--text-muted);text-wrap:pretty">Thin glas boven de inhoud. De hele regel is de knop, dus 48px hoog. De kleur zit in het rondje; de tekst blijft tekstkleur, behalve bij gedempt.</p></div>
+<div style="display:flex;flex-direction:column;gap:12px;max-width:560px;padding:20px;border-radius:var(--radius-lg);background:var(--canvas-wash),var(--surface);border:1px solid var(--border)">
+<div style="display:flex;align-items:center;gap:10px;min-height:48px;padding:0 14px;border-radius:999px;border:1px dashed var(--border-strong);font-size:14px;color:var(--text-muted)">Alles goed: geen regel</div>
+
+<div style="display:flex;align-items:center;gap:10px;min-height:48px;padding:0 14px 0 8px;border-radius:999px;background:var(--glass-thin);backdrop-filter:var(--glass-blur-thin);border:1px solid var(--glass-border);box-shadow:var(--glass-rim)"><span style="flex:0 0 auto;width:30px;height:30px;border-radius:999px;display:grid;place-items:center;background:var(--botergoud-soft);color:var(--botergoud)"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-clock" aria-hidden="true" style="flex:0 0 auto"><circle cx="12" cy="12" r="10"></circle><path d="M12 6v6l4 2"></path></svg></span><span style="flex:1;min-width:0;font-size:14px;line-height:1.35;padding:6px 0;color:var(--text)">Bankkoppeling verloopt over 6 dagen.</span><span style="flex:0 0 auto;font-size:14px;font-weight:600;color:var(--accent);white-space:nowrap">Vernieuwen</span></div>
+
+<div style="display:flex;align-items:center;gap:10px;min-height:48px;padding:0 14px 0 8px;border-radius:999px;background:var(--glass-thin);backdrop-filter:var(--glass-blur-thin);border:1px solid var(--glass-border);box-shadow:var(--glass-rim)"><span style="flex:0 0 auto;width:30px;height:30px;border-radius:999px;display:grid;place-items:center;background:var(--danger);color:var(--surface-raised)"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-alert lucide-alert-circle" aria-hidden="true" style="flex:0 0 auto"><circle cx="12" cy="12" r="10"></circle><line x1="12" x2="12" y1="8" y2="12"></line><line x1="12" x2="12.01" y1="16" y2="16"></line></svg></span><span style="flex:1;min-width:0;font-size:14px;line-height:1.35;padding:6px 0;color:var(--text)">Bankkoppeling verlopen. Nieuwe transacties komen niet binnen.</span><span style="flex:0 0 auto;font-size:14px;font-weight:600;color:var(--accent);white-space:nowrap">Opnieuw koppelen</span></div>
+
+<div style="display:flex;align-items:center;gap:10px;min-height:48px;padding:0 14px 0 8px;border-radius:999px;background:var(--glass-thin);backdrop-filter:var(--glass-blur-thin);border:1px solid var(--glass-border);box-shadow:var(--glass-rim)"><span style="flex:0 0 auto;width:30px;height:30px;border-radius:999px;display:grid;place-items:center;background:var(--surface-sunken);color:var(--text-muted)"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-cloud-off" aria-hidden="true" style="flex:0 0 auto"><path d="M10.94 5.274A7 7 0 0 1 15.71 10h1.79a4.5 4.5 0 0 1 4.222 6.057"></path><path d="M18.796 18.81A4.5 4.5 0 0 1 17.5 19H9A7 7 0 0 1 5.79 5.78"></path><path d="m2 2 20 20"></path></svg></span><span style="flex:1;min-width:0;font-size:14px;line-height:1.35;padding:6px 0;color:var(--text-muted)">Ophalen mislukt om 07:12. Straks gaat het vanzelf opnieuw.</span><span style="flex:0 0 auto;font-size:14px;font-weight:600;color:var(--accent);white-space:nowrap">Nu ophalen</span></div>
+
+</div>
+</section>
+
+<section data-screen-label="03 Lege staat" style="display:flex;flex-direction:column;gap:20px">
+<div style="display:flex;flex-direction:column;gap:6px;max-width:44rem"><p style="margin:0;font-size:13px;font-weight:600;color:var(--accent)">3 · LeegStaat</p><h2 style="margin:0;font-size:20px;font-weight:600;letter-spacing:-.01em">Icoon, een zin, eventueel een knop</h2><p style="margin:0;font-size:15px;line-height:1.5;color:var(--text-muted);text-wrap:pretty">De bestaande LeegStaat krijgt een optioneel icoon: 28px in tekst-subtiel, zonder plaat. Het icoon zegt waar je bent, niet wat er mist. De knop blijft stil, nooit accentgevuld.</p></div>
+<div style="display:flex;flex-wrap:wrap;gap:24px">
+<div style="flex:1 1 300px;max-width:420px;display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center;padding:48px 24px;border-radius:var(--radius-lg);background:var(--surface-raised);border:1px solid var(--border);box-shadow:var(--shadow-card)"><span style="color:var(--text-subtle);margin-bottom:6px"><svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-list-checks" aria-hidden="true" style="flex:0 0 auto"><path d="M13 5h8"></path><path d="M13 12h8"></path><path d="M13 19h8"></path><path d="m3 17 2 2 4-4"></path><path d="m3 7 2 2 4-4"></path></svg></span><b style="font-size:16px;font-weight:500">Niets na te kijken.</b><p style="margin:0;font-size:15px;line-height:1.5;color:var(--text-muted);max-width:17rem;text-wrap:pretty">Nieuwe transacties staan hier zodra de bank ze doorgeeft.</p></div>
+<div style="flex:1 1 300px;max-width:420px;display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center;padding:48px 24px;border-radius:var(--radius-lg);background:var(--surface-raised);border:1px solid var(--border);box-shadow:var(--shadow-card)"><span style="color:var(--text-subtle);margin-bottom:6px"><svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-landmark" aria-hidden="true" style="flex:0 0 auto"><path d="M10 18v-7"></path><path d="M11.119 2.205a2 2 0 0 1 1.762 0l7.84 3.846A.5.5 0 0 1 20.5 7h-17a.5.5 0 0 1-.22-.949z"></path><path d="M14 18v-7"></path><path d="M18 18v-7"></path><path d="M3 22h18"></path><path d="M6 18v-7"></path></svg></span><b style="font-size:16px;font-weight:500">Nog geen rekening gekoppeld.</b><p style="margin:0;font-size:15px;line-height:1.5;color:var(--text-muted);max-width:17rem;text-wrap:pretty">Koppel er een en de transacties halen zichzelf op.</p><span style="margin-top:12px;min-height:48px;padding:0 20px;border-radius:999px;background:var(--surface-sunken);display:flex;align-items:center;font-size:15px;font-weight:500">Rekening koppelen</span></div>
+</div>
+</section>
+
+<section data-screen-label="04 Balk met markering" style="display:flex;flex-direction:column;gap:20px">
+<div style="display:flex;flex-direction:column;gap:6px;max-width:44rem"><p style="margin:0;font-size:13px;font-weight:600;color:var(--accent)">4 · Balk</p><h2 style="margin:0;font-size:20px;font-weight:600;letter-spacing:-.01em">Voortgang met een streepje erop</h2><p style="margin:0;font-size:15px;line-height:1.5;color:var(--text-muted);text-wrap:pretty">Het streepje is vandaag in de periode, of het gemiddelde. Binnen is accent, bijna op (90 tot 100 procent) botergoud, over is danger. Precies 100 procent telt als binnen. Bij over schaalt de balk naar het bedrag en wordt het streepje het einde van het budget.</p></div>
+<div style="max-width:560px;display:flex;flex-direction:column;padding:8px 20px;border-radius:var(--radius-lg);background:var(--surface-raised);border:1px solid var(--border);box-shadow:var(--shadow-card)">
+
+<div style="display:flex;flex-direction:column;gap:8px;padding:14px 0;border-top:none">
+<div style="display:flex;align-items:baseline;justify-content:space-between;gap:12px"><b style="font-size:15px;font-weight:500">Boodschappen</b><span style="font-size:14px;color:var(--text-muted);font-variant-numeric:tabular-nums;white-space:nowrap">€ 268,20 van € 600,00</span></div>
+<div style="position:relative;height:8px;border-radius:999px;background:var(--surface-sunken)"><span style="position:absolute;left:0;top:0;bottom:0;width:44.7%;border-radius:999px;background:var(--accent)"></span><span aria-hidden="true" style="position:absolute;top:-4px;width:2px;height:16px;margin-left:-1px;left:53.3%;border-radius:1px;background:var(--text);box-shadow:0 0 0 2px var(--surface-raised)"></span></div>
+<div style="display:flex;justify-content:space-between;gap:12px;font-size:13px"><span style="color:var(--text-muted);font-variant-numeric:tabular-nums">nog € 331,80</span><span style="color:var(--text-subtle)">streep: vandaag</span></div>
+</div>
+
+<div style="display:flex;flex-direction:column;gap:8px;padding:14px 0;border-top:1px solid var(--border)">
+<div style="display:flex;align-items:baseline;justify-content:space-between;gap:12px"><b style="font-size:15px;font-weight:500">Uit eten</b><span style="font-size:14px;color:var(--text-muted);font-variant-numeric:tabular-nums;white-space:nowrap">€ 141,00 van € 150,00</span></div>
+<div style="position:relative;height:8px;border-radius:999px;background:var(--surface-sunken)"><span style="position:absolute;left:0;top:0;bottom:0;width:94%;border-radius:999px;background:var(--botergoud)"></span><span aria-hidden="true" style="position:absolute;top:-4px;width:2px;height:16px;margin-left:-1px;left:53.3%;border-radius:1px;background:var(--text);box-shadow:0 0 0 2px var(--surface-raised)"></span></div>
+<div style="display:flex;justify-content:space-between;gap:12px;font-size:13px"><span style="color:var(--text-muted);font-variant-numeric:tabular-nums">nog € 9,00, bijna op</span><span style="color:var(--text-subtle)">streep: vandaag</span></div>
+</div>
+
+<div style="display:flex;flex-direction:column;gap:8px;padding:14px 0;border-top:1px solid var(--border)">
+<div style="display:flex;align-items:baseline;justify-content:space-between;gap:12px"><b style="font-size:15px;font-weight:500">Abonnementen</b><span style="font-size:14px;color:var(--text-muted);font-variant-numeric:tabular-nums;white-space:nowrap">€ 64,97 van € 64,97</span></div>
+<div style="position:relative;height:8px;border-radius:999px;background:var(--surface-sunken)"><span style="position:absolute;left:0;top:0;bottom:0;width:100%;border-radius:999px;background:var(--accent)"></span><span aria-hidden="true" style="position:absolute;top:-4px;width:2px;height:16px;margin-left:-1px;left:53.3%;border-radius:1px;background:var(--text);box-shadow:0 0 0 2px var(--surface-raised)"></span></div>
+<div style="display:flex;justify-content:space-between;gap:12px;font-size:13px"><span style="color:var(--text-muted);font-variant-numeric:tabular-nums">precies op</span><span style="color:var(--text-subtle)">streep: vandaag</span></div>
+</div>
+
+<div style="display:flex;flex-direction:column;gap:8px;padding:14px 0;border-top:1px solid var(--border)">
+<div style="display:flex;align-items:baseline;justify-content:space-between;gap:12px"><b style="font-size:15px;font-weight:500">Kleding</b><span style="font-size:14px;color:var(--text-muted);font-variant-numeric:tabular-nums;white-space:nowrap">€ 128,50 van € 100,00</span></div>
+<div style="position:relative;height:8px;border-radius:999px;background:var(--surface-sunken)"><span style="position:absolute;left:0;top:0;bottom:0;width:100%;border-radius:999px;background:var(--danger)"></span><span aria-hidden="true" style="position:absolute;top:-4px;width:2px;height:16px;margin-left:-1px;left:77.8%;border-radius:1px;background:var(--text);box-shadow:0 0 0 2px var(--surface-raised)"></span></div>
+<div style="display:flex;justify-content:space-between;gap:12px;font-size:13px"><span style="color:var(--danger);font-variant-numeric:tabular-nums">€ 28,50 over</span><span style="color:var(--text-subtle)">streep: einde budget</span></div>
+</div>
+
+<div style="display:flex;flex-direction:column;gap:8px;padding:14px 0;border-top:1px solid var(--border)">
+<div style="display:flex;align-items:baseline;justify-content:space-between;gap:12px"><b style="font-size:15px;font-weight:500">Deze periode</b><span style="font-size:14px;color:var(--text-muted);font-variant-numeric:tabular-nums;white-space:nowrap">€ 2.184,30</span></div>
+<div style="position:relative;height:8px;border-radius:999px;background:var(--surface-sunken)"><span style="position:absolute;left:0;top:0;bottom:0;width:72.5%;border-radius:999px;background:var(--accent)"></span><span aria-hidden="true" style="position:absolute;top:-4px;width:2px;height:16px;margin-left:-1px;left:80%;border-radius:1px;background:var(--text);box-shadow:0 0 0 2px var(--surface-raised)"></span></div>
+<div style="display:flex;justify-content:space-between;gap:12px;font-size:13px"><span style="color:var(--text-muted);font-variant-numeric:tabular-nums">€ 225,70 onder het gemiddelde</span><span style="color:var(--text-subtle)">streep: gemiddeld</span></div>
+</div>
+
+</div>
+</section>
+
+<section data-screen-label="05 Heatmap" style="display:flex;flex-direction:column;gap:20px">
+<div style="display:flex;flex-direction:column;gap:6px;max-width:44rem"><p style="margin:0;font-size:13px;font-weight:600;color:var(--accent)">5 · --heat-0 tot --heat-3</p><h2 style="margin:0;font-size:20px;font-weight:600;letter-spacing:-.01em">Vier stappen, op het accent</h2><p style="margin:0;font-size:15px;line-height:1.5;color:var(--text-muted);text-wrap:pretty">Uitgeven is geen goed of fout, dus olijf en geen groen of rood. Niveau 0 is niets uitgegeven; 1 tot 3 zijn de terciles van de dagen met uitgaven in de periode. Op niveau 3 hoort --heat-3-fg.</p></div>
+<div style="display:flex;flex-wrap:wrap;gap:24px;align-items:flex-start">
+<div style="display:flex;flex-direction:column;gap:8px">
+
+<div style="display:flex;align-items:center;gap:12px"><span style="width:40px;height:40px;border-radius:var(--radius-sm);background:var(--heat-0);border:1px solid var(--border)"></span><span style="display:flex;flex-direction:column"><b style="font-size:14px;font-weight:600">--heat-0</b><span style="font-size:13px;color:var(--text-muted)">niets uitgegeven</span></span></div>
+
+<div style="display:flex;align-items:center;gap:12px"><span style="width:40px;height:40px;border-radius:var(--radius-sm);background:var(--heat-1);border:1px solid var(--border)"></span><span style="display:flex;flex-direction:column"><b style="font-size:14px;font-weight:600">--heat-1</b><span style="font-size:13px;color:var(--text-muted)">laagste derde</span></span></div>
+
+<div style="display:flex;align-items:center;gap:12px"><span style="width:40px;height:40px;border-radius:var(--radius-sm);background:var(--heat-2);border:1px solid var(--border)"></span><span style="display:flex;flex-direction:column"><b style="font-size:14px;font-weight:600">--heat-2</b><span style="font-size:13px;color:var(--text-muted)">middelste derde</span></span></div>
+
+<div style="display:flex;align-items:center;gap:12px"><span style="width:40px;height:40px;border-radius:var(--radius-sm);background:var(--heat-3);border:1px solid var(--border)"></span><span style="display:flex;flex-direction:column"><b style="font-size:14px;font-weight:600">--heat-3</b><span style="font-size:13px;color:var(--text-muted)">hoogste derde</span></span></div>
+
+</div>
+<div style="width:340px;display:flex;flex-direction:column;gap:10px;padding:20px;border-radius:var(--radius-lg);background:var(--surface-raised);border:1px solid var(--border);box-shadow:var(--shadow-card)">
+<b style="font-size:15px;font-weight:600">September</b>
+<div style="display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px;font-size:11px;color:var(--text-subtle);text-align:center"><span>ma</span><span>di</span><span>wo</span><span>do</span><span>vr</span><span>za</span><span>zo</span></div>
+<div style="display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px">
+
+<span style="grid-column-start:2;aspect-ratio:1;border-radius:var(--radius-sm);background:var(--heat-2);color:var(--text);display:grid;place-items:center;font-size:13px;font-weight:500;font-variant-numeric:tabular-nums">1</span>
+
+<span style="grid-column-start:auto;aspect-ratio:1;border-radius:var(--radius-sm);background:var(--heat-0);color:var(--text-muted);display:grid;place-items:center;font-size:13px;font-weight:500;font-variant-numeric:tabular-nums">2</span>
+
+<span style="grid-column-start:auto;aspect-ratio:1;border-radius:var(--radius-sm);background:var(--heat-1);color:var(--text);display:grid;place-items:center;font-size:13px;font-weight:500;font-variant-numeric:tabular-nums">3</span>
+
+<span style="grid-column-start:auto;aspect-ratio:1;border-radius:var(--radius-sm);background:var(--heat-3);color:var(--heat-3-fg);display:grid;place-items:center;font-size:13px;font-weight:500;font-variant-numeric:tabular-nums">4</span>
+
+<span style="grid-column-start:auto;aspect-ratio:1;border-radius:var(--radius-sm);background:var(--heat-1);color:var(--text);display:grid;place-items:center;font-size:13px;font-weight:500;font-variant-numeric:tabular-nums">5</span>
+
+<span style="grid-column-start:auto;aspect-ratio:1;border-radius:var(--radius-sm);background:var(--heat-3);color:var(--heat-3-fg);display:grid;place-items:center;font-size:13px;font-weight:500;font-variant-numeric:tabular-nums">6</span>
+
+<span style="grid-column-start:auto;aspect-ratio:1;border-radius:var(--radius-sm);background:var(--heat-0);color:var(--text-muted);display:grid;place-items:center;font-size:13px;font-weight:500;font-variant-numeric:tabular-nums">7</span>
+
+<span style="grid-column-start:auto;aspect-ratio:1;border-radius:var(--radius-sm);background:var(--heat-2);color:var(--text);display:grid;place-items:center;font-size:13px;font-weight:500;font-variant-numeric:tabular-nums">8</span>
+
+<span style="grid-column-start:auto;aspect-ratio:1;border-radius:var(--radius-sm);background:var(--heat-0);color:var(--text-muted);display:grid;place-items:center;font-size:13px;font-weight:500;font-variant-numeric:tabular-nums">9</span>
+
+<span style="grid-column-start:auto;aspect-ratio:1;border-radius:var(--radius-sm);background:var(--heat-2);color:var(--text);display:grid;place-items:center;font-size:13px;font-weight:500;font-variant-numeric:tabular-nums">10</span>
+
+<span style="grid-column-start:auto;aspect-ratio:1;border-radius:var(--radius-sm);background:var(--heat-1);color:var(--text);display:grid;place-items:center;font-size:13px;font-weight:500;font-variant-numeric:tabular-nums">11</span>
+
+<span style="grid-column-start:auto;aspect-ratio:1;border-radius:var(--radius-sm);background:var(--heat-2);color:var(--text);display:grid;place-items:center;font-size:13px;font-weight:500;font-variant-numeric:tabular-nums">12</span>
+
+<span style="grid-column-start:auto;aspect-ratio:1;border-radius:var(--radius-sm);background:var(--heat-3);color:var(--heat-3-fg);display:grid;place-items:center;font-size:13px;font-weight:500;font-variant-numeric:tabular-nums">13</span>
+
+<span style="grid-column-start:auto;aspect-ratio:1;border-radius:var(--radius-sm);background:var(--heat-0);color:var(--text-muted);display:grid;place-items:center;font-size:13px;font-weight:500;font-variant-numeric:tabular-nums">14</span>
+
+<span style="grid-column-start:auto;aspect-ratio:1;border-radius:var(--radius-sm);background:var(--heat-1);color:var(--text);display:grid;place-items:center;font-size:13px;font-weight:500;font-variant-numeric:tabular-nums">15</span>
+
+<span style="grid-column-start:auto;aspect-ratio:1;border-radius:var(--radius-sm);background:var(--heat-0);color:var(--text-muted);display:grid;place-items:center;font-size:13px;font-weight:500;font-variant-numeric:tabular-nums">16</span>
+
+<span style="grid-column-start:auto;aspect-ratio:1;border-radius:var(--radius-sm);background:var(--heat-3);color:var(--heat-3-fg);display:grid;place-items:center;font-size:13px;font-weight:500;font-variant-numeric:tabular-nums">17</span>
+
+<span style="grid-column-start:auto;aspect-ratio:1;border-radius:var(--radius-sm);background:var(--heat-1);color:var(--text);display:grid;place-items:center;font-size:13px;font-weight:500;font-variant-numeric:tabular-nums">18</span>
+
+<span style="grid-column-start:auto;aspect-ratio:1;border-radius:var(--radius-sm);background:var(--heat-2);color:var(--text);display:grid;place-items:center;font-size:13px;font-weight:500;font-variant-numeric:tabular-nums">19</span>
+
+<span style="grid-column-start:auto;aspect-ratio:1;border-radius:var(--radius-sm);background:var(--heat-3);color:var(--heat-3-fg);display:grid;place-items:center;font-size:13px;font-weight:500;font-variant-numeric:tabular-nums">20</span>
+
+<span style="grid-column-start:auto;aspect-ratio:1;border-radius:var(--radius-sm);background:var(--heat-0);color:var(--text-muted);display:grid;place-items:center;font-size:13px;font-weight:500;font-variant-numeric:tabular-nums">21</span>
+
+<span style="grid-column-start:auto;aspect-ratio:1;border-radius:var(--radius-sm);background:var(--heat-1);color:var(--text);display:grid;place-items:center;font-size:13px;font-weight:500;font-variant-numeric:tabular-nums">22</span>
+
+<span style="grid-column-start:auto;aspect-ratio:1;border-radius:var(--radius-sm);background:var(--heat-0);color:var(--text-muted);display:grid;place-items:center;font-size:13px;font-weight:500;font-variant-numeric:tabular-nums">23</span>
+
+<span style="grid-column-start:auto;aspect-ratio:1;border-radius:var(--radius-sm);background:var(--heat-2);color:var(--text);display:grid;place-items:center;font-size:13px;font-weight:500;font-variant-numeric:tabular-nums">24</span>
+
+<span style="grid-column-start:auto;aspect-ratio:1;border-radius:var(--radius-sm);background:var(--heat-3);color:var(--heat-3-fg);display:grid;place-items:center;font-size:13px;font-weight:500;font-variant-numeric:tabular-nums">25</span>
+
+<span style="grid-column-start:auto;aspect-ratio:1;border-radius:var(--radius-sm);background:var(--heat-1);color:var(--text);display:grid;place-items:center;font-size:13px;font-weight:500;font-variant-numeric:tabular-nums">26</span>
+
+<span style="grid-column-start:auto;aspect-ratio:1;border-radius:var(--radius-sm);background:var(--heat-3);color:var(--heat-3-fg);display:grid;place-items:center;font-size:13px;font-weight:500;font-variant-numeric:tabular-nums">27</span>
+
+<span style="grid-column-start:auto;aspect-ratio:1;border-radius:var(--radius-sm);background:var(--heat-0);color:var(--text-muted);display:grid;place-items:center;font-size:13px;font-weight:500;font-variant-numeric:tabular-nums">28</span>
+
+<span style="grid-column-start:auto;aspect-ratio:1;border-radius:var(--radius-sm);background:var(--heat-2);color:var(--text);display:grid;place-items:center;font-size:13px;font-weight:500;font-variant-numeric:tabular-nums">29</span>
+
+<span style="grid-column-start:auto;aspect-ratio:1;border-radius:var(--radius-sm);background:var(--heat-3);color:var(--heat-3-fg);display:grid;place-items:center;font-size:13px;font-weight:500;font-variant-numeric:tabular-nums">30</span>
+
+</div>
+</div>
+</div>
+</section>
+
+<section data-screen-label="06 Categoriekleuren" style="display:flex;flex-direction:column;gap:20px">
+<div style="display:flex;flex-direction:column;gap:6px;max-width:44rem"><p style="margin:0;font-size:13px;font-weight:600;color:var(--accent)">6 · --cat-*</p><h2 style="margin:0;font-size:20px;font-weight:600;letter-spacing:-.01em">Elf paren, en rood is niet meer danger</h2><p style="margin:0;font-size:15px;line-height:1.5;color:var(--text-muted);text-wrap:pretty">Teal en olijf komen erbij, op de waarden van --macro-koolhydraten en --olijf-diep. --cat-red krijgt een eigen tint, een stap richting framboos: een categorie mag nooit verward worden met een signaal. Melding fout gaat naar --danger zelf.</p></div>
+<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;max-width:900px">
+
+<div style="display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:var(--radius);background:var(--surface-raised);border:1px solid var(--border)"><span style="padding:4px 10px;border-radius:999px;background:var(--cat-green-bg);color:var(--cat-green);font-size:13px;font-weight:600">Groen</span><span style="font-size:12px;color:var(--text-muted)"></span></div>
+
+<div style="display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:var(--radius);background:var(--surface-raised);border:1px solid var(--border)"><span style="padding:4px 10px;border-radius:999px;background:var(--cat-red-bg);color:var(--cat-red);font-size:13px;font-weight:600">Rood</span><span style="font-size:12px;color:var(--text-muted)">nieuwe tint</span></div>
+
+<div style="display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:var(--radius);background:var(--surface-raised);border:1px solid var(--border)"><span style="padding:4px 10px;border-radius:999px;background:var(--cat-yellow-bg);color:var(--cat-yellow);font-size:13px;font-weight:600">Geel</span><span style="font-size:12px;color:var(--text-muted)"></span></div>
+
+<div style="display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:var(--radius);background:var(--surface-raised);border:1px solid var(--border)"><span style="padding:4px 10px;border-radius:999px;background:var(--cat-gray-bg);color:var(--cat-gray);font-size:13px;font-weight:600">Grijs</span><span style="font-size:12px;color:var(--text-muted)"></span></div>
+
+<div style="display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:var(--radius);background:var(--surface-raised);border:1px solid var(--border)"><span style="padding:4px 10px;border-radius:999px;background:var(--cat-blue-bg);color:var(--cat-blue);font-size:13px;font-weight:600">Blauw</span><span style="font-size:12px;color:var(--text-muted)"></span></div>
+
+<div style="display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:var(--radius);background:var(--surface-raised);border:1px solid var(--border)"><span style="padding:4px 10px;border-radius:999px;background:var(--cat-brown-bg);color:var(--cat-brown);font-size:13px;font-weight:600">Bruin</span><span style="font-size:12px;color:var(--text-muted)"></span></div>
+
+<div style="display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:var(--radius);background:var(--surface-raised);border:1px solid var(--border)"><span style="padding:4px 10px;border-radius:999px;background:var(--cat-pink-bg);color:var(--cat-pink);font-size:13px;font-weight:600">Roze</span><span style="font-size:12px;color:var(--text-muted)"></span></div>
+
+<div style="display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:var(--radius);background:var(--surface-raised);border:1px solid var(--border)"><span style="padding:4px 10px;border-radius:999px;background:var(--cat-purple-bg);color:var(--cat-purple);font-size:13px;font-weight:600">Paars</span><span style="font-size:12px;color:var(--text-muted)"></span></div>
+
+<div style="display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:var(--radius);background:var(--surface-raised);border:1px solid var(--border)"><span style="padding:4px 10px;border-radius:999px;background:var(--cat-orange-bg);color:var(--cat-orange);font-size:13px;font-weight:600">Oranje</span><span style="font-size:12px;color:var(--text-muted)"></span></div>
+
+<div style="display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:var(--radius);background:var(--surface-raised);border:1px solid var(--border)"><span style="padding:4px 10px;border-radius:999px;background:var(--cat-teal-bg);color:var(--cat-teal);font-size:13px;font-weight:600">Teal</span><span style="font-size:12px;color:var(--text-muted)">nieuw</span></div>
+
+<div style="display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:var(--radius);background:var(--surface-raised);border:1px solid var(--border)"><span style="padding:4px 10px;border-radius:999px;background:var(--cat-olijf-bg);color:var(--cat-olijf);font-size:13px;font-weight:600">Olijf</span><span style="font-size:12px;color:var(--text-muted)">nieuw</span></div>
+
+</div>
+<div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;font-size:13px;color:var(--text-muted)"><span style="display:flex;align-items:center;gap:8px"><span style="width:28px;height:28px;border-radius:999px;background:var(--cat-red)"></span>--cat-red</span><span style="display:flex;align-items:center;gap:8px"><span style="width:28px;height:28px;border-radius:999px;background:var(--danger)"></span>--danger</span><span>Naast elkaar: verwant, maar niet meer gelijk.</span></div>
+</section>
+
+<section data-screen-label="07 Donut met lijst" style="display:flex;flex-direction:column;gap:20px">
+<div style="display:flex;flex-direction:column;gap:6px;max-width:44rem"><p style="margin:0;font-size:13px;font-weight:600;color:var(--accent)">7 · DonutLijst</p><h2 style="margin:0;font-size:20px;font-weight:600;letter-spacing:-.01em">De donut is klein, de lijst is de hoofdzaak</h2><p style="margin:0;font-size:15px;line-height:1.5;color:var(--text-muted);text-wrap:pretty">Donut van 112px op de telefoon, 160px vanaf breed. 2px lucht tussen de stukken, geen labels in de ring. Per rij een kleurstip, het icoon, de naam en het bedrag; met een budget komt de balk uit punt 4 eronder.</p></div>
+<div style="width:390px;max-width:100%;box-sizing:border-box;display:flex;flex-direction:column;padding:20px;border-radius:var(--radius-lg);background:var(--surface-raised);border:1px solid var(--border);box-shadow:var(--shadow-card)">
+<div style="display:flex;align-items:center;gap:20px;padding-bottom:12px"><svg width="112" height="112" viewBox="0 0 112 112" aria-hidden="true" style="flex:0 0 auto"><circle cx="56" cy="56" r="48" fill="none" stroke="var(--cat-blue)" stroke-width="14" stroke-dasharray="114.67170080080759 301.59289474462014" stroke-dashoffset="0" transform="rotate(-90 56 56)"></circle><circle cx="56" cy="56" r="48" fill="none" stroke="var(--cat-green)" stroke-width="14" stroke-dasharray="82.55591665137818 301.59289474462014" stroke-dashoffset="-116.67170080080759" transform="rotate(-90 56 56)"></circle><circle cx="56" cy="56" r="48" fill="none" stroke="var(--cat-teal)" stroke-width="14" stroke-dasharray="27.630469812844147 301.59289474462014" stroke-dashoffset="-201.22761745218577" transform="rotate(-90 56 56)"></circle><circle cx="56" cy="56" r="48" fill="none" stroke="var(--cat-orange)" stroke-width="14" stroke-dasharray="17.46829563658446 301.59289474462014" stroke-dashoffset="-230.85808726502992" transform="rotate(-90 56 56)"></circle><circle cx="56" cy="56" r="48" fill="none" stroke="var(--cat-red)" stroke-width="14" stroke-dasharray="15.742382902844703 301.59289474462014" stroke-dashoffset="-250.32638290161438" transform="rotate(-90 56 56)"></circle><circle cx="56" cy="56" r="48" fill="none" stroke="var(--cat-gray)" stroke-width="14" stroke-dasharray="14.503867925113052 301.59289474462014" stroke-dashoffset="-268.0687658044591" transform="rotate(-90 56 56)"></circle><circle cx="56" cy="56" r="48" fill="none" stroke="var(--cat-purple)" stroke-width="14" stroke-dasharray="6.970604024885761 301.59289474462014" stroke-dashoffset="-284.57263372957215" transform="rotate(-90 56 56)"></circle><circle cx="56" cy="56" r="48" fill="none" stroke="var(--cat-olijf)" stroke-width="14" stroke-dasharray="6.049656990162227 301.59289474462014" stroke-dashoffset="-293.5432377544579" transform="rotate(-90 56 56)"></circle></svg><span style="display:flex;flex-direction:column;gap:2px"><span style="font-size:13px;color:var(--text-muted)">Uitgegeven in september</span><b style="font-size:28px;font-weight:600;letter-spacing:-.02em;font-variant-numeric:tabular-nums;white-space:nowrap">€ 2.184,30</b></span></div>
+
+<div style="display:flex;flex-direction:column;gap:8px;padding:12px 0;border-top:1px solid var(--border)">
+<div style="display:flex;align-items:center;gap:10px;min-height:24px"><span style="flex:0 0 auto;width:8px;height:8px;border-radius:999px;background:var(--cat-blue)"></span><span style="color:var(--text-muted);display:flex"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-house lucide-home" aria-hidden="true" style="flex:0 0 auto"><path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"></path><path d="M3 10a2 2 0 0 1 .709-1.528l7-6a2 2 0 0 1 2.582 0l7 6A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg></span><span style="flex:1;min-width:0;font-size:15px">Wonen</span><span style="font-size:15px;font-variant-numeric:tabular-nums">€ 845,00</span></div>
+
+</div>
+
+<div style="display:flex;flex-direction:column;gap:8px;padding:12px 0;border-top:1px solid var(--border)">
+<div style="display:flex;align-items:center;gap:10px;min-height:24px"><span style="flex:0 0 auto;width:8px;height:8px;border-radius:999px;background:var(--cat-green)"></span><span style="color:var(--text-muted);display:flex"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-shopping-basket" aria-hidden="true" style="flex:0 0 auto"><path d="m15 11-1 9"></path><path d="m19 11-4-7"></path><path d="M2 11h20"></path><path d="m3.5 11 1.6 7.4a2 2 0 0 0 2 1.6h9.8a2 2 0 0 0 2-1.6l1.7-7.4"></path><path d="M4.5 15.5h15"></path><path d="m5 11 4-7"></path><path d="m9 11 1 9"></path></svg></span><span style="flex:1;min-width:0;font-size:15px">Boodschappen</span><span style="font-size:15px;font-variant-numeric:tabular-nums">€ 612,40</span></div>
+<div style="position:relative;height:6px;margin-left:46px;border-radius:999px;background:var(--surface-sunken)"><span style="position:absolute;left:0;top:0;bottom:0;width:87.5%;border-radius:999px;background:var(--accent)"></span><span aria-hidden="true" style="position:absolute;top:-3px;width:2px;height:12px;margin-left:-1px;left:53.3%;border-radius:1px;background:var(--text);box-shadow:0 0 0 2px var(--surface-raised)"></span></div>
+</div>
+
+<div style="display:flex;flex-direction:column;gap:8px;padding:12px 0;border-top:1px solid var(--border)">
+<div style="display:flex;align-items:center;gap:10px;min-height:24px"><span style="flex:0 0 auto;width:8px;height:8px;border-radius:999px;background:var(--cat-teal)"></span><span style="color:var(--text-muted);display:flex"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-car" aria-hidden="true" style="flex:0 0 auto"><path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2"></path><circle cx="7" cy="17" r="2"></circle><path d="M9 17h6"></path><circle cx="17" cy="17" r="2"></circle></svg></span><span style="flex:1;min-width:0;font-size:15px">Vervoer</span><span style="font-size:15px;font-variant-numeric:tabular-nums">€ 214,60</span></div>
+
+</div>
+
+<div style="display:flex;flex-direction:column;gap:8px;padding:12px 0;border-top:1px solid var(--border)">
+<div style="display:flex;align-items:center;gap:10px;min-height:24px"><span style="flex:0 0 auto;width:8px;height:8px;border-radius:999px;background:var(--cat-orange)"></span><span style="color:var(--text-muted);display:flex"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-utensils lucide-fork-knife" aria-hidden="true" style="flex:0 0 auto"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"></path><path d="M7 2v20"></path><path d="M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7"></path></svg></span><span style="flex:1;min-width:0;font-size:15px">Uit eten</span><span style="font-size:15px;font-variant-numeric:tabular-nums">€ 141,00</span></div>
+<div style="position:relative;height:6px;margin-left:46px;border-radius:999px;background:var(--surface-sunken)"><span style="position:absolute;left:0;top:0;bottom:0;width:94%;border-radius:999px;background:var(--botergoud)"></span><span aria-hidden="true" style="position:absolute;top:-3px;width:2px;height:12px;margin-left:-1px;left:53.3%;border-radius:1px;background:var(--text);box-shadow:0 0 0 2px var(--surface-raised)"></span></div>
+</div>
+
+<div style="display:flex;flex-direction:column;gap:8px;padding:12px 0;border-top:1px solid var(--border)">
+<div style="display:flex;align-items:center;gap:10px;min-height:24px"><span style="flex:0 0 auto;width:8px;height:8px;border-radius:999px;background:var(--cat-red)"></span><span style="color:var(--text-muted);display:flex"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-shirt" aria-hidden="true" style="flex:0 0 auto"><path d="M20.38 3.46 16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z"></path></svg></span><span style="flex:1;min-width:0;font-size:15px">Kleding</span><span style="font-size:15px;font-variant-numeric:tabular-nums">€ 128,50</span></div>
+<div style="position:relative;height:6px;margin-left:46px;border-radius:999px;background:var(--surface-sunken)"><span style="position:absolute;left:0;top:0;bottom:0;width:100%;border-radius:999px;background:var(--danger)"></span><span aria-hidden="true" style="position:absolute;top:-3px;width:2px;height:12px;margin-left:-1px;left:77.8%;border-radius:1px;background:var(--text);box-shadow:0 0 0 2px var(--surface-raised)"></span></div>
+</div>
+
+<div style="display:flex;flex-direction:column;gap:8px;padding:12px 0;border-top:1px solid var(--border)">
+<div style="display:flex;align-items:center;gap:10px;min-height:24px"><span style="flex:0 0 auto;width:8px;height:8px;border-radius:999px;background:var(--cat-gray)"></span><span style="color:var(--text-muted);display:flex"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-ellipsis lucide-more-horizontal" aria-hidden="true" style="flex:0 0 auto"><circle cx="12" cy="12" r="1"></circle><circle cx="19" cy="12" r="1"></circle><circle cx="5" cy="12" r="1"></circle></svg></span><span style="flex:1;min-width:0;font-size:15px">Overig</span><span style="font-size:15px;font-variant-numeric:tabular-nums">€ 119,53</span></div>
+
+</div>
+
+<div style="display:flex;flex-direction:column;gap:8px;padding:12px 0;border-top:1px solid var(--border)">
+<div style="display:flex;align-items:center;gap:10px;min-height:24px"><span style="flex:0 0 auto;width:8px;height:8px;border-radius:999px;background:var(--cat-purple)"></span><span style="color:var(--text-muted);display:flex"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-repeat" aria-hidden="true" style="flex:0 0 auto"><path d="m17 2 4 4-4 4"></path><path d="M3 11v-1a4 4 0 0 1 4-4h14"></path><path d="m7 22-4-4 4-4"></path><path d="M21 13v1a4 4 0 0 1-4 4H3"></path></svg></span><span style="flex:1;min-width:0;font-size:15px">Abonnementen</span><span style="font-size:15px;font-variant-numeric:tabular-nums">€ 64,97</span></div>
+
+</div>
+
+<div style="display:flex;flex-direction:column;gap:8px;padding:12px 0;border-top:1px solid var(--border)">
+<div style="display:flex;align-items:center;gap:10px;min-height:24px"><span style="flex:0 0 auto;width:8px;height:8px;border-radius:999px;background:var(--cat-olijf)"></span><span style="color:var(--text-muted);display:flex"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-sprout" aria-hidden="true" style="flex:0 0 auto"><path d="M14 9.536V7a4 4 0 0 1 4-4h1.5a.5.5 0 0 1 .5.5V5a4 4 0 0 1-4 4 4 4 0 0 0-4 4c0 2 1 3 1 5a5 5 0 0 1-1 3"></path><path d="M4 9a5 5 0 0 1 8 4 5 5 0 0 1-8-4"></path><path d="M5 21h14"></path></svg></span><span style="flex:1;min-width:0;font-size:15px">Tuin</span><span style="font-size:15px;font-variant-numeric:tabular-nums">€ 58,30</span></div>
+
+</div>
+
+</div>
+</section>
+
+<section data-screen-label="08 Geldbedragen" style="display:flex;flex-direction:column;gap:20px">
+<div style="display:flex;flex-direction:column;gap:6px;max-width:44rem"><p style="margin:0;font-size:13px;font-weight:600;color:var(--accent)">8 · Bedrag</p><h2 style="margin:0;font-size:20px;font-weight:600;letter-spacing:-.01em">Eén schrijfwijze voor geld</h2><p style="margin:0;font-size:15px;line-height:1.5;color:var(--text-muted);text-wrap:pretty">€, harde spatie, punt voor duizendtallen, komma en altijd twee decimalen. Tabelcijfers, rechts uitgelijnd. Het teken staat voor het euroteken, zodat een kolom op het teken lijnt: een echte min (U+2212) in tekstkleur voor een uitgave, plus in --success voor inkomsten. Rood nooit voor een gewone uitgave. Wat niet meetelt is gedempt en zonder teken.</p></div>
+<div style="display:flex;flex-wrap:wrap;gap:24px;align-items:flex-start">
+<div style="width:390px;max-width:100%;box-sizing:border-box;display:flex;flex-direction:column;padding:4px 20px;border-radius:var(--radius-lg);background:var(--surface-raised);border:1px solid var(--border);box-shadow:var(--shadow-card)">
+
+<div style="display:flex;align-items:center;gap:12px;min-height:56px;border-top:none"><span style="flex:1;min-width:0;display:flex;flex-direction:column;gap:1px"><span style="font-size:15px;color:var(--text)">Jumbo Utrecht</span><span style="font-size:13px;color:var(--text-muted)">Boodschappen · vandaag</span></span><span style="font-size:15px;font-weight:500;font-variant-numeric:tabular-nums;white-space:nowrap;color:var(--text)">−€ 42,18</span></div>
+
+<div style="display:flex;align-items:center;gap:12px;min-height:56px;border-top:1px solid var(--border)"><span style="flex:1;min-width:0;display:flex;flex-direction:column;gap:1px"><span style="font-size:15px;color:var(--text)">Salaris</span><span style="font-size:13px;color:var(--text-muted)">Inkomen · 25 sep</span></span><span style="font-size:15px;font-weight:500;font-variant-numeric:tabular-nums;white-space:nowrap;color:var(--success)">+€ 2.400,00</span></div>
+
+<div style="display:flex;align-items:center;gap:12px;min-height:56px;border-top:1px solid var(--border)"><span style="flex:1;min-width:0;display:flex;flex-direction:column;gap:1px"><span style="font-size:15px;color:var(--text)">Tikkie van Imke</span><span style="font-size:13px;color:var(--text-muted)">Terugbetaling · 24 sep</span></span><span style="font-size:15px;font-weight:500;font-variant-numeric:tabular-nums;white-space:nowrap;color:var(--success)">+€ 18,50</span></div>
+
+<div style="display:flex;align-items:center;gap:12px;min-height:56px;border-top:1px solid var(--border)"><span style="flex:1;min-width:0;display:flex;flex-direction:column;gap:1px"><span style="font-size:15px;color:var(--text-muted)">Naar spaarrekening</span><span style="font-size:13px;color:var(--text-muted)">Eigen rekening · telt niet mee</span></span><span style="font-size:15px;font-weight:500;font-variant-numeric:tabular-nums;white-space:nowrap;color:var(--text-subtle)">€ 500,00</span></div>
+
+</div>
+<div style="display:flex;flex-direction:column;gap:14px;padding:20px;border-radius:var(--radius-lg);background:var(--surface-raised);border:1px solid var(--border);box-shadow:var(--shadow-card)">
+<div style="display:flex;flex-direction:column;gap:2px"><span style="font-size:13px;color:var(--text-muted)">groot · 30px, semibold</span><b style="font-size:30px;font-weight:600;letter-spacing:-.02em;font-variant-numeric:tabular-nums">€ 1.234,56</b></div>
+<div style="display:flex;flex-direction:column;gap:2px"><span style="font-size:13px;color:var(--text-muted)">regel · 15px, medium</span><span style="font-size:15px;font-weight:500;font-variant-numeric:tabular-nums">€ 1.234,56</span></div>
+<div style="display:flex;flex-direction:column;gap:2px"><span style="font-size:13px;color:var(--text-muted)">klein · 13px, regular</span><span style="font-size:13px;font-variant-numeric:tabular-nums">€ 1.234,56</span></div>
+</div>
+</div>
+</section>
+</div>
+</div></div></body></html>
