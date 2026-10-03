@@ -21,3 +21,9 @@ Design system en inloglaag van de yoim-apps. Zie `README.md` voor gebruik.
 
 Geen em-dashes (U+2014), ook geen en-dashes als vervanging. Comments zeldzaam
 en kort, alleen voor een niet-voor-de-hand-liggende keuze of waarschuwing.
+
+**Taal in code.** Code is Engels: functies, variabelen, types, props, bestanden in `lib/`, en
+in de database tabellen, kolommen, functies en policies. Een domeinbegrip zonder goede Engelse
+vertaling mag Nederlands blijven (`potje`, `Nakijken`). Comments, UI-tekst, URL's, docs en
+commits blijven Nederlands. Geldt voor nieuwe code; bestaande namen zet je alleen om als je ze
+toch aanraakt, en een bestaande databasetabel hernoem je nooit alleen om de taal.
