@@ -277,6 +277,197 @@
   }
 }
 
+/* Navigation: op de telefoon een zwevende capsule, vanaf --bp-breed een rail.
+   Staat na .sheen, die position: relative zet en hier niet mag winnen. De
+   lozenge rekent met het aantal routes (--n) en het actieve item (--i).
+
+   De waarde hieronder is --bp-breed; CSS kan geen var() in een media query. */
+@layer components {
+  .navigation {
+    position: fixed;
+    right: 1rem;
+    bottom: calc(var(--onder-b) + env(safe-area-inset-bottom));
+    left: 1rem;
+    z-index: 40;
+    display: flex;
+    padding: 6px;
+    border-radius: var(--radius-capsule);
+  }
+
+  .nav-brand,
+  .nav-foot {
+    display: none;
+  }
+
+  .nav-routes {
+    position: relative;
+    display: flex;
+    flex: 1;
+    min-width: 0;
+  }
+
+  /* Geen backdrop-filter: de lozenge ligt op glas dat al geblurd is. */
+  .nav-pill {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: calc(100% / var(--n, 3));
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-capsule);
+    background: var(--glass-tint-strong);
+    box-shadow: var(--glass-rim);
+    transform: translateX(calc(var(--i, 0) * 100%));
+    transition: transform var(--dur-glas) var(--ease-glas);
+  }
+
+  .nav-item {
+    position: relative;
+    z-index: 1;
+    flex: 1;
+    /* Anders wordt een item niet smaller dan zijn label en loopt de lozenge
+       weg van zijn icoon. */
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    padding: 6px 4px 5px;
+    border-radius: var(--radius-capsule);
+    color: var(--text-muted);
+    font-size: var(--text-nav);
+    font-weight: 500;
+    line-height: var(--lh-nav);
+    white-space: nowrap;
+    transition: color var(--dur-fast) var(--ease);
+  }
+
+  /* CSS wint van de attributen die lucide op de svg zet. */
+  .nav-item svg {
+    width: 22px;
+    height: 22px;
+    flex: none;
+    stroke-width: 1.8;
+  }
+
+  .nav-item[aria-current="page"] {
+    color: var(--accent);
+  }
+
+  .nav-item[aria-current="page"] svg {
+    stroke-width: 2.4;
+  }
+
+  .nav-label {
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* Op de telefoon een badge rechtsboven het icoon. */
+  .nav-count {
+    position: absolute;
+    top: 3px;
+    left: calc(50% + 4px);
+    min-width: 16px;
+    height: 16px;
+    padding: 0 4px;
+    border-radius: var(--radius-capsule);
+    background: var(--accent);
+    color: var(--accent-fg);
+    font-size: 0.625rem;
+    font-weight: 600;
+    line-height: 16px;
+    text-align: center;
+    font-variant-numeric: tabular-nums;
+  }
+
+  @media (min-width: 745px) {
+    /* De vaste kop schuift mee naast de rail. */
+    :root:has(.navigation) {
+      --rail-nu: var(--rail-b);
+    }
+
+    /* De inhoud naast de rail en niet eronder; .schermkolom centreert binnen
+       wat overblijft. */
+    body:has(.navigation) {
+      padding-left: var(--rail-b);
+    }
+
+    /* Regular glas zonder buitenschaduw; alleen een rand rechts. */
+    .navigation {
+      top: 0;
+      right: auto;
+      bottom: 0;
+      left: 0;
+      width: var(--rail-b);
+      flex-direction: column;
+      gap: var(--space-4);
+      padding: 18px 10px 14px;
+      border: 0;
+      border-right: 1px solid var(--glass-border);
+      border-radius: 0;
+      box-shadow: var(--glass-highlight);
+    }
+
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      min-width: 0;
+      padding: 0 10px;
+    }
+
+    .nav-routes {
+      flex: none;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    /* Rij en lozenge zijn allebei 48px met een stap van 54. */
+    .nav-pill {
+      right: 0;
+      bottom: auto;
+      width: auto;
+      height: 3rem;
+      border-radius: var(--radius-lg);
+      transform: translateY(calc(var(--i, 0) * 3.375rem));
+    }
+
+    .nav-item {
+      flex: none;
+      flex-direction: row;
+      justify-content: flex-start;
+      height: 3rem;
+      padding: 0 12px;
+      gap: 12px;
+      border-radius: var(--radius-lg);
+      font-size: var(--text-body);
+    }
+
+    .nav-label {
+      flex: 1;
+      text-align: left;
+    }
+
+    .nav-count {
+      position: static;
+      height: 20px;
+      padding: 0 7px;
+      font-size: 0.75rem;
+      line-height: 20px;
+    }
+
+    .nav-foot {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-2);
+      margin-top: auto;
+    }
+  }
+}
+
 /* Hover hangt aan een capability query en nooit aan een breedte: een iPad met
    toetsenbord in een smal venster is geen telefoon. En hover is alleen een
    tint, geen lift, geen scale, geen andere schaduw. */

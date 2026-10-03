@@ -34,6 +34,8 @@
   --accent-soft:#e8eddc;
 
   --danger:#c0392b;
+  /* Het vlak onder een foutmelding, zodat die niet meer op --cat-red-bg hoeft. */
+  --danger-soft:#fbe6e3;
   --success:#3f7a58;
 
   /* Support tones — quiet emphasis, and the butter-gold used sparingly for warmth. */
@@ -61,7 +63,9 @@
   /* Category colours, taken from the Notion page so the list looks familiar.
   Each pair is text + background. */
   --cat-green:#2e7d55;   --cat-green-bg:#e3f1e8;
-  --cat-red:#c0392b;     --cat-red-bg:#fbe6e3;
+  /* --cat-red had de waarde van --danger; een eigen tint, een stap richting
+  framboos, zodat een categorie niet als signaal leest. */
+  --cat-red:#a8434a;     --cat-red-bg:#f8e3e4;
   --cat-yellow:#9a7209;  --cat-yellow-bg:#fcf1d8;
   --cat-gray:#5f5851;    --cat-gray-bg:#eeeae6;
   --cat-blue:#2563a8;    --cat-blue-bg:#e2edf9;
@@ -69,6 +73,17 @@
   --cat-pink:#a83a70;    --cat-pink-bg:#fbe4ef;
   --cat-purple:#6b46a8;  --cat-purple-bg:#ece4f9;
   --cat-orange:#b5591a;  --cat-orange-bg:#fbeadd;
+  --cat-teal:#2b7d74;    --cat-teal-bg:#e0efed;
+  --cat-olijf:#4c5c35;   --cat-olijf-bg:#e9ecdf;
+
+  /* Heatmap van uitgaven per dag. Letterlijk en geen color-mix, want een var()
+  in een custom property lost op waar hij gedeclareerd wordt. Ze volgen het
+  accent: uitgeven is geen goed of fout. */
+  --heat-0:#eceae1;
+  --heat-1:#dadfd2;
+  --heat-2:#aeb99c;
+  --heat-3:#6b7f4b;
+  --heat-3-fg:#ffffff;
 
   /* Macro's, in de lijn van MyFitnessPal maar in onze hue en verzadiging. Amber
      is een stap donkerder dan de eerste keus: op 14px semibold moet 4,5:1 gehaald
@@ -276,6 +291,7 @@
     --accent-soft:#212617;
 
     --danger:#ef7767;
+    --danger-soft:#2e1d1a;
     --success:#68b389;
 
     --olijf-diep:#c3d6a1;
@@ -294,7 +310,7 @@
     --lucht-gloed:214 172 74;
 
     --cat-green:#6ec295;   --cat-green-bg:#1b2a22;
-    --cat-red:#ef8a7c;     --cat-red-bg:#2e1d1a;
+    --cat-red:#e58a92;     --cat-red-bg:#2e1b1e;
     --cat-yellow:#d6b45c;  --cat-yellow-bg:#2b2517;
     --cat-gray:#a9a099;    --cat-gray-bg:#241f1b;
     --cat-blue:#75aae4;    --cat-blue-bg:#1a2331;
@@ -302,6 +318,14 @@
     --cat-pink:#e389b5;    --cat-pink-bg:#2d1c26;
     --cat-purple:#ab8fe0;  --cat-purple-bg:#241e33;
     --cat-orange:#e9945f;  --cat-orange-bg:#2d1f16;
+    --cat-teal:#6fc2b8;    --cat-teal-bg:#172a27;
+    --cat-olijf:#c3d6a1;   --cat-olijf-bg:#22281a;
+
+    --heat-0:#262a22;
+    --heat-1:#3d4530;
+    --heat-2:#63724b;
+    --heat-3:#9cb573;
+    --heat-3-fg:#161a12;
 
     --macro-kcal:#8ab6e8;
     --macro-koolhydraten:#6fc2b8;
@@ -350,6 +374,7 @@
   --accent-soft:#212617;
 
   --danger:#ef7767;
+  --danger-soft:#2e1d1a;
   --success:#68b389;
 
   --olijf-diep:#c3d6a1;
@@ -368,7 +393,7 @@
   --lucht-gloed:214 172 74;
 
   --cat-green:#6ec295;   --cat-green-bg:#1b2a22;
-  --cat-red:#ef8a7c;     --cat-red-bg:#2e1d1a;
+  --cat-red:#e58a92;     --cat-red-bg:#2e1b1e;
   --cat-yellow:#d6b45c;  --cat-yellow-bg:#2b2517;
   --cat-gray:#a9a099;    --cat-gray-bg:#241f1b;
   --cat-blue:#75aae4;    --cat-blue-bg:#1a2331;
@@ -376,6 +401,14 @@
   --cat-pink:#e389b5;    --cat-pink-bg:#2d1c26;
   --cat-purple:#ab8fe0;  --cat-purple-bg:#241e33;
   --cat-orange:#e9945f;  --cat-orange-bg:#2d1f16;
+  --cat-teal:#6fc2b8;    --cat-teal-bg:#172a27;
+  --cat-olijf:#c3d6a1;   --cat-olijf-bg:#22281a;
+
+  --heat-0:#262a22;
+  --heat-1:#3d4530;
+  --heat-2:#63724b;
+  --heat-3:#9cb573;
+  --heat-3-fg:#161a12;
 
   --macro-kcal:#8ab6e8;
   --macro-koolhydraten:#6fc2b8;
@@ -455,6 +488,7 @@
   --color-accent-fg: var(--accent-fg);
   --color-accent-soft: var(--accent-soft);
   --color-danger: var(--danger);
+  --color-danger-soft: var(--danger-soft);
   --color-success: var(--success);
 
   --radius-sm: var(--radius-sm);

@@ -65,10 +65,18 @@ export default async function Login(props: PageProps<'/auth/login'>) {
   glas-tokens, de Tailwind `@theme` en de varianten `breed:` en `plannen:`.
 - `styles/glas.css`: `.glas`, `.glas-dun`, `.glas-dik`, `.sheen`, `.kaart`,
   `.rij`, `.kop`, `.schermkolom`, `.vastekop`, `.postertray`, `.overlay`, en de
-  basisregels voor body, focus en selectie.
+  basisregels voor body, focus en selectie. Ook de vormen van `Navigation`
+  (`.navigation`, `.nav-*`).
 - `auth/`: `proxy`, `createServerSupabase`, `createBrowserSupabase`,
   `cookieOptions`, `inlog-fout`, `moment`.
-- `components/`: `InlogPagina`, `InlogTray`, `GoogleKnop`, `Klok`, `Merk`.
+- `components/`: `InlogPagina`, `InlogTray`, `GoogleKnop`, `Klok`, `Merk`,
+  `LeegStaat` (`leeg-staat`), `Navigation` (`navigation`), `StatusLine`
+  (`status-line`), `Bar` (`bar`), `DonutList` (`donut-list`), `Amount`
+  (`amount`). Iconen zijn lucide: `lucide-react` is een peer dependency, en
+  een icoon geef je mee als element (`icon={<Wallet />}`).
+- `money.ts`: `formatAmount` (`−€ 42,18`, `+€ 2.400,00`), `barState` (binnen,
+  bijna, over; precies op het budget is binnen) en `heatLevel` (terciles van
+  de dagen met uitgaven).
 - `thema.ts`: `SURFACE`, `THEMA_SCRIPT`, `THEMA_SLEUTEL`.
 - `week.ts`: de week van dit huishouden, zaterdag tot en met vrijdag. Zit hier
   en niet in een app omdat weekl.yoim.nl en de hub op yoim.nl allebei dezelfde

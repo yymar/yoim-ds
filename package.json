@@ -1,6 +1,6 @@
 {
   "name": "@yoim/ds",
-  "version": "0.3.2",
+  "version": "0.4.0",
   "private": true,
   "description": "Het design system en de inloglaag van de yoim-apps: tokens, glas, auth, inlogscherm.",
   "exports": {
@@ -8,7 +8,8 @@
     "./auth/*": "./auth/*.ts",
     "./components/*": "./components/*.tsx",
     "./thema": "./thema.ts",
-    "./week": "./week.ts"
+    "./week": "./week.ts",
+    "./money": "./money.ts"
   },
   "scripts": {
     "test": "vitest run",
@@ -17,6 +18,7 @@
   "peerDependencies": {
     "@supabase/ssr": ">=0.12",
     "@supabase/supabase-js": ">=2",
+    "lucide-react": ">=1",
     "next": ">=16",
     "react": ">=19",
     "react-dom": ">=19"
@@ -26,6 +28,7 @@
     "@supabase/supabase-js": "^2.112.3",
     "@types/node": "^26",
     "@types/react": "^19",
+    "lucide-react": "^1.51.0",
     "next": "16.3.2",
     "react": "19.2.8",
     "react-dom": "19.2.8",
