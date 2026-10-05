@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.4.1
+
+- De sessie-proxy controleert het token met `getClaims` in plaats van
+  `getUser`. Het yoim-project tekent met ES256, dus dat gebeurt lokaal en
+  scheelt bij elke request een ronde naar Supabase Auth. Het token wordt nog
+  steeds ververst.
+
 ## 0.4.0
 
 Wat mone.yoim.nl nodig heeft.

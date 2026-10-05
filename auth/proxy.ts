@@ -37,9 +37,10 @@ export async function proxy(request: NextRequest) {
 
   // Niet weghalen: deze aanroep ververst het token. Zonder dit loggen Yoran en
   // Imke elke keer opnieuw uit, wat precies de frictie is die we niet willen.
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
+  // `getClaims` en niet `getUser`: het project tekent met ES256, dus dit toetst
+  // de handtekening lokaal in plaats van bij elke request Supabase Auth te bellen.
+  const { data } = await supabase.auth.getClaims()
+  const user = data?.claims ?? null
 
   const { pathname } = request.nextUrl
   const isAuthRoute = pathname.startsWith('/auth')
