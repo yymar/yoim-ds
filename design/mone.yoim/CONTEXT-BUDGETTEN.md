@@ -45,7 +45,10 @@ Terugbetalingen worden verrekend. Het ingestelde bedrag verandert nooit: "van �
 ## Periode en per persoon
 
 - Periode: elke maand met een startdag. Imke: de 25e t/m de 24e.
-- Elk budget begint elke periode weer bij het volle bedrag. Restant meenemen: nog navragen bij Imke hoe Spendee dit deed; niet bouwen tot dat duidelijk is.
+- Elk budget begint elke periode opnieuw, net als in Spendee. Geen automatisch restant meenemen.
+  - Vaste last: het bedrag blijft staan; je past het alleen aan als de last echt verandert.
+  - Potje: de gebruiker zet het bedrag elke periode zelf (wat er over was plus wat erbij komt: 50 over en 50 erbij wordt 100). De app weet niet hoeveel er naar welk potje gaat, dus dat blijft handmatig.
+  - Daarom hoort het bedrag bij een periode (`mone.budget_amounts`): een wijziging geldt vanaf de lopende periode, een eerdere periode verandert nooit. In de sheet bij een potje alleen ter informatie "Vorige periode € 50,00 over".
 - Budgetten zijn per persoon, nooit "samen".
 
 ## Detail van een budget
@@ -73,13 +76,13 @@ Eén zin en een stille knop "Budget instellen". Geen lege lijst.
 
 ## Nog open
 
-- Spaardoel dat overboekingen naar een spaarrekening telt (Imke's "Spaarrekening" € 50).
-- Restant meenemen naar de volgende periode.
+- Spaardoel dat overboekingen naar een spaarrekening telt (Imke's "Spaarrekening" € 50). Haar spaarrekening is SNS NL41 SNSB 8815 5769 91; die staat er eerst als rekening zonder koppeling, zodat overboekingen ernaartoe herkend worden.
 
 ## Klaar als
 
 - [ ] Budget heeft `soort: 'vast' | 'potje'`, door de gebruiker gekozen.
 - [ ] Netto met terugbetalingen; het ingestelde bedrag wijzigt nooit.
+- [ ] Bedrag per periode: wijzigen raakt alleen de lopende periode en later.
 - [ ] Vaste last helemaal binnen toont "Betaald", nooit rood.
 - [ ] Potje: rustig / precies op / over, met rood alleen bij over.
 - [ ] Rekeningen per budget, standaard alleen privé; delen per rekening in Profiel.
