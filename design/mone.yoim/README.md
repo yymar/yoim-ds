@@ -7,8 +7,9 @@ Hij staat daar als losse map `mone.yoim/`, naast de vergrendelde delen (`compone
 | Bestand | Kaart |
 | --- | --- |
 | `Onderdelen.html` | Onderdelen v0.4: de acht onderdelen van `@yoim/ds` v0.4, licht en donker |
-| `Telefoon.html` | Overzicht · telefoon (390 x 844), licht en donker |
-| `Desktop.html` | Overzicht · desktop (1280 x 832, zijrail), licht en donker |
+| `Transacties`, `Budgetten`, `Budgetten leeg`, `Budget detail`, `Budget sheet`, `Profiel`, `Inzicht` (`telefoon` en `desktop`) | de pagina's, licht en donker; telefoon is af, desktop ligt qua structuur vast |
+| `nakijken.js` | het gedrag van de nakijkkaart (vegen, kiezer) dat de Transacties-kaarten laden |
+| `PROMPT-PAGINAS.md`, `CONTEXT-BUDGETTEN.md` | de bouwopdracht voor de pagina's en de logica van budgetten |
 | `mone-tokens.css` | de tokens die de kaarten naast `../styles.css` laden |
 | `PROMPT-CLAUDE-CODE.md` | de bouwspec van v0.4 |
 
@@ -25,8 +26,8 @@ node convert.cjs MoneOnderdelen.dc.html '{"thema":"donker","routes":"3"}' > donk
 python3 card.py ../Onderdelen.html "Onderdelen v0.4" 2460x5400 "<subtitel>" licht.html donker.html
 ```
 
-Telefoon en desktop gaan net zo, met `MoneTelefoon.dc.html` en `MoneDesktop.dc.html`, props
-`{"thema":"licht","status":"binnenkort"}` en viewports 940x1020 en 2720x1020.
+De pagina's worden in Claude Design zelf gemaakt en hier alleen bewaard (met DesignSync
+`get_file` opgehaald); `Budgetten varianten.html` is groter dan 256 KiB en staat er daarom niet bij.
 
 Uploaden gaat met DesignSync naar `mone.yoim/**` in het project, gevolgd door het seintje
 `_ds_needs_recompile` zodat Claude Design zijn kaartindex opnieuw opbouwt.

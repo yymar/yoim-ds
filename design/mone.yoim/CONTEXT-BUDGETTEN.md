@@ -1,103 +1,86 @@
-# Context voor Claude Code: de budgetcard in mone
+# Context voor Claude Code: budgetten in mone.yoim
 
 Plak alles onder de lijn in je Claude Code-sessie.
 
 ---
 
-De Spendee-data staat erin. Voordat je de budgetcard op het dashboard bouwt: in mone bestaan **twee soorten budget** die zich verschillend gedragen. Spendee kent dat onderscheid niet; dat moet jij erin leggen. Het ontwerp staat in het design system: `mone.yoim/Desktop.html` en `Telefoon.html` (de card rechts naast "Uitgegeven in september"), en de verkenning in `mone.yoim/Hoofdcard varianten.html`, ronde 5b.
+De Spendee-data staat erin. Bouw de budgetten vanuit de vragen die Imke stelt, niet vanuit Spendee. Het ontwerp staat in het design system, map `mone.yoim/`:
 
-## Waarom
+- `Budgetten desktop.html` / `Budgetten telefoon.html`: overzicht
+- `Budget detail desktop.html` / `telefoon.html`: potje (Onvoorzien), vaste last (Maandlasten), druk potje (Boodschappen)
+- `Budget sheet desktop.html` / `telefoon.html`: maken, wijzigen, categorie kiezen (klikbaar)
+- `Budgetten leeg desktop.html` / `telefoon.html`: gebruiker zonder budgetten
 
-Imke heeft budgetten voor haar vaste lasten, bijvoorbeeld de woonlasten. Die worden in één keer afgeschreven, dus het budget is direct op en de regel stond permanent in het rood. Dat klopt niet, want er is niets mis: het bedrag was vooraf bekend. Een budget is voor uitgaven waarvan je het bedrag **niet** vooraf weet. Een vaste last weet je wel. Twee soorten dus, met elk hun eigen regels.
+## Twee soorten, de gebruiker kiest zelf
 
-## De twee soorten
+Bij het maken kiest de gebruiker "Vaste last" of "Potje". Geen voorstel, geen gok: wie een budget maakt, weet waarvoor.
 
-### Vaste lasten
-Het bedrag staat vast en komt op een bekend moment binnen: hypotheek, energie, verzekeringen, abonnementen.
+### Vaste last
+Vast bedrag op een vast moment (woonlasten, maandlasten, auto).
+- Rij: rechts wat nog moet komen, eronder "van € 235,67". Balk in de categoriekleur.
+- Helemaal binnen: rechts € 0,00 in grijs, links "Betaald" met groen vinkje. Nooit rood, nooit "op".
+- Nog niet alles binnen: "Nog 1 · rond 14 okt".
+- Afwijking (hoger dan vorige keer, of te laat): alleen in de afschrijvingsrij in het detail, in botergoud met alert-icoon ("€ 7,50 hoger dan vorige keer"). Kopje: "3 van 4 binnen · 1 afwijking".
 
-- **Vraag die hij beantwoordt:** is alles wat moest komen binnen, en klopt het bedrag?
-- **Voortgang:** afgeschreven tegenover verwacht. De balk vult in de **categoriekleur**, nooit in de toestandskleuren.
-- **Helemaal binnen** (`afgeschreven >= verwacht`): rechts een groen vinkje met "betaald". Dat is het normale eindpunt, geen alarm.
-- **Nog niet alles binnen:** de subregel noemt de volgende afschrijving: "Volgende: verzekering, 24 sep · € 86,40".
-- **Nooit rood. Geen tempo-markering**, want tempo betekent niets bij een vaste last.
-- **Alleen bij een afwijking** krijgt de rij een signaal, in **botergoud** met een alert-icoon, niet in rood:
-  - een afschrijving is hoger dan vorige keer ("Spotify € 7,50 hoger dan vorige maand");
-  - een verwachte afschrijving is niet op tijd binnen.
-- **Kolomkop:** "Afgeschreven / verwacht".
+### Potje
+Plafond voor variabele uitgaven. Bij Imke staat een potje altijd op een spaarpot; er is geen aparte spaarpot-optie.
+- Rij: rechts wat nog in het potje zit, links "€ 28,27 uitgegeven", rechts "van € 52,54".
+- Toestanden, `x = netto / bedrag`:
+  - rustig (`x < 1`): tekstkleur, balk `--accent`
+  - precies op (`x == 1`): bedrag grijs, "Helemaal besteed", balk `--border`. Dat is binnen, geen rood.
+  - over (`x > 1`): het enige rood (`--danger`): bedrag, statusregel ("€ 12,30 over budget") en balk.
+- Geen "gaat snel", geen bedrag per dag, geen tempo-kleur. Imke wil dat niet.
+- Volgorde: potjes met uitgaven bovenaan (over eerst), potjes zonder uitgaven als korte rij (icoon, naam, bedrag) onderaan in dezelfde card, zonder apart kopje.
 
-### Potjes
-Een plafond voor variabele uitgaven waarvan je het bedrag pas achteraf weet: boodschappen, uit eten, kleding. Ook spaardoelen zoals "Vakantie 2026" en "Onvoorzien" vallen hieronder.
+## Netto
 
-- **Vraag die hij beantwoordt:** lig ik op koers voor de rest van de maand?
-- **Tempo:** vergelijk het verbruikte deel met het verstreken deel van de periode, `tempo = dag / dagenInPeriode` (dag 16 van 30 is 0,533).
-- **Toestand per potje**, met `x = uitgegeven / budget`:
-  - `over` als `x > 1`, in `--danger`. Het bedrag rechts wordt rood en de tekst zegt "€ 28,50 over".
-  - `snel` als `x > tempo + 0,15`, in `--botergoud`. Je loopt voor op schema.
-  - `ok` voor de rest, in `--accent`.
-- **Balk:** vult in de toestandskleur, met een **stip op vandaag** (positie `tempo`). Zo zie je in één oogopslag of de vulling voor of achter de stip ligt.
-- **Rechts:** het bedrag, met "van € 700" eronder.
-- **Volgorde:** op urgentie, `x` aflopend. Wat over is staat bovenaan.
-- **Kolomkop:** "Uitgegeven / budget".
+Terugbetalingen worden verrekend. Het ingestelde bedrag verandert nooit: "van € 52,54 · € 48,27 uit · € 20,00 terug · netto € 28,27". In het detail staat de terugbetaling gekoppeld aan de oorspronkelijke uitgave ("voor Hornbach"). Inkomsten en terugbetalingen staan in `--success`.
 
-## Opbouw van de card
+## Rekeningen
 
-```
-Budgetten                         dag 16 van 30
-Vaste lasten          Afgeschreven / verwacht
-  [icoon] Woonlasten   ████████████   € 1.065  ✓ betaald
-          Hypotheek, energie, water · alles binnen
-  [icoon] Auto         █░░░░░░░░░░░   € 52,03  van € 389
-          Volgende: verzekering, 24 sep · € 86,40
-  [icoon] Maandlasten  ░░░░░░░░░░░░   € 12,50  van € 236
-          ⚠ Spotify € 7,50 hoger dan vorige maand   (botergoud)
-────────────────────────────────────────────────
-Potjes                  Uitgegeven / budget
-  [icoon] Kleding      ██████████●█   € 128,50 van € 100   (rood)
-  [icoon] Uit eten     █████████●     € 141    van € 150   (goud)
-  ...
-  [icoon] Vakantie 2026 ●             € 0      van € 75
-```
+- Per budget kies je welke rekeningen meetellen. Standaard alleen je eigen privé-rekeningen; de gezamenlijke zet je per budget aan.
+- In Profiel heeft elke rekening de schakelaar "Gedeeld met [partner]". Gedeeld = de ander ziet de transacties; in haar budgetten telt de rekening alleen mee als zij dat per budget aanzet.
+- Banklogo als plaatshouder (`data-bank-logo="SNS"`), vervangen door het echte logo.
 
-- Eén scheidingslijn, alleen tussen de groepen Vaste lasten en Potjes, niet tussen de rijen.
-- Elk icoon zit in een rond plaatje van 36px in de categoriekleur, met de lichte categorietint als vlak (`--cat-*` en `--cat-*-bg`).
-- Rijen: grid `36px | 1fr | 112px`, minimaal 68px hoog. De naam staat op 16px, met de balk (6px) en eventueel de subregel eronder.
-- Leeg (geen budgetten, zoals bij Yoran): één zin en een stille knop "Budget instellen". Geen lege lijst.
+## Periode en per persoon
 
-## Datamodel
+- Periode: elke maand met een startdag. Imke: de 25e t/m de 24e.
+- Elk budget begint elke periode weer bij het volle bedrag. Restant meenemen: nog navragen bij Imke hoe Spendee dit deed; niet bouwen tot dat duidelijk is.
+- Budgetten zijn per persoon, nooit "samen".
 
-Spendee heeft alleen "budget". Voeg een soort toe:
+## Detail van een budget
 
-```ts
-type Budget = {
-  id: string;
-  naam: string;
-  categorieIds: string[];      // welke Spendee-categorieën tellen mee
-  bedrag: number;              // verwacht (vast) of plafond (potje)
-  soort: 'vast' | 'potje';
-  eigenaar: 'imke' | 'yoran' | 'samen';
-  periode: 'maand';            // nu alleen maand
-};
-// alleen voor soort 'vast': wat verwachten we binnen deze periode
-type VerwachteAfschrijving = { budgetId: string; omschrijving: string; bedrag: number; datum: string; binnen: boolean };
-```
+1. Kop: terug, icoon, naam, soort en rekening, knop Wijzigen.
+2. "Deze periode": de details groot.
+3. "Vergelijking met vorige periode": twee balken (deze periode tot nu, vorige periode) en één zin.
+4. Transacties of afschrijvingen: de nieuwste 5, daaronder "Alle 20 transacties" (opent Transacties gefilterd op dit budget en deze periode). Terugbetalingen blijven altijd zichtbaar.
 
-- **Voorstel bij de import:** een budget is waarschijnlijk `vast` als al zijn transacties in de afgelopen 3 maanden terugkeren met (bijna) hetzelfde bedrag (marge ±5%) en rond dezelfde dag (±3 dagen). Laat het de gebruiker bevestigen; raad het niet stil.
-- **Verwachte afschrijvingen:** leid die af uit dezelfde terugkerende transacties van vorige maand.
-- **Afwijking:**
-  - het bedrag verschilt meer dan €1 of meer dan 2% van vorige keer;
-  - of de verwachte datum plus 3 dagen is verstreken zonder dat er een afschrijving is binnengekomen.
+## Maken en wijzigen
 
-## Niet doen
+Velden: naam, bedrag tot op de cent, soort, categorieën, rekeningen, periode (herhaalt + begint op). De subtitel volgt de gekozen soort ("Potje · alleen voor jou").
+Categorieën: "+ Categorie" klapt een lijst open in het veld zelf (zoeken, één kolom, meerdere kiezen, Klaar). Aanname: elke categorie hoort bij één budget, zodat een uitgave nooit in twee budgetten telt.
 
-- Een vaste last die volledig binnen is, niet rood of "op" maken. Dat was precies Imkes klacht.
-- De tempo-stip niet tonen bij vaste lasten.
-- Botergoud niet als tekstkleur op wit voor lange tekst; alleen kort, semibold, met icoon (het contrast is krap).
-- Gewone uitgaven nooit rood. Rood is alleen voor `over` bij een potje.
+## Leeg
+
+Eén zin en een stille knop "Budget instellen". Geen lege lijst.
+
+## Stijl
+
+- Kopje van een groep boven de card, niet erin; rechts in grijs wat het getal betekent.
+- Geen scheidingslijnen tussen rijen; groepen zijn aparte cards.
+- Rood alleen voor een potje dat over is. Botergoud alleen voor een afwijking bij een vaste last.
+- Geen em-dashes of en-dashes in microcopy ("25 sep t/m 24 okt").
+
+## Nog open
+
+- Spaardoel dat overboekingen naar een spaarrekening telt (Imke's "Spaarrekening" € 50).
+- Restant meenemen naar de volgende periode.
 
 ## Klaar als
 
-- [ ] Budgetten in de data hebben het veld `soort`, met een voorstel uit de terugkeer-heuristiek.
-- [ ] Een vaste last die volledig binnen is, toont "betaald" met een groen vinkje.
-- [ ] Afwijkingen bij vaste lasten zijn botergoud, met een uitleg in de subregel.
-- [ ] Potjes zijn gesorteerd op urgentie, met over/snel/ok en een stip op vandaag.
-- [ ] Er zijn tests voor de toestand bij `x` = 0,5 / tempo+0,15 / 1 / 1,01, en voor vast op exact 100%.
+- [ ] Budget heeft `soort: 'vast' | 'potje'`, door de gebruiker gekozen.
+- [ ] Netto met terugbetalingen; het ingestelde bedrag wijzigt nooit.
+- [ ] Vaste last helemaal binnen toont "Betaald", nooit rood.
+- [ ] Potje: rustig / precies op / over, met rood alleen bij over.
+- [ ] Rekeningen per budget, standaard alleen privé; delen per rekening in Profiel.
+- [ ] Tests voor `x` = 0,5 / 1 / 1,01, vaste last op exact 100%, en een terugbetaling die netto verlaagt.
