@@ -1,0 +1,37 @@
+<!-- @dsCard group="mone · Profiel" viewport="5760x2380" name="Categorieën · desktop" subtitle="Vanuit Profiel: lijst per soort met netto, wijzigen met regels, samenvoegen met voorvertoning, verwijderen met keuze, nieuw, en de twee rondes om Splits In en Splits Uit uit te faseren; licht en donker" -->
+<!doctype html><html lang="nl"><head><meta charset="utf-8"><title>Categorieën · desktop · mone.yoim</title>
+<link rel="stylesheet" href="../styles.css">
+<link rel="stylesheet" href="mone-tokens.css">
+<style>body{margin:0;display:flex;flex-wrap:wrap;align-items:flex-start;gap:64px;padding:64px;width:5632px;background:#5f5f58;font-family:var(--font-sans)}.vak{flex:0 0 auto;border-radius:28px;overflow:hidden;box-shadow:0 0 0 1px rgba(255,255,255,.08),0 24px 60px rgba(0,0,0,.28)}.kop{display:flex;flex-direction:column;gap:6px;margin-bottom:28px}.kop p{margin:0;font-size:11px;letter-spacing:.08em;text-transform:uppercase;font-weight:600;color:var(--text-subtle)}.kop h1{margin:0;font-size:30px;font-weight:600;letter-spacing:-.02em}.kop span{font-size:14px;color:var(--text-muted);max-width:560px;line-height:1.45;text-wrap:pretty}.scherm{width:1280px;height:832px;border-radius:var(--radius-lg);border:1px solid var(--border);background:var(--canvas-wash),var(--surface);box-shadow:var(--shadow-raised)}a{color:var(--accent)}a:hover{color:var(--accent-hover)}</style>
+</head><body>
+<div class="vak"><div data-thema="licht" style="background:var(--surface-sunken);color:var(--text);padding:40px">
+<div class="kop"><p>mone.yoim.nl · desktop · licht</p><h1>Lijst en wijzigen</h1><span>Per soort, met netto dit jaar. Klik op een categorie: naam, kleur en icoon, soort, budget en welke tegenpartijen er vanzelf in vallen. Bovenaan de uitnodiging voor de twee Splits-rondes.</span></div>
+<div class="scherm" data-cat='{"mode":"desktop","open":"bood"}' data-screen-label="Categorieën · lijst en wijzigen"></div>
+</div></div>
+<div class="vak"><div data-thema="licht" style="background:var(--surface-sunken);color:var(--text);padding:40px">
+<div class="kop"><p>mone.yoim.nl · desktop · licht</p><h1>Samenvoegen</h1><span>Vaste Boodschappen gaat op in Boodschappen. Vooraf precies wat er verandert, en de waarschuwing dat het budget Vaste boodschappen leeg achterblijft.</span></div>
+<div class="scherm" data-cat='{"mode":"desktop","sel":["bood","vbood"],"merge":true}' data-screen-label="Categorieën · samenvoegen"></div>
+</div></div>
+<div class="vak"><div data-thema="licht" style="background:var(--surface-sunken);color:var(--text);padding:40px">
+<div class="kop"><p>mone.yoim.nl · desktop · licht</p><h1>Verwijderen</h1><span>Gezondheid heeft transacties, dus eerst een keuze: samenvoegen met een andere categorie, of de transacties terug naar Nakijken.</span></div>
+<div class="scherm" data-cat='{"mode":"desktop","open":"gez","del":true,"delTo":"onv"}' data-screen-label="Categorieën · verwijderen"></div>
+</div></div>
+<div class="vak"><div data-thema="licht" style="background:var(--surface-sunken);color:var(--text);padding:40px">
+<div class="kop"><p>mone.yoim.nl · desktop · licht</p><h1>Nieuw</h1><span>Naam, kleur uit de categorietokens en een icoon met zoeken. De soort is optioneel.</span></div>
+<div class="scherm" data-cat='{"mode":"desktop","open":"new","newName":"Cadeaus"}' data-screen-label="Categorieën · nieuw"></div>
+</div></div>
+<div class="vak"><div data-thema="licht" style="background:var(--surface-sunken);color:var(--text);padding:40px">
+<div class="kop"><p>mone.yoim.nl · desktop · licht</p><h1>Oude Tikkies koppelen</h1><span>Een kaart tegelijk. De app stelt de uitgave voor en laat zien wat het netto wordt. Eén Loetje-Tikkie is al gekoppeld; rechts wat er nog komt.</span></div>
+<div class="scherm" data-cat='{"mode":"desktop","view":"tikkies","tikStep":1}' data-screen-label="Categorieën · Tikkies koppelen"></div>
+</div></div>
+<div class="vak"><div data-thema="licht" style="background:var(--surface-sunken);color:var(--text);padding:40px">
+<div class="kop"><p>mone.yoim.nl · desktop · licht</p><h1>Splits Uit verdelen</h1><span>Per transactie de waarschijnlijke categorie bovenaan, uit de omschrijving en eerdere keren. Aan het eind is Splits Uit leeg en kan hij weg of verborgen worden.</span></div>
+<div class="scherm" data-cat='{"mode":"desktop","view":"splits","splitsStep":2}' data-screen-label="Categorieën · Splits Uit verdelen"></div>
+</div></div>
+<div class="vak"><div data-thema="donker" style="background:var(--surface-sunken);color:var(--text);padding:40px">
+<div class="kop"><p>mone.yoim.nl · desktop · donker</p><h1>Vaste Lasten</h1><span>Eén categorie die netto rekent: de afschrijvingen en Imkes bijdrage samen. Imke op de ABN valt hier vanzelf in, elders bij Splits In.</span></div>
+<div class="scherm" data-cat='{"mode":"desktop","open":"vlast"}' data-screen-label="Categorieën · donker"></div>
+</div></div>
+<script src="tx2-data.js"></script><script src="cat-data.js"></script><script src="cat-app.js"></script><script src="cat-rondes.js"></script>
+<script>document.querySelectorAll('[data-cat]').forEach(el => CATAPP.App(el, JSON.parse(el.dataset.cat)));</script>
+</body></html>

@@ -1,0 +1,41 @@
+<!-- @dsCard group="mone · Profiel" viewport="2200x2400" name="Categorieën · telefoon" subtitle="Vanuit Profiel: lijst per soort, wijzigen in een sheet, samenvoegen met voorvertoning, verwijderen met keuze, nieuw, en de twee Splits-rondes als kaart; licht en donker" -->
+<!doctype html><html lang="nl"><head><meta charset="utf-8"><title>Categorieën · telefoon · mone.yoim</title>
+<link rel="stylesheet" href="../styles.css">
+<link rel="stylesheet" href="mone-tokens.css">
+<style>body{margin:0;display:flex;flex-wrap:wrap;align-items:flex-start;gap:64px;padding:64px;width:2072px;background:#5f5f58;font-family:var(--font-sans)}.vak{flex:0 0 auto;border-radius:28px;overflow:hidden;box-shadow:0 0 0 1px rgba(255,255,255,.08),0 24px 60px rgba(0,0,0,.28)}.kop{display:flex;flex-direction:column;gap:6px;margin-bottom:28px;height:104px}.kop p{margin:0;font-size:11px;letter-spacing:.08em;text-transform:uppercase;font-weight:600;color:var(--text-subtle)}.kop h1{margin:0;font-size:30px;font-weight:600;letter-spacing:-.02em}.kop span{font-size:14px;color:var(--text-muted);max-width:390px;line-height:1.45;text-wrap:pretty}.scherm{width:390px;height:844px;border-radius:var(--radius-2xl);border:1px solid var(--border);background:var(--canvas-wash),var(--surface);box-shadow:var(--shadow-raised)}a{color:var(--accent)}a:hover{color:var(--accent-hover)}</style>
+</head><body>
+<div class="vak"><div data-thema="licht" style="background:var(--surface-sunken);color:var(--text);padding:40px">
+<div class="kop"><p>telefoon · licht</p><h1>Lijst</h1><span>Per soort met netto dit jaar. Zoeken, samenvoegen en de plus voor nieuw.</span></div>
+<div class="scherm" data-cat='{"mode":"phone"}' data-screen-label="Categorieën · telefoon · lijst"></div>
+</div></div>
+<div class="vak"><div data-thema="licht" style="background:var(--surface-sunken);color:var(--text);padding:40px">
+<div class="kop"><p>telefoon · licht</p><h1>Wijzigen</h1><span>Boodschappen in een sheet. Scroll voor soort, budget, wat er vanzelf in valt en verbergen.</span></div>
+<div class="scherm" data-cat='{"mode":"phone","open":"bood"}' data-screen-label="Categorieën · telefoon · wijzigen"></div>
+</div></div>
+<div class="vak"><div data-thema="licht" style="background:var(--surface-sunken);color:var(--text);padding:40px">
+<div class="kop"><p>telefoon · licht</p><h1>Samenvoegen</h1><span>Transfer Fees gaat op in Other. Kies het doel, eventueel een nieuwe naam, en lees wat er verandert.</span></div>
+<div class="scherm" data-cat='{"mode":"phone","sel":["other","fees"],"merge":true,"mergeTo":"other","mergeName":"Overig"}' data-screen-label="Categorieën · telefoon · samenvoegen"></div>
+</div></div>
+<div class="vak"><div data-thema="licht" style="background:var(--surface-sunken);color:var(--text);padding:40px">
+<div class="kop"><p>telefoon · licht</p><h1>Verwijderen</h1><span>Met transacties eerst een keuze, met aantallen. Hier: naar Nakijken.</span></div>
+<div class="scherm" data-cat='{"mode":"phone","open":"gez","del":true,"delChoice":"nk"}' data-screen-label="Categorieën · telefoon · verwijderen"></div>
+</div></div>
+<div class="vak"><div data-thema="licht" style="background:var(--surface-sunken);color:var(--text);padding:40px">
+<div class="kop"><p>telefoon · licht</p><h1>Nieuw</h1><span>Het voorbeeld bovenaan verandert mee met kleur en icoon.</span></div>
+<div class="scherm" data-cat='{"mode":"phone","open":"new","newName":"Cadeaus"}' data-screen-label="Categorieën · telefoon · nieuw"></div>
+</div></div>
+<div class="vak"><div data-thema="licht" style="background:var(--surface-sunken);color:var(--text);padding:40px">
+<div class="kop"><p>telefoon · licht</p><h1>Tikkies koppelen</h1><span>Een kaart tegelijk: koppelen, andere uitgave of overslaan. Ongedaan maken in de melding en onder Gedaan.</span></div>
+<div class="scherm" data-cat='{"mode":"phone","view":"tikkies","tikStep":1}' data-screen-label="Categorieën · telefoon · Tikkies"></div>
+</div></div>
+<div class="vak"><div data-thema="licht" style="background:var(--surface-sunken);color:var(--text);padding:40px">
+<div class="kop"><p>telefoon · licht</p><h1>Splits Uit verdelen</h1><span>Tik op de juiste categorie. Bovenaan wat het waarschijnlijkst is, met waarom.</span></div>
+<div class="scherm" data-cat='{"mode":"phone","view":"splits"}' data-screen-label="Categorieën · telefoon · Splits Uit"></div>
+</div></div>
+<div class="vak"><div data-thema="donker" style="background:var(--surface-sunken);color:var(--text);padding:40px">
+<div class="kop"><p>telefoon · donker</p><h1>Lijst</h1><span>Dezelfde lijst in het donker. Onderaan staat de verborgen categorie uitgeklapt.</span></div>
+<div class="scherm" data-cat='{"mode":"phone","showHidden":true}' data-screen-label="Categorieën · telefoon · donker"></div>
+</div></div>
+<script src="tx2-data.js"></script><script src="cat-data.js"></script><script src="cat-app.js"></script><script src="cat-rondes.js"></script>
+<script>document.querySelectorAll('[data-cat]').forEach(el => CATAPP.App(el, JSON.parse(el.dataset.cat)));</script>
+</body></html>
