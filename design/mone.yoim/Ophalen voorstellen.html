@@ -1,0 +1,33 @@
+<!-- @dsCard group="mone · Transacties" viewport="2240x2520" name="Ophalen · voorstellen" subtitle="Zelf verversen in de kop van Transacties: A knop bij het saldo, B lijn in de kaart, C eerste kaartje; zeven staten van rust tot toestemming verlopen, desktop en telefoon" -->
+<!doctype html><html lang="nl"><head><meta charset="utf-8"><title>Ophalen · voorstellen · mone.yoim</title>
+<link rel="stylesheet" href="../styles.css">
+<link rel="stylesheet" href="mone-tokens.css">
+<style>body{margin:0;display:flex;flex-direction:column;gap:64px;padding:64px;width:max-content;background:#5f5f58;font-family:var(--font-sans)}.rij{display:flex;gap:48px;align-items:flex-start}.uitleg{width:360px;display:flex;flex-direction:column;gap:14px;color:#f2f1ec}.uitleg p{margin:0;font-size:11px;letter-spacing:.08em;text-transform:uppercase;font-weight:600;color:#c9c8c0}.uitleg h1{margin:0;font-size:34px;font-weight:600;letter-spacing:-.02em}.uitleg span{font-size:15px;line-height:1.5;color:#dcdbd3;text-wrap:pretty}.uitleg ul{margin:0;padding-left:18px;font-size:14px;line-height:1.55;color:#dcdbd3}.staten{display:flex;flex-wrap:wrap;gap:6px}.staten button{height:36px;padding:0 12px;border-radius:999px;border:0;background:#3a3b35;color:#dcdbd3;font:inherit;font-size:13px;font-weight:600;cursor:pointer}.staten button[aria-pressed="true"]{background:#f2f1ec;color:#2b2c27}.vak{flex:0 0 auto;border-radius:28px;overflow:hidden;box-shadow:0 0 0 1px rgba(255,255,255,.08),0 24px 60px rgba(0,0,0,.28)}.vak>div{background:var(--surface-sunken);color:var(--text);padding:32px}.vak small{display:block;margin-bottom:16px;font-size:11px;letter-spacing:.08em;text-transform:uppercase;font-weight:600;color:var(--text-subtle)}.d{width:1040px;height:640px;border-radius:var(--radius-lg);border:1px solid var(--border);background:var(--canvas-wash),var(--surface);box-shadow:var(--shadow-raised)}.t{width:390px;height:640px;border-radius:var(--radius-2xl);border:1px solid var(--border);background:var(--canvas-wash),var(--surface);box-shadow:var(--shadow-raised)}a{color:var(--accent)}a:hover{color:var(--accent-hover)}</style>
+</head><body>
+<div class="rij" data-v="A">
+<div class="uitleg"><p>Voorstel A</p><h1>Knop bij het saldo</h1><span>Desktop: een ronde knop rechts in de kop, de status in de regel ernaast. Telefoon: geen knop, je trekt de lijst omlaag. Tijdens ophalen krijgt elk rekeninglogo een ring; klaar is een badge met wat er nieuw is.</span><ul><li>Eén plek voor alles, het rustigst.</li><li>Na een ronde vijf minuten niet opnieuw: de knop wordt een vinkje, en omlaag trekken zegt "Net opgehaald".</li><li>Probeer het: sleep in het telefoonscherm bovenaan omlaag.</li></ul><div class="staten"></div></div>
+<div class="vak"><div data-thema="licht"><small>desktop · hoofdkolom</small><div class="d" data-m="desktop" data-screen-label="Ophalen A · desktop"></div></div></div>
+<div class="vak"><div data-thema="licht"><small>telefoon</small><div class="t" data-m="phone" data-screen-label="Ophalen A · telefoon"></div></div></div>
+</div>
+<div class="rij" data-v="B">
+<div class="uitleg"><p>Voorstel B</p><h1>Lijn in de kaart</h1><span>Het tijdstip is zelf de knop. Tijdens ophalen loopt bovenin de kaart een lijn met een stukje per rekening, dat vol loopt als die rekening klaar is.</span><ul><li>Het minst nieuw: de tekst die er al stond, wordt de knop.</li><li>Op de telefoon kan omlaag trekken hetzelfde doen.</li></ul><div class="staten"></div></div>
+<div class="vak"><div data-thema="licht"><small>desktop · hoofdkolom</small><div class="d" data-m="desktop" data-screen-label="Ophalen B · desktop"></div></div></div>
+<div class="vak"><div data-thema="licht"><small>telefoon</small><div class="t" data-m="phone" data-screen-label="Ophalen B · telefoon"></div></div></div>
+</div>
+<div class="rij" data-v="C">
+<div class="uitleg"><p>Voorstel C</p><h1>Eerste kaartje</h1><span>Ophalen is het eerste kaartje in de rij rekeningen. Tijdens en na ophalen zegt elk kaartje zelf hoe het ging: wacht, ophalen, 3 nieuw, lukte niet.</span><ul><li>Per rekening het duidelijkst.</li><li>Neemt ruimte in de rij; op de telefoon schuift de rest op.</li></ul><div class="staten"></div></div>
+<div class="vak"><div data-thema="licht"><small>desktop · hoofdkolom</small><div class="d" data-m="desktop" data-screen-label="Ophalen C · desktop"></div></div></div>
+<div class="vak"><div data-thema="donker"><small>telefoon · donker</small><div class="t" data-m="phone" data-screen-label="Ophalen C · telefoon"></div></div></div>
+</div>
+<script src="tx2-data.js"></script><script src="oph.js"></script>
+<script>
+const STATEN = [['rust','Rust'],['oud','Gisteren'],['bezig','Bezig'],['klaar','Klaar'],['deels','Deels mislukt'],['teveel','Te veel verzoeken'],['verlopen','Verlopen']];
+const START = { A:'klaar', B:'bezig', C:'deels' };
+document.querySelectorAll('.rij').forEach(rij => {
+  const v = rij.dataset.v, mocks = [...rij.querySelectorAll('[data-m]')].map(el => OPH.Mock(el, { variant:v, mode:el.dataset.m, state:START[v] }));
+  const box = rij.querySelector('.staten');
+  box.innerHTML = STATEN.map(([k, l]) => `<button data-s="${k}" aria-pressed="${k === START[v]}">${l}</button>`).join('');
+  box.addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; box.querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', x === b)); mocks.forEach(m => m.set(b.dataset.s)); });
+});
+</script>
+</body></html>

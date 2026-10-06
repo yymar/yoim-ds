@@ -1,20 +1,19 @@
-<!-- @dsCard group="mone.yoim" viewport="3100x1130" name="Transacties v2 · prototype" subtitle="Feedback 5 okt: volledige rekeningnamen, samenvatting die doorloopt, filters zonder Toepassen die inklappen bij scrollen, categorie wijzigen via het icoon, volgorde en verbergen in Profiel" -->
+<!-- @dsCard group="mone · Transacties" viewport="3100x1130" name="Kop, filters en detail · prototype" subtitle="Met ophalen (variant A: knop op desktop, omlaag trekken op de telefoon). Feedback 5 okt, gekozen ontwerp: volledige rekeningnamen, filters in een eigen card zonder Toepassen die inklapt bij scrollen, categorie via het icoon, detail als paneel, Profiel met volgorde, oog en uitklappen" -->
 <!doctype html><html lang="nl"><head><meta charset="utf-8"><title>Transacties v2 · mone.yoim</title>
 <link rel="stylesheet" href="../styles.css">
 <link rel="stylesheet" href="mone-tokens.css">
-<style>body{margin:0;display:flex;align-items:flex-start;gap:64px;padding:96px 64px 64px;width:max-content;background:#5f5f58;font-family:var(--font-sans)}.vak{flex:0 0 auto;border-radius:28px;overflow:hidden;box-shadow:0 0 0 1px rgba(255,255,255,.08),0 24px 60px rgba(0,0,0,.28)}.kop{display:flex;flex-direction:column;gap:6px;margin-bottom:28px}.kop p{margin:0;font-size:11px;letter-spacing:.08em;text-transform:uppercase;font-weight:600;color:var(--text-subtle)}.kop h1{margin:0;font-size:30px;font-weight:600;letter-spacing:-.02em}.kop span{font-size:14px;color:var(--text-muted);max-width:390px;line-height:1.45;text-wrap:pretty}.bar{position:fixed;top:16px;left:64px;z-index:50;display:flex;align-items:center;gap:16px;height:44px;padding:0 6px 0 16px;border-radius:999px;background:#2b2c27;color:#f2f1ec;font-size:13px;font-weight:600;box-shadow:0 6px 20px rgba(0,0,0,.25)}.seg{display:flex;gap:2px;padding:3px;border-radius:999px;background:#3a3b35}.seg button{height:30px;padding:0 12px;border-radius:999px;border:0;background:transparent;color:#c9c8c0;font:inherit;font-size:12px;font-weight:600;cursor:pointer}.seg button[aria-pressed="true"]{background:#f2f1ec;color:#2b2c27}a{color:var(--accent)}a:hover{color:var(--accent-hover)}</style>
+<style>body{margin:0;display:flex;align-items:flex-start;gap:64px;padding:64px;width:max-content;background:#5f5f58;font-family:var(--font-sans)}.vak{flex:0 0 auto;border-radius:28px;overflow:hidden;box-shadow:0 0 0 1px rgba(255,255,255,.08),0 24px 60px rgba(0,0,0,.28)}.kop{display:flex;flex-direction:column;gap:6px;margin-bottom:28px}.kop p{margin:0;font-size:11px;letter-spacing:.08em;text-transform:uppercase;font-weight:600;color:var(--text-subtle)}.kop h1{margin:0;font-size:30px;font-weight:600;letter-spacing:-.02em}.kop span{font-size:14px;color:var(--text-muted);max-width:390px;line-height:1.45;text-wrap:pretty}a{color:var(--accent)}a:hover{color:var(--accent-hover)}</style>
 </head><body>
-<div class="bar"><span>Filters</span><div class="seg" data-set="placement"><button data-v="in" aria-pressed="false">In de rekeningencard</button><button data-v="onder" aria-pressed="true">Card eronder · gekozen</button></div><span>Detail</span><div class="seg" data-set="variant"><button data-v="A" aria-pressed="false">A Uitklap</button><button data-v="B" aria-pressed="true">B Paneel · gekozen</button><button data-v="C" aria-pressed="false">C Tegenpartij</button><button data-v="D" aria-pressed="false">D Bon</button></div></div>
 <div class="vak"><div data-thema="licht" style="background:var(--surface-sunken);color:var(--text);padding:40px">
-<div class="kop"><p>mone.yoim.nl · desktop · licht</p><h1>Transacties</h1><span>Scroll in de lijst: de filters klappen in tot een regel. Klik op een icoon om de categorie te wijzigen, op de rij voor het detail.</span></div>
+<div class="kop"><p>mone.yoim.nl · desktop · licht</p><h1>Transacties</h1><span>Ophalen met de capsule rechts in de kop. Scroll in de lijst: de filters klappen in tot een regel. Klik op een icoon om de categorie te wijzigen, op de rij voor het detail.</span></div>
 <div id="desk" data-screen-label="Transacties v2 · desktop" style="width:1280px;height:832px;border-radius:var(--radius-lg);border:1px solid var(--border);background:var(--canvas-wash),var(--surface);box-shadow:var(--shadow-raised)"></div>
 </div></div>
 <div class="vak"><div data-thema="licht" style="background:var(--surface-sunken);color:var(--text);padding:40px">
-<div class="kop"><p>mone.yoim.nl · telefoon · licht</p><h1>Bovenaan</h1><span>Twee rekeningen in beeld: de regel na vaste lasten loopt door op een tweede regel in plaats van af te breken.</span></div>
+<div class="kop"><p>mone.yoim.nl · telefoon · licht</p><h1>Bovenaan</h1><span>Trek de lijst omlaag om op te halen, er is geen knop. Daarna vijf minuten rust: trekken zegt dan Net opgehaald.</span></div>
 <div id="tel" data-screen-label="Transacties v2 · telefoon" style="width:390px;height:844px;border-radius:var(--radius-2xl);border:1px solid var(--border);background:var(--canvas-wash),var(--surface);box-shadow:var(--shadow-raised)"></div>
 </div></div>
 <div class="vak"><div data-thema="licht" style="background:var(--surface-sunken);color:var(--text);padding:40px">
-<div class="kop"><p>mone.yoim.nl · telefoon · licht</p><h1>Na scrollen</h1><span>De filters als samenvatting. Tik erop en ze klappen weer uit; verder scrollen klapt ze weer in.</span></div>
+<div class="kop"><p>mone.yoim.nl · telefoon · licht</p><h1>Na scrollen</h1><span>Net opgehaald: badges op de logo's, 3 nieuw in de lijst. De filters als samenvatting; tik erop en ze klappen uit.</span></div>
 <div id="tel2" data-screen-label="Transacties v2 · telefoon · gescrold" style="width:390px;height:844px;border-radius:var(--radius-2xl);border:1px solid var(--border);background:var(--canvas-wash),var(--surface);box-shadow:var(--shadow-raised)"></div>
 </div></div>
 <div class="vak"><div data-thema="licht" style="background:var(--surface-sunken);color:var(--text);padding:40px">
@@ -25,14 +24,7 @@
 <script>
 TX2.App(document.getElementById('desk'), { mode:'desktop', view:['asn-y'] });
 TX2.App(document.getElementById('tel'), { mode:'phone', view:['asn-y', 'abn'] });
-TX2.App(document.getElementById('tel2'), { mode:'phone', view:['asn-y', 'abn'], cats:['auto', 'sport'], scrollTop:200 });
+TX2.App(document.getElementById('tel2'), { mode:'phone', view:['asn-y', 'abn'], cats:['auto', 'sport'], scrollTop:200, fetch:'klaar' });
 TX2D.Profiel(document.getElementById('prof'));
-document.querySelectorAll('.seg').forEach(seg => seg.addEventListener('click', e => {
-  const b = e.target.closest('button'); if (!b) return;
-  TX2SET[seg.dataset.set] = b.dataset.v;
-  seg.querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', x === b));
-  TX2SET.apps.forEach(a => { if (seg.dataset.set === 'variant') a.st.dpos = null; });
-  TX2.refreshAll();
-}));
 </script>
 </body></html>

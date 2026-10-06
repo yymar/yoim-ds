@@ -4,7 +4,7 @@
    tx2-detail.js. */
 (() => {
 const X = window.TX2, { ico, CATS, CAT, tone, TX, store, eur, signed, dayTitle, range, iso, PRESETS, TODAY, MONL, at } = X;
-const SET = window.TX2SET = Object.assign({ placement:'onder', variant:'B', apps:[] }, window.TX2SET || {});
+const SET = window.TX2SET = { apps:[] };
 X.refreshAll = () => SET.apps.forEach(a => a.refresh());
 store.subs.push(X.refreshAll);
 
@@ -19,7 +19,13 @@ if (!document.getElementById('tx2-css')) {
 @keyframes txFade{from{opacity:0}to{opacity:1}}
 .tx-sheet{animation:txUp .28s cubic-bezier(.32,.72,0,1)}.tx-in{animation:txIn .18s ease}.tx-panel{animation:txSide .28s cubic-bezier(.32,.72,0,1)}.tx-scrim{animation:txFade .2s ease}
 .tx-hscroll{scrollbar-width:none}.tx-hscroll::-webkit-scrollbar{display:none}
-.tx-mono{font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace}`;
+.tx-mono{font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace}
+@media (hover:hover) and (pointer:fine){.tx-fetch[data-hov="1"]:hover{background:var(--surface-sunken)!important}}
+@keyframes txXfade{from{opacity:0}to{opacity:1}}.tx-xfade{animation:txXfade .24s ease-out .08s both}
+.tx-chips>*{flex:0 0 auto!important;white-space:nowrap}
+@keyframes txSpin{to{transform:rotate(360deg)}}@keyframes txPulse{50%{opacity:.35}}@keyframes txFlash{0%,35%{background:var(--accent-soft)}100%{background:transparent}}
+.tx-spin{animation:txSpin 1s linear infinite;transform-origin:50% 50%}.tx-flash{animation:txFlash 2.4s ease-out both}
+@media (prefers-reduced-motion:reduce){.tx-spin{animation:txPulse 1.6s ease-in-out infinite}.tx-flash,.tx-in,.tx-sheet,.tx-panel,.tx-xfade{animation:none}}`;
   document.head.appendChild(s);
 }
 
@@ -31,6 +37,9 @@ const fbtn = on => `display:flex;align-items:center;gap:8px;min-height:44px;padd
 const SPECIAL = { _nk:'Nakijken', _ob:'Overboekingen' };
 const switchEl = on => `<span style="flex:0 0 auto;position:relative;width:44px;height:26px;border-radius:999px;background:${on ? 'var(--accent)' : 'var(--border)'};transition:background .15s"><span style="position:absolute;top:3px;left:${on ? 21 : 3}px;width:20px;height:20px;border-radius:999px;background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.2);transition:left .15s"></span></span>`;
 X.ui = { chip, logo, amtColor, subOf, switchEl };
+const refreshIco = (s, spin) => `<svg ${spin ? 'class="tx-spin"' : ''} xmlns="http://www.w3.org/2000/svg" width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex:0 0 auto;display:block"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/></svg>`;
+/* Ophalen (variant A): per rekening wat er nieuw binnenkomt in deze demo. */
+const FETCH_NEW = { 'asn-y':['t1', 't2'], abn:[], bunq:['t8'], paypal:[] };
 
 function navHTML() {
   const item = (icon, label, on, badge) => `<span style="position:relative;height:48px;display:flex;align-items:center;gap:12px;padding:0 12px;font-size:15px;font-weight:500;color:${on ? 'var(--accent)' : 'var(--text-muted)'};border-radius:var(--radius-lg);${on ? 'background:var(--glass-tint-strong);border:1px solid var(--glass-border);box-shadow:var(--glass-rim);' : ''}">${ico(icon, 20, on ? 2.4 : 1.8)}${label}${badge ? `<span style="margin-left:auto;padding:2px 8px;border-radius:999px;background:var(--accent-soft);color:var(--accent-hover);font-size:13px;font-weight:600">${badge}</span>` : ''}</span>`;
@@ -42,12 +51,12 @@ function tabHTML() {
 }
 
 function App(root, opt = {}) {
-  const phone = opt.mode === 'phone', V = () => opt.variant || SET.variant;
-  const st = { view:new Set(opt.view || ['asn-y']), from:'2026-10-01', to:'2026-10-31', preset:'deze', cats:new Set(opt.cats || []), collapsed:false, peek:false, peekY:0, pop:null, popId:null, pos:null, detail:opt.openDetail || null, dpos:null, ym:[2026, 9], anchor:null, q:'', rule:false, toast:null };
+  const phone = opt.mode === 'phone';
+  const st = { view:new Set(opt.view || ['asn-y']), from:'2026-10-01', to:'2026-10-31', preset:'deze', cats:new Set(opt.cats || []), collapsed:false, peek:false, peekY:0, pop:null, popId:null, pos:null, detail:opt.openDetail || null, dpos:null, ym:[2026, 9], anchor:null, q:'', rule:false, toast:null, f:{ busy:false, cool:false, last:opt.fetchLast || '16:00', acc:{}, newIds:new Set(), flash:new Set() } };
   root.style.position = 'relative'; root.style.overflow = 'hidden';
   root.innerHTML = phone
-    ? `<div data-scroller style="position:absolute;inset:0;overflow-y:auto;padding:16px 16px 112px;box-sizing:border-box"><div style="display:flex;flex-direction:column;gap:16px;font-family:var(--font-sans);color:var(--text)"><div style="display:flex;align-items:center;justify-content:space-between;padding-left:8px"><b style="font-size:30px;font-weight:600;letter-spacing:-.02em">Transacties</b><span style="width:48px;height:48px;display:grid;place-items:center"><span style="width:36px;height:36px;border-radius:999px;background:var(--member-yoran);color:#fff;display:grid;place-items:center;font-size:14px;font-weight:600">Y</span></span></div><div data-sticky style="position:sticky;top:8px;z-index:4;display:flex;flex-direction:column;gap:8px"></div><div data-list style="display:flex;flex-direction:column;gap:16px"></div></div></div>${tabHTML()}<div data-overlay style="position:absolute;inset:0;pointer-events:none;z-index:30;font-family:var(--font-sans);color:var(--text)"></div>`
-    : `${navHTML()}<div data-scroller style="position:absolute;top:0;bottom:0;left:240px;right:0;overflow-y:auto;padding:28px 40px 40px;box-sizing:border-box"><div style="max-width:1000px;margin:0 auto;display:flex;flex-direction:column;gap:20px;font-family:var(--font-sans);color:var(--text)"><div style="display:flex;align-items:center;gap:12px"><b style="flex:1;font-size:30px;font-weight:600;letter-spacing:-.02em">Transacties</b><label style="display:flex;align-items:center;gap:8px;width:260px;height:44px;padding:0 14px;border-radius:999px;background:var(--surface-raised);border:1px solid var(--border);box-sizing:border-box;color:var(--text-muted)">${ico('search', 16, 2.2)}<input placeholder="Zoek transacties" style="flex:1;min-width:0;border:0;outline:0;background:transparent;font:inherit;font-size:14px;color:var(--text)"></label></div><div data-sticky style="position:sticky;top:20px;z-index:4;display:flex;flex-direction:column;gap:8px"></div><div data-list style="display:flex;flex-direction:column;gap:16px"></div></div></div><div data-overlay style="position:absolute;inset:0;pointer-events:none;z-index:30;font-family:var(--font-sans);color:var(--text)"></div>`;
+    ? `<div data-scroller style="position:absolute;inset:0;overflow-y:auto;overflow-anchor:none;padding:16px 16px 112px;box-sizing:border-box"><div style="display:flex;flex-direction:column;gap:16px;min-height:calc(100% + 160px);font-family:var(--font-sans);color:var(--text)"><div style="display:flex;align-items:center;justify-content:space-between;padding-left:8px"><b style="font-size:30px;font-weight:600;letter-spacing:-.02em">Transacties</b><span style="width:48px;height:48px;display:grid;place-items:center"><span style="width:36px;height:36px;border-radius:999px;background:var(--member-yoran);color:#fff;display:grid;place-items:center;font-size:14px;font-weight:600">Y</span></span></div><div data-sticky style="position:sticky;top:8px;z-index:4;display:flex;flex-direction:column;gap:8px"></div><div data-list style="display:flex;flex-direction:column;gap:16px"></div></div></div>${tabHTML()}<div data-overlay style="position:absolute;inset:0;pointer-events:none;z-index:30;font-family:var(--font-sans);color:var(--text)"></div>`
+    : `${navHTML()}<div data-scroller style="position:absolute;top:0;bottom:0;left:240px;right:0;overflow-y:auto;overflow-anchor:none;padding:28px 40px 40px;box-sizing:border-box"><div style="max-width:1000px;margin:0 auto;display:flex;flex-direction:column;gap:20px;min-height:calc(100% + 160px);font-family:var(--font-sans);color:var(--text)"><div style="display:flex;align-items:center;gap:12px"><b style="flex:1;font-size:30px;font-weight:600;letter-spacing:-.02em">Transacties</b><label style="display:flex;align-items:center;gap:8px;width:260px;height:44px;padding:0 14px;border-radius:999px;background:var(--surface-raised);border:1px solid var(--border);box-sizing:border-box;color:var(--text-muted)">${ico('search', 16, 2.2)}<input placeholder="Zoek transacties" style="flex:1;min-width:0;border:0;outline:0;background:transparent;font:inherit;font-size:14px;color:var(--text)"></label></div><div data-sticky style="position:sticky;top:20px;z-index:4;display:flex;flex-direction:column;gap:8px"></div><div data-list style="display:flex;flex-direction:column;gap:16px"></div></div></div><div data-overlay style="position:absolute;inset:0;pointer-events:none;z-index:30;font-family:var(--font-sans);color:var(--text)"></div>`;
   const $ = s => root.querySelector(s);
   const scroller = $('[data-scroller]'), stickyEl = $('[data-sticky]'), listEl = $('[data-list]'), overlay = $('[data-overlay]');
 
@@ -63,10 +72,13 @@ function App(root, opt = {}) {
   }
 
   function filtersHTML() {
-    const ids = [...st.cats], max = phone ? 2 : 4;
+    const ids = [...st.cats], max = phone ? 2 : 6;
     const per = `<button data-act="pop-period" style="${fbtn(st.preset !== 'deze')}">${ico('calendar', 16, 2.2)}${!phone && presetName() ? `<span>${presetName()}</span><span style="color:${st.preset !== 'deze' ? 'inherit' : 'var(--text-muted)'};font-weight:500">${range(st.from, st.to)}</span>` : `<span>${range(st.from, st.to)}</span>`}${ico('down', 16, 2.2)}</button>`;
     const cats = `<button data-act="pop-cats" style="${fbtn(ids.length > 0)}">${phone ? '' : ico('filter', 16, 2.2)}<span>${catLabel()}</span>${ico('down', 16, 2.2)}</button>`;
-    const chips = ids.length > 1 ? ids.slice(0, max).map(id => `<button data-act="rmcat" data-id="${id}" aria-label="${nameOf(id)} weghalen" style="display:flex;align-items:center;gap:6px;min-height:36px;padding:0 8px 0 6px;border-radius:999px;border:0;background:${CAT[id] ? tone(CAT[id]).bg : 'var(--surface-sunken)'};color:${CAT[id] ? tone(CAT[id]).fg : 'var(--text)'};font:inherit;font-size:13px;font-weight:600;cursor:pointer">${CAT[id] ? ico(CAT[id].icon, 14, 2.2) : ''}${nameOf(id)}${ico('x', 14, 2.4)}</button>`).join('') + (ids.length > max ? `<span style="font-size:13px;color:var(--text-muted);padding:0 4px">+${ids.length - max}</span>` : '') : '';
+    const chipBtn = id => `<button data-act="rmcat" data-id="${id}" aria-label="${nameOf(id)} weghalen" style="display:flex;align-items:center;gap:6px;min-height:36px;padding:0 8px 0 6px;border-radius:999px;border:0;background:${CAT[id] ? tone(CAT[id]).bg : 'var(--surface-sunken)'};color:${CAT[id] ? tone(CAT[id]).fg : 'var(--text)'};font:inherit;font-size:13px;font-weight:600;cursor:pointer">${CAT[id] ? ico(CAT[id].icon, 14, 2.2) : ''}${nameOf(id)}${ico('x', 14, 2.4)}</button>`;
+    const iconBtn = (id, i) => { const c = CAT[id]; return `<button data-act="rmcat" data-id="${id}" aria-label="${nameOf(id)} weghalen" title="${nameOf(id)} weghalen" style="flex:0 0 auto;width:32px;height:32px;margin-left:${i ? -6 : 0}px;padding:0;border-radius:999px;border:0;display:grid;place-items:center;box-shadow:0 0 0 2px var(--glass-tint-strong);background:${c ? tone(c).bg : 'var(--surface-sunken)'};color:${c ? tone(c).fg : 'var(--text-muted)'};cursor:pointer">${c ? ico(c.icon, 15, 2.2) : id === '_nk' ? '<span style="width:8px;height:8px;border-radius:999px;background:var(--botergoud)"></span>' : ico('transfer', 15, 2.2)}</button>`; };
+    /* Vanaf 3: de eerdere als icoontjes (tik haalt weg), alleen de laatst gekozen met naam. */
+    const chips = ids.length >= 3 ? `<span style="display:flex;align-items:center">${ids.slice(0, -1).map(iconBtn).join('')}</span>${chipBtn(ids[ids.length - 1])}` : ids.length > 1 ? ids.map(chipBtn).join('') : '';
     const dirty = st.preset !== 'deze' || ids.length;
     if (phone) {
       // Telefoon: één rij, geen losse pills. De keuze zit als icoontjes in de knop; weghalen gaat in de sheet.
@@ -76,10 +88,23 @@ function App(root, opt = {}) {
       const resetP = dirty ? `<button data-act="reset" aria-label="Filters wissen" title="Wissen" style="flex:0 0 auto;width:44px;height:44px;border-radius:999px;border:1px solid var(--border);background:var(--surface-raised);display:grid;place-items:center;color:var(--text-muted);cursor:pointer">${ico('x', 16, 2.4)}</button>` : '';
       return `<div class="tx-in" style="display:flex;align-items:center;gap:6px">${perP}${catsP}${resetP}</div>`;
     }
-    return `<div class="tx-in" style="display:flex;flex-wrap:wrap;align-items:center;gap:8px">${per}${cats}${chips}${dirty ? `<button data-act="reset" style="margin-left:auto;min-height:44px;padding:0 10px;border:0;background:none;font:inherit;font-size:14px;font-weight:600;color:var(--text-muted);cursor:pointer">Wissen</button>` : ''}</div>`;
+    return `<div style="display:flex;align-items:center;gap:8px">${per}${cats}<span class="tx-chips" style="flex:1;min-width:0;display:flex;align-items:center;gap:8px;overflow:hidden">${chips}</span>${dirty ? `<button data-act="reset" aria-label="Filters wissen" title="Filters wissen" style="flex:0 0 auto;width:44px;height:44px;display:grid;place-items:center;border-radius:999px;border:0;background:transparent;font:inherit;color:var(--text-muted);cursor:pointer" data-hov>${ico('x', 18, 2.2)}</button>` : ''}</div>`;
+  }
+  /* Chips die niet passen, gaan naar "+N" in plaats van te krimpen of af te breken. */
+  function fitChips() {
+    const box = stickyEl.querySelector('.tx-chips'); if (!box || st.cats.size >= 3) return;
+    const kids = [...box.children].filter(k => k.tagName !== 'SPAN' || /^\+\d+$/.test(k.textContent.trim())), more = kids.find(k => /^\+\d+$/.test(k.textContent.trim())), chipsEls = kids.filter(k => k !== more);
+    let hidden = more ? +more.textContent.trim().slice(1) : 0, plus = more;
+    if (!plus) { plus = document.createElement('span'); plus.style.cssText = 'font-size:13px;font-weight:600;color:var(--text-muted)'; box.appendChild(plus); plus.style.display = 'none'; }
+    for (let i = chipsEls.length - 1; i >= 0 && box.scrollWidth > box.clientWidth + 1; i--) { chipsEls[i].style.display = 'none'; hidden++; plus.textContent = '+' + hidden; plus.style.display = ''; }
+    const vis = chipsEls.filter(c => c.style.display !== 'none').length, rest = st.cats.size - vis;
+    if (rest > 0) { plus.textContent = '+' + rest; plus.style.display = ''; plus.title = [...st.cats].slice(vis).map(nameOf).join(', '); while (box.scrollWidth > box.clientWidth + 1 && chipsEls.some(c => c.style.display !== 'none')) { const l = chipsEls.filter(c => c.style.display !== 'none').pop(); l.style.display = 'none'; plus.textContent = '+' + (st.cats.size - chipsEls.filter(c => c.style.display !== 'none').length); } } else plus.style.display = 'none';
   }
   function summaryHTML(slim) {
-    return `<button data-act="peek" class="tx-in" aria-label="Filters tonen" style="display:flex;align-items:center;gap:8px;width:100%;min-height:${slim ? 40 : 36}px;padding:0 ${slim ? 14 : 4}px;border:0;background:none;font:inherit;font-size:13px;color:var(--text-muted);cursor:pointer;text-align:left;box-sizing:border-box">${ico('filter', 15, 2.2)}<span style="flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis"><b style="font-weight:600;color:var(--text)">${range(st.from, st.to)}</b> · ${st.cats.size ? [...st.cats].map(nameOf).join(', ') : 'alle categorieën'}</span>${ico('down', 16, 2.2)}</button>`;
+    const ids = [...st.cats], max = phone ? 5 : 7;
+    const mini = id => id === '_nk' ? `<span style="width:22px;height:22px;border-radius:999px;display:grid;place-items:center;background:var(--surface-sunken)"><span style="width:7px;height:7px;border-radius:999px;background:var(--botergoud)"></span></span>` : chip(id === '_ob' ? null : CAT[id], 22);
+    const icons = ids.length ? `<span title="${ids.map(nameOf).join(', ')}" style="display:flex;align-items:center;flex:0 0 auto">${ids.slice(0, max).map((id, i) => `<span style="display:block;margin-left:${i ? -6 : 0}px;border-radius:999px;box-shadow:0 0 0 2px var(--surface-raised)">${mini(id)}</span>`).join('')}${ids.length > max ? `<span style="margin-left:6px;font-size:12px;font-weight:600;color:var(--text-muted)">+${ids.length - max}</span>` : ''}</span>` : '';
+    return `<button data-act="peek" aria-label="Filters tonen: ${range(st.from, st.to)}, ${ids.length ? ids.map(nameOf).join(', ') : 'alle categorieën'}" style="display:flex;align-items:center;gap:8px;width:100%;min-height:${slim ? 40 : 36}px;padding:0 ${slim ? 14 : 4}px;border:0;background:none;font:inherit;font-size:13px;color:var(--text-muted);cursor:pointer;text-align:left;box-sizing:border-box">${ico('filter', 15, 2.2)}<span style="min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis"><b style="font-weight:600;color:var(--text)">${range(st.from, st.to)}</b>${ids.length ? '' : ' · alle categorieën'}</span>${icons}<span style="flex:1"></span>${ico('down', 16, 2.2)}</button>`;
   }
   const glass = 'border-radius:var(--radius-lg);background:var(--glass-tint-strong);backdrop-filter:var(--glass-blur);-webkit-backdrop-filter:var(--glass-blur);border:1px solid var(--glass-border);box-shadow:var(--glass-rim),var(--shadow-card);box-sizing:border-box';
 
@@ -87,26 +112,63 @@ function App(root, opt = {}) {
     fixView();
     const accs = store.visible(), shown = accs.filter(a => st.view.has(a.id));
     const bal = shown.filter(a => a.bal != null).reduce((s, a) => s + a.bal, 0);
-    const head = `<p style="margin:0;padding:0 4px;display:flex;flex-wrap:wrap;align-items:baseline;column-gap:10px;row-gap:1px;font-size:12px;color:var(--text-muted)"><b style="font-size:${phone ? 18 : 20}px;font-weight:600;letter-spacing:-.01em;color:var(--text);font-variant-numeric:tabular-nums;white-space:nowrap">${eur(bal)}</b><span style="white-space:nowrap">${shown.length === 1 ? shown[0].name : `${shown.length} rekeningen`}</span><span><b style="font-weight:600;color:var(--text);font-variant-numeric:tabular-nums;white-space:nowrap">${bal - 35819 < 0 ? '−' : ''}${eur(bal - 35819)}</b> na vaste lasten die nog komen</span></p>`;
-    const chips = `<div role="group" aria-label="Rekeningen in beeld" class="tx-hscroll" style="display:flex;gap:8px;overflow-x:auto;margin:0 -12px;padding:0 12px">${accs.map(a => { const on = st.view.has(a.id); return `<button data-act="acc" data-id="${a.id}" aria-pressed="${on}" style="flex:0 0 auto;display:flex;align-items:center;gap:8px;height:48px;padding:0 14px 0 6px;border-radius:14px;border:1px solid ${on ? 'var(--border)' : 'transparent'};background:${on ? 'var(--surface-raised)' : 'transparent'};box-shadow:${on ? 'var(--shadow-card)' : 'none'};font:inherit;color:${on ? 'var(--text)' : 'var(--text-muted)'};cursor:pointer;text-align:left;transition:background .2s,border-color .2s">${logo(a.bank, 32, !on)}<span style="display:flex;flex-direction:column"><span style="font-size:13px;line-height:1.25;font-weight:${on ? 600 : 500};white-space:nowrap">${a.name}</span>${a.bal != null ? `<span style="font-size:12px;line-height:1.25;color:var(--text-muted);font-variant-numeric:tabular-nums;white-space:nowrap">${eur(a.bal)}</span>` : ''}</span></button>`; }).join('')}</div>`;
+    const F = st.f, linked = store.accounts().filter(x => x.connected), act = linked.filter(x => F.acc[x.id]), done = act.filter(x => F.acc[x.id] === 'ok'), nNew = F.newIds.size;
+    const fT = F.busy ? `Ophalen, ${done.length} van ${act.length}` : F.cool ? (nNew ? `${nNew} nieuw · ${F.last}` : `Alles was al bij · ${F.last}`) : `Opgehaald ${F.last}`;
+    const fCol = F.busy || (F.cool && nNew) ? 'var(--accent-hover)' : 'var(--text-muted)', fW = F.busy || F.cool ? 600 : 400;
+    const fDis = F.busy || F.cool, fLab = F.busy ? 'Bezig met ophalen' : F.cool ? 'Net opgehaald, kan weer om 16:17' : 'Rekeningen ophalen';
+    const fIcon = F.busy ? refreshIco(14, true) : F.cool ? ico('check', 14, 2.6) : refreshIco(14);
+    const fPill = (h = 32) => `<button data-act="fetch" data-hov="${fDis ? '' : '1'}" ${fDis ? 'aria-disabled="true"' : ''} aria-label="${fLab}" title="${fLab}" class="tx-fetch" style="flex:0 0 auto;display:inline-flex;align-items:center;gap:6px;height:${h}px;padding:0 12px 0 10px;border-radius:999px;border:0;background:${F.busy || (F.cool && nNew) ? 'var(--accent-soft)' : 'transparent'};color:${fCol};font:inherit;font-size:12px;font-weight:${fW};font-variant-numeric:tabular-nums;white-space:nowrap;cursor:${fDis ? 'default' : 'pointer'};transition:background .15s">${fIcon}${fT}</button>`;
+    const status = phone ? `<button data-act="fetch" ${fDis ? 'aria-disabled="true"' : ''} aria-label="${fLab}" title="${fLab}" style="display:inline-flex;align-items:center;min-height:24px;margin:-4px 0;padding:0;border:0;background:none;font:inherit;font-size:12px;color:${fCol};font-weight:${fW};white-space:nowrap;cursor:${fDis ? 'default' : 'pointer'}">${fT}</button>` : '';
+    const line = `<p style="flex:1;min-width:0;margin:0;padding:0 4px;display:flex;flex-wrap:wrap;align-items:baseline;column-gap:10px;row-gap:1px;font-size:12px;color:var(--text-muted)"><b style="font-size:${phone ? 18 : 20}px;font-weight:600;letter-spacing:-.01em;color:var(--text);font-variant-numeric:tabular-nums;white-space:nowrap">${eur(bal)}</b><span style="white-space:nowrap">${shown.length === 1 ? shown[0].name : `${shown.length} rekeningen`}</span>${status}<span><b style="font-weight:600;color:var(--text);font-variant-numeric:tabular-nums;white-space:nowrap">${bal - 35819 < 0 ? '−' : ''}${eur(bal - 35819)}</b> na vaste lasten die nog komen</span></p>`;
+    const fBtn = `<button data-act="fetch" ${fDis ? 'aria-disabled="true"' : ''} aria-label="${fLab}" title="${fLab}" style="flex:0 0 auto;width:44px;height:44px;margin:-6px -2px -6px 0;border-radius:999px;border:1px solid ${F.busy || F.cool ? 'transparent' : 'var(--glass-border)'};display:grid;place-items:center;background:${F.busy ? 'var(--accent-soft)' : F.cool ? 'transparent' : 'var(--surface-raised)'};color:${F.busy ? 'var(--accent)' : F.cool ? 'var(--text-subtle)' : 'var(--text)'};box-shadow:${F.busy || F.cool ? 'none' : 'var(--shadow-card)'};cursor:${fDis ? 'default' : 'pointer'}">${F.cool && !F.busy ? ico('check', 18, 2.4) : refreshIco(18, F.busy)}</button>`;
+    const head = phone ? line : `<div style="display:flex;align-items:center;gap:8px;margin-right:-4px">${line}<span style="margin:-6px 0">${fPill(36)}</span></div>`;
+    const ring = s => s === 'wait' || s === 'busy' ? `<svg ${s === 'busy' ? 'class="tx-spin"' : ''} width="42" height="42" viewBox="0 0 42 42" style="position:absolute;left:-5px;top:-5px;pointer-events:none" aria-hidden="true"><circle cx="21" cy="21" r="19" fill="none" stroke="var(--border)" stroke-width="2"/>${s === 'busy' ? '<circle cx="21" cy="21" r="19" fill="none" stroke="var(--accent)" stroke-width="2.4" stroke-linecap="round" stroke-dasharray="28 92"/>' : ''}</svg>` : '';
+    const badge = id => { if (F.acc[id] !== 'ok' || !F.cool) return ''; const n = (FETCH_NEW[id] || []).length; return `<span class="tx-in" style="position:absolute;right:-5px;bottom:-5px;min-width:18px;height:18px;padding:0 4px;box-sizing:border-box;border-radius:999px;display:grid;place-items:center;background:${n ? 'var(--accent)' : 'var(--surface-sunken)'};color:${n ? 'var(--accent-fg)' : 'var(--text-muted)'};border:2px solid var(--surface-raised);font-size:10px;font-weight:700;line-height:1">${n ? '+' + n : ico('check', 10, 3.4)}</span>`; };
+    const chips = `<div role="group" aria-label="Rekeningen in beeld" class="tx-hscroll" style="display:flex;gap:8px;overflow-x:auto;margin:0 -12px;padding:0 12px">${accs.map(a => { const on = st.view.has(a.id); return `<button data-act="acc" data-id="${a.id}" aria-pressed="${on}" style="flex:0 0 auto;display:flex;align-items:center;gap:8px;height:48px;padding:0 14px 0 6px;border-radius:14px;border:1px solid ${on ? 'var(--border)' : 'transparent'};background:${on ? 'var(--surface-raised)' : 'transparent'};box-shadow:${on ? 'var(--shadow-card)' : 'none'};font:inherit;color:${on ? 'var(--text)' : 'var(--text-muted)'};cursor:pointer;text-align:left;transition:background .2s,border-color .2s"><span style="position:relative;width:32px;height:32px;flex:0 0 auto">${logo(a.bank, 32, !on || F.acc[a.id] === 'wait')}${ring(F.acc[a.id])}${badge(a.id)}</span><span style="display:flex;flex-direction:column"><span style="font-size:13px;line-height:1.25;font-weight:${on ? 600 : 500};white-space:nowrap">${a.name}</span>${a.bal != null ? `<span style="font-size:12px;line-height:1.25;color:var(--text-muted);font-variant-numeric:tabular-nums;white-space:nowrap">${eur(a.bal)}</span>` : ''}</span></button>`; }).join('')}</div>`;
     const collapsed = st.collapsed;
-    if (SET.placement === 'in') {
-      stickyEl.innerHTML = `<div style="${glass};display:flex;flex-direction:column;gap:${collapsed ? 6 : 10}px;padding:10px 12px ${collapsed ? 4 : 12}px">${head}${chips}${collapsed ? summaryHTML(false) : filtersHTML()}</div>`;
-    } else {
-      stickyEl.innerHTML = `<div style="${glass};display:flex;flex-direction:column;gap:8px;padding:10px 12px 12px">${head}${chips}</div><div style="${glass};${collapsed ? 'border-radius:999px;' : 'padding:8px;'}">${collapsed ? summaryHTML(true) : filtersHTML()}</div>`;
+    const minis = shown.map((a, i) => `<span style="display:block;margin-left:${i ? -8 : 0}px;border-radius:8px;box-shadow:0 0 0 2px var(--surface-raised)">${logo(a.bank, 24)}</span>`).join('');
+    const slim = phone
+      ? `<button data-act="peek" aria-label="Rekeningen tonen" style="display:flex;align-items:center;gap:10px;width:100%;min-height:44px;padding:0 16px;border:0;background:none;font:inherit;color:var(--text-muted);text-align:left;cursor:pointer;white-space:nowrap"><b style="font-size:16px;font-weight:600;letter-spacing:-.01em;color:var(--text);font-variant-numeric:tabular-nums">${eur(bal)}</b><span style="min-width:0;overflow:hidden;text-overflow:ellipsis;font-size:13px">${shown.length === 1 ? shown[0].name : `${shown.length} rekeningen`}</span><span style="margin-left:auto;display:flex;align-items:center;gap:6px;font-size:12px;color:${fCol};font-weight:${fW};font-variant-numeric:tabular-nums">${F.busy ? refreshIco(13, true) : ''}${F.busy ? `${done.length} van ${act.length}` : F.cool && nNew ? `${nNew} nieuw` : F.last}</span></button>`
+      : `<button data-act="peek" aria-label="Rekeningen tonen" style="flex:1;min-width:0;display:flex;align-items:center;gap:12px;min-height:48px;padding:0 8px 0 10px;border:0;background:none;font:inherit;color:var(--text-muted);text-align:left;cursor:pointer;white-space:nowrap"><span style="display:flex;flex:0 0 auto">${minis}</span><b style="font-size:17px;font-weight:600;letter-spacing:-.01em;color:var(--text);font-variant-numeric:tabular-nums">${eur(bal)}</b><span style="font-size:13px">${shown.length === 1 ? shown[0].name : `${shown.length} rekeningen`}</span><span style="min-width:0;overflow:hidden;text-overflow:ellipsis;font-size:13px"><b style="font-weight:600;color:var(--text);font-variant-numeric:tabular-nums">${bal - 35819 < 0 ? '−' : ''}${eur(bal - 35819)}</b> na vaste lasten</span></button>`;
+    const small = collapsed && !st.peek;
+    const accCard = small ? `<div style="${glass};border-radius:999px;display:flex;align-items:center;${phone ? '' : 'flex:1 1 auto;min-width:0;padding-right:6px'}">${slim}${phone ? '' : fPill(36)}</div>` : `<div style="${glass};display:flex;flex-direction:column;gap:8px;padding:10px 12px 12px">${head}${chips}</div>`;
+    const filCard = `<div style="${glass};${collapsed ? 'border-radius:999px;' : 'padding:8px;'}${small && !phone ? 'flex:0 0 auto;max-width:360px;min-width:0;display:flex;align-items:center;' : ''}">${collapsed ? summaryHTML(true) : filtersHTML()}</div>`;
+    const shape = `${small}|${collapsed}`, morph = st.shape && st.shape !== shape && !matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const old = morph ? [...stickyEl.children].map(c => ({ w:c.offsetWidth, h:c.offsetHeight })) : null;
+    st.shape = shape;
+    stickyEl.style.flexDirection = small && !phone ? 'row' : 'column';
+    stickyEl.innerHTML = accCard + filCard;
+    fitChips();
+    if (morph) {
+      const els = [...stickyEl.children], nu = els.map(c => ({ w:c.offsetWidth, h:c.offsetHeight }));
+      els.forEach((el, i) => {
+        if (!old[i]) return;
+        el._prev = { width:el.style.width, height:el.style.height, overflow:el.style.overflow, flex:el.style.flex, boxSizing:el.style.boxSizing, transition:el.style.transition };
+        Object.assign(el.style, { width:old[i].w + 'px', height:old[i].h + 'px', overflow:'hidden', flex:'0 0 auto', boxSizing:'border-box' });
+        const inner = el.firstElementChild; if (inner) { inner.classList.add('tx-xfade'); }
+      });
+      stickyEl.offsetHeight;
+      els.forEach((el, i) => {
+        if (!old[i]) return;
+        const ez = ' .3s cubic-bezier(.4,0,.2,1)'; el.style.transition = 'width' + ez + ',height' + ez + ',border-radius' + ez;
+        el.style.width = nu[i].w + 'px'; el.style.height = nu[i].h + 'px';
+        const done = () => { if (!el._prev) return; Object.assign(el.style, el._prev); el._prev = null; };
+        el.addEventListener('transitionend', e => { if (e.target === el && e.propertyName === 'height') done(); }, { once:false });
+        setTimeout(done, 600);
+      });
     }
   }
 
   function rowHTML(t, multi) {
     const c = t.cat ? CAT[t.cat] : null, open = st.detail === t.id;
-    return `<div data-row="${t.id}" data-act="detail" style="display:grid;grid-template-columns:36px minmax(0,1fr) auto;gap:12px;align-items:center;min-height:60px;margin:0 -8px;padding:0 8px;border-radius:14px;cursor:pointer;${open ? 'background:var(--surface-sunken);' : ''}">${t.transfer ? `<span style="display:grid;place-items:center">${chip(null)}</span>` : `<button data-act="cat" data-id="${t.id}" class="tx-ico" aria-label="Categorie van ${t.who} wijzigen" style="position:relative;width:44px;height:44px;margin:-4px;padding:0;border:0;background:none;display:grid;place-items:center;cursor:pointer;border-radius:999px">${chip(c)}<span class="tx-pen">${ico('pencil', 10, 2.4)}</span></button>`}<span style="min-width:0;display:flex;flex-direction:column;gap:1px"><span style="font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;${t.transfer ? 'color:var(--text-muted)' : ''}">${t.who}</span><span style="font-size:13px;color:var(--text-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${!t.confirmed ? '<span style="display:inline-block;width:7px;height:7px;border-radius:999px;background:var(--botergoud);margin-right:6px;vertical-align:1px"></span>' : ''}${subOf(t, multi)}</span></span><span style="font-size:15px;font-weight:500;font-variant-numeric:tabular-nums;white-space:nowrap;color:${amtColor(t)}">${signed(t.amt)}</span></div>${open && V() === 'A' ? `<div class="tx-in" style="padding:4px 0 14px">${window.TX2D.content('A', t, { phone, view:st.view })}</div>` : ''}`;
+    return `<div data-row="${t.id}" data-act="detail" class="${st.f.flash.has(t.id) ? 'tx-flash' : ''}" style="display:grid;grid-template-columns:36px minmax(0,1fr) auto;gap:12px;align-items:center;min-height:60px;padding:0 10px;border-radius:14px;cursor:pointer;${open ? 'background:var(--surface-sunken);' : ''}">${t.transfer ? `<span style="display:grid;place-items:center">${chip(null)}</span>` : `<button data-act="cat" data-id="${t.id}" class="tx-ico" aria-label="Categorie van ${t.who} wijzigen" style="position:relative;width:44px;height:44px;margin:-4px;padding:0;border:0;background:none;display:grid;place-items:center;cursor:pointer;border-radius:999px">${chip(c)}<span class="tx-pen">${ico('pencil', 10, 2.4)}</span></button>`}<span style="min-width:0;display:flex;flex-direction:column;gap:1px"><span style="font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;${t.transfer ? 'color:var(--text-muted)' : ''}">${t.who}</span><span style="font-size:13px;color:var(--text-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${!t.confirmed ? '<span style="display:inline-block;width:7px;height:7px;border-radius:999px;background:var(--botergoud);margin-right:6px;vertical-align:1px"></span>' : ''}${subOf(t, multi)}</span></span><span style="font-size:15px;font-weight:500;font-variant-numeric:tabular-nums;white-space:nowrap;color:${amtColor(t)}">${signed(t.amt)}</span></div>`;
   }
   function renderList() {
     const rows = TX.filter(t => inView(t) && catMatch(t)), multi = st.view.size > 1;
     const days = [...new Set(rows.map(t => t.d))].sort().reverse();
     listEl.innerHTML = days.length ? days.map(d => {
-      const r = rows.filter(t => t.d === d), net = r.filter(t => !t.transfer).reduce((s, t) => s + t.amt, 0);
-      return `<section style="display:flex;flex-direction:column;gap:6px"><div style="display:flex;justify-content:space-between;padding:4px 4px 0;font-size:13px;font-weight:600;color:var(--text-muted);font-variant-numeric:tabular-nums;white-space:nowrap"><span>${dayTitle(d)}</span><span style="${net > 0 ? 'color:var(--success)' : ''}">${signed(net)}</span></div><div style="display:flex;flex-direction:column;padding:4px 16px;border-radius:var(--radius-lg);background:var(--surface-raised);border:1px solid var(--border);box-shadow:var(--shadow-card)">${r.map(t => rowHTML(t, multi)).join('')}</div></section>`;
+      const r = rows.filter(t => t.d === d), nn = r.filter(t => st.f.newIds.has(t.id)).length, net = r.filter(t => !t.transfer).reduce((s, t) => s + t.amt, 0);
+      return `<section style="display:flex;flex-direction:column;gap:6px"><div style="display:flex;justify-content:space-between;padding:4px 4px 0;font-size:13px;font-weight:600;color:var(--text-muted);font-variant-numeric:tabular-nums;white-space:nowrap"><span>${dayTitle(d)}</span><span style="display:flex;gap:10px">${nn ? `<span style="color:var(--accent-hover)">${nn} nieuw</span>` : ''}<span style="${net > 0 ? 'color:var(--success)' : ''}">${signed(net)}</span></span></div><div style="display:flex;flex-direction:column;gap:2px;padding:6px;border-radius:var(--radius-lg);background:var(--surface-raised);border:1px solid var(--border);box-shadow:var(--shadow-card)">${r.map(t => rowHTML(t, multi)).join('')}</div></section>`;
     }).join('') : `<div style="padding:48px 16px;text-align:center;display:flex;flex-direction:column;gap:6px"><b style="font-size:17px;font-weight:600">Niets in deze periode.</b><span style="font-size:14px;color:var(--text-muted)">Kies hierboven een andere periode, categorie of rekening.</span></div>`;
   }
 
@@ -159,18 +221,14 @@ function App(root, opt = {}) {
   const popover = body => `<div data-act="close-pop" style="position:absolute;inset:0;pointer-events:auto"></div><div data-pop style="position:absolute;left:${st.pos.l}px;top:${st.pos.b + 6}px;padding:10px;border-radius:20px;background:var(--surface-raised);border:1px solid var(--border);box-shadow:var(--shadow-raised);pointer-events:auto;box-sizing:border-box" class="tx-in">${body}</div>`;
 
   function detailHTML() {
-    if (!st.detail || V() === 'A') return '';
-    const t = TX.find(x => x.id === st.detail), v = V(), body = window.TX2D.content(v, t, { phone, view:st.view });
+    if (!st.detail) return '';
+    const t = TX.find(x => x.id === st.detail), body = window.TX2D.content(t, { phone, view:st.view });
     const closeBtn = `<button data-act="close-detail" aria-label="Sluiten" style="position:absolute;top:12px;right:12px;z-index:2;width:40px;height:40px;border-radius:999px;border:0;background:var(--surface-sunken);display:grid;place-items:center;color:var(--text-muted);cursor:pointer">${ico('x', 18, 2.2)}</button>`;
     const scrim = `<div data-act="close-detail" class="tx-scrim" style="position:absolute;inset:0;background:rgb(14 16 10 / .42);pointer-events:auto"></div>`;
     if (phone) {
-      if (v === 'C') return `<div class="tx-panel" style="position:absolute;inset:0;overflow-y:auto;background:var(--canvas-wash),var(--surface);pointer-events:auto">${body}</div>`;
-      return `${scrim}<div class="tx-sheet" style="position:absolute;left:0;right:0;bottom:0;${v === 'B' ? 'top:56px;' : 'max-height:86%;'}border-radius:28px 28px 0 0;background:var(--surface-raised);box-shadow:var(--shadow-raised);pointer-events:auto;overflow-y:auto;box-sizing:border-box"><span style="display:block;margin:8px auto 0;width:36px;height:5px;border-radius:999px;background:var(--border)"></span>${closeBtn}${body}</div>`;
+      return `${scrim}<div class="tx-sheet" style="position:absolute;left:0;right:0;bottom:0;top:56px;border-radius:28px 28px 0 0;background:var(--surface-raised);box-shadow:var(--shadow-raised);pointer-events:auto;overflow-y:auto;box-sizing:border-box"><span style="display:block;margin:8px auto 0;width:36px;height:5px;border-radius:999px;background:var(--border)"></span>${closeBtn}${body}</div>`;
     }
-    if (v === 'B') return `<aside class="tx-panel" style="position:absolute;top:12px;right:12px;bottom:12px;width:420px;border-radius:var(--radius-lg);background:var(--surface-raised);border:1px solid var(--border);box-shadow:var(--shadow-raised);pointer-events:auto;overflow-y:auto;box-sizing:border-box">${closeBtn}${body}</aside>`;
-    if (v === 'C') return `${scrim}<div class="tx-sheet" style="position:absolute;left:calc(240px + (100% - 240px - 600px) / 2);top:48px;bottom:48px;width:600px;border-radius:var(--radius-lg);background:var(--surface-raised);border:1px solid var(--border);box-shadow:var(--shadow-raised);pointer-events:auto;overflow-y:auto;box-sizing:border-box">${closeBtn}${body}</div>`;
-    if (!st.dpos) { const r = root.querySelector(`[data-row="${st.detail}"]`); if (!r) return ''; st.dpos = rectOf(r); }
-    return `<div data-act="close-detail" style="position:absolute;inset:0;pointer-events:auto"></div><div data-dpop style="position:absolute;left:${st.dpos.r - 380}px;top:${st.dpos.b + 4}px;width:380px;border-radius:22px;background:var(--surface-raised);border:1px solid var(--border);box-shadow:var(--shadow-raised);pointer-events:auto;box-sizing:border-box" class="tx-in">${body}</div>`;
+    return `<aside class="tx-panel" style="position:absolute;top:12px;right:12px;bottom:12px;width:420px;border-radius:var(--radius-lg);background:var(--surface-raised);border:1px solid var(--border);box-shadow:var(--shadow-raised);pointer-events:auto;overflow-y:auto;box-sizing:border-box">${closeBtn}${body}</aside>`;
   }
   function popHTML() {
     if (!st.pop) return '';
@@ -208,7 +266,7 @@ function App(root, opt = {}) {
     if (act === 'acc') { if (st.view.has(id)) { if (st.view.size > 1) st.view.delete(id); } else st.view.add(id); renderSticky(); renderList(); }
     else if (act === 'pop-period') openPop('period', a);
     else if (act === 'pop-cats') openPop('cats', a);
-    else if (act === 'peek') { st.peek = true; st.peekY = scroller.scrollTop; st.collapsed = false; renderSticky(); }
+    else if (act === 'peek') { st.peek = true; st.peekAt = Date.now(); st.collapsed = false; renderSticky(); st.peekY = scroller.scrollTop; }
     else if (act === 'reset') { Object.assign(st, { from:'2026-10-01', to:'2026-10-31', preset:'deze' }); st.cats.clear(); refresh(); }
     else if (act === 'rmcat') { st.cats.delete(id); renderSticky(); renderList(); }
     else if (act === 'preset') { const p = PRESETS.find(x => x.id === id); Object.assign(st, { from:p.from, to:p.to, preset:p.id, anchor:null, pop:null }); refresh(); }
@@ -228,13 +286,13 @@ function App(root, opt = {}) {
       st.pop = null; X.refreshAll();
       toast(st.rule ? `${t.who} is voortaan ${CAT[id].name}` : `Ingedeeld als ${CAT[id].name}`, () => { before.forEach(([x, c, k]) => { x.cat = c; x.confirmed = k; }); X.refreshAll(); });
     }
+    else if (act === 'fetch') fetchRun();
     else if (act === 'undo') { st.toast?.undo?.(); st.toast = null; renderOverlay(); }
     else if (act === 'close-pop') { st.pop = null; st.anchor = null; renderOverlay(); }
     else if (act === 'close-detail') { st.detail = null; renderList(); renderOverlay(); }
     else if (act === 'detail') {
-      const rid = a.dataset.row, toggle = st.detail === rid && V() !== 'B';
+      const rid = a.dataset.row, toggle = false;
       st.detail = toggle ? null : rid;
-      if (V() === 'D' && !phone) st.dpos = rectOf(a);
       renderList(); renderOverlay();
     }
   });
@@ -245,20 +303,72 @@ function App(root, opt = {}) {
     if (l) l.innerHTML = catListHTML();
     if (c) c.innerHTML = changeListHTML();
   });
+  let lastY = 0;
   scroller.addEventListener('scroll', () => {
-    const y = scroller.scrollTop;
+    const y = scroller.scrollTop, up = y < lastY; lastY = y;
     if (!phone && st.pop) { st.pop = null; renderOverlay(); }
-    if (!phone && st.detail && V() === 'D') { st.detail = null; renderList(); renderOverlay(); }
-    if (y < 8) { st.peek = false; if (st.collapsed) { st.collapsed = false; renderSticky(); } return; }
-    if (st.peek) { if (Math.abs(y - st.peekY) > 80) { st.peek = false; st.collapsed = true; renderSticky(); } return; }
+    if (y < 8) { st.peek = false; if (st.collapsed && (up || y === 0) && scroller.scrollHeight > scroller.clientHeight + 120) { st.collapsed = false; renderSticky(); } return; }
+    if (st.peek) { if (Date.now() - (st.peekAt || 0) < 400) { st.peekY = y; return; } if (y < st.peekY) { st.peekY = y; return; } if (y - st.peekY > 80) { st.peek = false; st.collapsed = true; renderSticky(); } return; }
     if (y > 60 && !st.collapsed) { st.collapsed = true; renderSticky(); }
   }, { passive:true });
+
+  /* Ophalen: één ronde tegelijk, daarna afkoelen. Op de telefoon omlaag trekken. */
+  let fT = [];
+  function fetchRun() {
+    const F = st.f; if (F.busy || F.cool) return;
+    const ids = store.accounts().filter(x => x.connected).map(x => x.id);
+    F.busy = true; F.newIds = new Set(); F.acc = Object.fromEntries(ids.map(id => [id, 'wait'])); renderSticky(); renderList();
+    ids.forEach((id, i) => {
+      fT.push(setTimeout(() => { F.acc[id] = 'busy'; renderSticky(); }, 250 + i * 600));
+      fT.push(setTimeout(() => {
+        F.acc[id] = 'ok';
+        if (ids.every(x => F.acc[x] === 'ok')) {
+          F.busy = false; F.cool = true; F.last = '16:12';
+          ids.forEach(x => (FETCH_NEW[x] || []).forEach(t => { F.newIds.add(t); F.flash.add(t); }));
+          renderList(); setTimeout(() => { F.flash.clear(); }, 2500);
+        }
+        renderSticky();
+      }, 1000 + i * 600));
+    });
+  }
+  if (opt.fetch === 'klaar') { const ids = store.accounts().filter(x => x.connected).map(x => x.id); Object.assign(st.f, { cool:true, last:'16:12', acc:Object.fromEntries(ids.map(id => [id, 'ok'])) }); ids.forEach(x => (FETCH_NEW[x] || []).forEach(t => st.f.newIds.add(t))); }
+  if (phone) {
+    root.insertAdjacentHTML('beforeend', `<div data-pull aria-hidden="true" style="position:absolute;left:50%;top:0;z-index:5;display:flex;align-items:center;gap:8px;height:36px;transform:translate(-50%,-48px);opacity:0;pointer-events:none;transition:transform .25s cubic-bezier(.32,.72,0,1),opacity .2s;font-family:var(--font-sans)"><span data-pull-i style="width:36px;height:36px;border-radius:999px;display:grid;place-items:center;background:var(--surface-raised);border:1px solid var(--border);box-shadow:var(--shadow-card);color:var(--text-muted);transition:color .15s,background .15s;flex:0 0 auto"><span data-pull-r style="display:block">${refreshIco(16)}</span></span><span data-pull-t style="display:none;font-size:13px;font-weight:600;color:var(--text-muted);white-space:nowrap"></span></div>`);
+    const TH = 56; let pd = null;
+    const content = () => scroller.firstElementChild;
+    const start = (y, t) => { if (scroller.scrollTop > 0 || st.pop || st.detail || (t && t.closest && t.closest('button,input'))) return; pd = { y, d:0, on:false }; };
+    const move = (y, e) => {
+      if (!pd) return;
+      const k = root.getBoundingClientRect().height / root.offsetHeight || 1, dy = (y - pd.y) / k;
+      if (!pd.on && dy > 6) pd.on = true; if (!pd.on) return;
+      e.cancelable && e.preventDefault();
+      const blocked = st.f.busy || st.f.cool, d = Math.max(0, Math.min(blocked ? 56 : 88, dy * .5)), ready = d >= TH; pd.d = d;
+      const c = content(), ind = root.querySelector('[data-pull]'), i = ind.querySelector('[data-pull-i]'), r = ind.querySelector('[data-pull-r]'), tx = ind.querySelector('[data-pull-t]');
+      c.style.transition = 'none'; c.style.transform = `translateY(${d}px)`;
+      ind.style.transition = 'none'; ind.style.transform = `translate(-50%,${Math.max(-48, (16 + d) / 2 - 18)}px)`; ind.style.opacity = Math.max(0, Math.min(1, (d - 12) / 28));
+      r.style.transform = `rotate(${d * 4}deg)`;
+      i.style.color = blocked ? 'var(--text-subtle)' : ready ? 'var(--accent)' : 'var(--text-muted)'; i.style.background = ready && !blocked ? 'var(--accent-soft)' : 'var(--surface-raised)';
+      tx.style.display = blocked && d > 36 ? 'block' : 'none'; tx.textContent = st.f.busy ? 'Bezig met ophalen' : 'Net opgehaald, weer om 16:17';
+    };
+    const end = () => {
+      if (!pd) return;
+      const go = pd.on && pd.d >= TH && !st.f.busy && !st.f.cool, c = content(), ind = root.querySelector('[data-pull]');
+      c.style.transition = 'transform .25s cubic-bezier(.32,.72,0,1)'; c.style.transform = '';
+      ind.style.transition = ''; ind.style.transform = 'translate(-50%,-48px)'; ind.style.opacity = 0;
+      pd = null; if (go) setTimeout(fetchRun, 200);
+    };
+    root.addEventListener('pointerdown', e => { if (e.pointerType === 'mouse') start(e.clientY, e.target); });
+    window.addEventListener('pointermove', e => { if (e.pointerType === 'mouse' && pd) move(e.clientY, e); });
+    window.addEventListener('pointerup', e => { if (e.pointerType === 'mouse') end(); });
+    root.addEventListener('touchstart', e => start(e.touches[0].clientY, e.target), { passive:true });
+    root.addEventListener('touchmove', e => move(e.touches[0].clientY, e), { passive:false });
+    root.addEventListener('touchend', end); root.addEventListener('touchcancel', end);
+  }
 
   refresh();
   if (opt.scrollTop) requestAnimationFrame(() => { scroller.scrollTop = opt.scrollTop; });
   if (opt.scrollToDetail && st.detail) requestAnimationFrame(() => { const r = root.querySelector(`[data-row="${st.detail}"]`); if (r) scroller.scrollTop = r.offsetTop - (phone ? 300 : 260); });
   if (opt.openPop) requestAnimationFrame(() => { const el = opt.openPop === 'change' ? root.querySelector(`[data-row="${opt.popId}"] [data-act="cat"]`) : root.querySelector(`[data-act="pop-${opt.openPop}"]`); if (el) openPop(opt.openPop, el, opt.popId); });
-  if (opt.dposRow && V() === 'D') requestAnimationFrame(() => { const r = root.querySelector(`[data-row="${st.detail}"]`); if (r) { st.dpos = rectOf(r); renderOverlay(); } });
   const app = { refresh, st, root };
   SET.apps.push(app);
   return app;
