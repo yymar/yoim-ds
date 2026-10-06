@@ -63,3 +63,24 @@ Lees dit eerst en controleer het tegen de huidige code (`app/api/...` of de edge
 - [ ] Nieuwe transacties herkenbaar in de lijst tot je de pagina verlaat.
 - [ ] Geen toast voor ophalen op Transacties, geen dubbele melding bij verlopen toestemming.
 - [ ] Reduced motion gerespecteerd.
+
+---
+
+## Aanpassing: knop 2, status in de regel (vervangt de ronde knop en de capsule rechts)
+
+Ontwerp: `Transacties v2.html` (code in `tx2-app.js`, const `status`). De keuze staat in `Ophalen knop varianten.html` als nummer 2.
+
+- Geen losse knop rechts meer, ook niet ingeklapt. De ronde knop van 44px en de capsule rechts gaan eruit.
+- De status in de regel is zelf de knop. De capsule staat in de eerste regel van de kop, direct na het saldo en "2 rekeningen", vóór "na vaste lasten". Hij is hetzelfde op desktop en telefoon.
+- Maat: 28px hoog, padding `0 10px 0 8px`, border-radius 999px, gap 6px, icoon 13px, tekst 12px met tabular-nums, `align-self: center` en `margin: -4px 0`, zodat de regel niet hoger wordt.
+- Tikvlak minimaal 44px hoog: een onzichtbare uitbreiding via `::after { inset: -8px -4px }` op een knop met `position: relative`.
+- Staten:
+  - Rust: "↻ Opgehaald 16:00". `--text-muted`, gewicht 400, randje `box-shadow: inset 0 0 0 1px var(--border)`, geen achtergrond.
+  - Bezig: "↻ Ophalen, 2 van 4". `--accent-hover` op `--accent-soft`, gewicht 600, geen randje, het icoon draait (reduced motion: pulseren).
+  - Klaar en afkoelen: "✓ 3 nieuw · 16:12" of "✓ Alles was al bij · 16:12". `--accent-hover`, gewicht 600, geen randje en geen achtergrond.
+- Tijdens bezig en afkoelen: `aria-disabled="true"` en een title met de uitleg ("Bezig met ophalen" of "Net opgehaald, kan weer om 16:17"). De knop doet dan niets.
+- Hover (`--surface-sunken`) alleen in rust en alleen op `(hover: hover) and (pointer: fine)`.
+- Ingeklapt op desktop: dezelfde capsule staat rechts in de smalle rekeningenregel, met 4px marge rechts.
+- Telefoon: de capsule in de regel én omlaag trekken, met dezelfde regels (één ronde tegelijk, vijf minuten afkoelen). Ingeklapt op de telefoon blijft rechts in de smalle regel alleen de tijd staan, of "2 van 4" en "3 nieuw", als tekst en niet als knop.
+- De voortgang per rekening blijft de ring om het logo en daarna de badge ("+2" of een vinkje). Geen tweede voortgangsteken in of naast de capsule.
+- Ongewijzigd: de techniek, de beveiliging op de server en de zeven staten. Bij deels mislukt, te veel verzoeken en verlopen toestemming komt die tekst op dezelfde plek in de capsule, in `--botergoud`. Opnieuw staat ernaast als stille tekstknop.
