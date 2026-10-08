@@ -16,6 +16,10 @@ Design system en inloglaag van de yoim-apps. Zie `README.md` voor gebruik.
   pinnen een tag, nooit `main`.
 - **De tests blijven groen** (`npm test`) en `npm run typecheck` schoon
   voor elke tag.
+- **Nooit iets met Info Support (Yorans werkgever) op GitHub.** Geen rechten vragen of goedkeuren
+  die de organisaties `infosupport` of `InfoSupportNederland` raken (geen `gh auth refresh` of
+  `gh auth login` met extra scopes, geen OAuth-schermen), en nooit hun repo's lezen of wijzigen.
+  Alleen `yymar/*`; pushen gaat via SSH.
 
 ## Schrijfstijl
 
