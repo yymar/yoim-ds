@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { useRef, useSyncExternalStore } from 'react'
 import { LogOut, Monitor, Moon, Sun } from 'lucide-react'
 
-import { themeTip, type Thema } from '../thema'
+import { DARK, subscribeDark, themeTip, type Thema } from '../thema'
 
 export type NavigationRoute = {
   id: string
@@ -37,14 +37,6 @@ const THEMAS = [
   { id: 'donker', label: 'Donker', Icon: Moon },
   { id: 'systeem', label: 'Systeem', Icon: Monitor },
 ] as const
-
-const DARK = '(prefers-color-scheme: dark)'
-
-function subscribeDark(onChange: () => void) {
-  const query = window.matchMedia(DARK)
-  query.addEventListener('change', onChange)
-  return () => query.removeEventListener('change', onChange)
-}
 
 /**
  * De navigatie, in twee vormen die hetzelfde ding zijn. Op de telefoon een

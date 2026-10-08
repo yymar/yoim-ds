@@ -10,7 +10,8 @@
 - Zonder `system` blijft het zoals het was: Licht en Donker met tekst. De
   radiogroep heet nu wel "Weergave" in plaats van "Thema", en elke knop heeft
   een `aria-label`.
-- Nieuw in `@yoim/ds/thema`: `themeTip`.
+- Nieuw in `@yoim/ds/thema`: `themeTip`, en `subscribeDark` met `DARK` (de
+  wissel van `prefers-color-scheme`, zoals Navigation hem volgt).
 
 ## 0.4.1
 

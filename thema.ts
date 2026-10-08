@@ -36,3 +36,12 @@ export function themeTip(button: Thema, chosen: Thema | undefined, systemDark: b
   const now = chosen === 'systeem' ? `, nu ${systemDark ? 'donker' : 'licht'}` : ''
   return `Systeem · volgt je apparaat${now}`
 }
+
+export const DARK = '(prefers-color-scheme: dark)'
+
+/** Seint bij elke wissel van het apparaat tussen licht en donker. */
+export function subscribeDark(onChange: () => void) {
+  const query = window.matchMedia(DARK)
+  query.addEventListener('change', onChange)
+  return () => query.removeEventListener('change', onChange)
+}

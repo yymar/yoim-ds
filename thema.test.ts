@@ -1,6 +1,6 @@
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 
-import { themeTip } from './thema'
+import { DARK, subscribeDark, themeTip } from './thema'
 
 describe('themeTip', () => {
   it('noemt licht en donker bij naam', () => {
@@ -12,5 +12,24 @@ describe('themeTip', () => {
     expect(themeTip('systeem', 'licht', true)).toBe('Systeem · volgt je apparaat')
     expect(themeTip('systeem', 'systeem', false)).toBe('Systeem · volgt je apparaat, nu licht')
     expect(themeTip('systeem', 'systeem', true)).toBe('Systeem · volgt je apparaat, nu donker')
+  })
+})
+
+describe('subscribeDark', () => {
+  it('volgt een wissel van prefers-color-scheme tot je afmeldt', () => {
+    const query = new EventTarget()
+    const matchMedia = vi.fn(() => query)
+    vi.stubGlobal('window', { matchMedia })
+    const onChange = vi.fn()
+
+    const stop = subscribeDark(onChange)
+    query.dispatchEvent(new Event('change'))
+    expect(matchMedia).toHaveBeenCalledWith(DARK)
+    expect(onChange).toHaveBeenCalledTimes(1)
+
+    stop()
+    query.dispatchEvent(new Event('change'))
+    expect(onChange).toHaveBeenCalledTimes(1)
+    vi.unstubAllGlobals()
   })
 })
