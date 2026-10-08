@@ -1,10 +1,10 @@
 'use client'
 
 import Link from 'next/link'
-import { useRef } from 'react'
-import { LogOut, Moon, Sun } from 'lucide-react'
+import { useRef, useSyncExternalStore } from 'react'
+import { LogOut, Monitor, Moon, Sun } from 'lucide-react'
 
-import type { Thema } from '../thema'
+import { themeTip, type Thema } from '../thema'
 
 export type NavigationRoute = {
   id: string
@@ -26,10 +26,25 @@ export type NavigationAccount = {
 
 type Theme = Exclude<Thema, 'systeem'>
 
+/** Zonder `system` twee knoppen met tekst, zoals voor 0.4.2; met `system` drie
+    icoontjes en is `theme` wat iemand koos, ook `systeem`. */
+type ThemeProps =
+  | { system?: false; theme?: Theme; onTheme?: (theme: Theme) => void }
+  | { system: true; theme?: Thema; onTheme?: (theme: Thema) => void }
+
 const THEMAS = [
   { id: 'licht', label: 'Licht', Icon: Sun },
   { id: 'donker', label: 'Donker', Icon: Moon },
+  { id: 'systeem', label: 'Systeem', Icon: Monitor },
 ] as const
+
+const DARK = '(prefers-color-scheme: dark)'
+
+function subscribeDark(onChange: () => void) {
+  const query = window.matchMedia(DARK)
+  query.addEventListener('change', onChange)
+  return () => query.removeEventListener('change', onChange)
+}
 
 /**
  * De navigatie, in twee vormen die hetzelfde ding zijn. Op de telefoon een
@@ -47,10 +62,11 @@ export function Navigation({
   onSelect,
   brand,
   account,
+  system,
   theme,
   onTheme,
   onSignOut,
-}: {
+}: ThemeProps & {
   routes: NavigationRoute[]
   active: string
   onSelect?: (id: string) => void
@@ -58,11 +74,13 @@ export function Navigation({
   /** Zonder account, thema en uitloggen heeft de rail geen voet, en kan hij
       zonder client-wrapper vanuit een servercomponent. */
   account?: NavigationAccount
-  theme?: Theme
-  onTheme?: (theme: Theme) => void
   onSignOut?: () => void
 }) {
   const themaknoppen = useRef<Array<HTMLButtonElement | null>>([])
+  const systemDark = useSyncExternalStore(subscribeDark, () => window.matchMedia(DARK).matches, () => false)
+  const themas = system ? THEMAS : THEMAS.slice(0, 2)
+  // Zonder `system` komen hier alleen licht en donker langs.
+  const choose = onTheme as ((theme: Thema) => void) | undefined
 
   if (routes.length < 3 || routes.length > 5) {
     console.warn(`Navigation is ontworpen voor 3 tot 5 routes, niet ${routes.length}.`)
@@ -109,15 +127,15 @@ export function Navigation({
       </span>
 
       <span className="nav-foot">
-        {/* Een keuze uit twee is een radiogroep: zo hoor je "1 van 2" en lopen
-            de pijltjes erdoor. */}
-        {theme && onTheme ? (
+        {/* Een keuze is een radiogroep: zo hoor je "1 van 3" en lopen de
+            pijltjes erdoor. */}
+        {theme && choose ? (
           <span
             role="radiogroup"
-            aria-label="Thema"
-            className="glas-dun flex gap-0.5 rounded-[var(--radius-capsule)] p-[3px]"
+            aria-label="Weergave"
+            className="glas-dun relative flex gap-0.5 rounded-[var(--radius-capsule)] p-[3px]"
           >
-            {THEMAS.map(({ id, label, Icon }, i) => {
+            {themas.map(({ id, label, Icon }, i) => {
               const aan = theme === id
 
               return (
@@ -129,23 +147,36 @@ export function Navigation({
                   type="button"
                   role="radio"
                   aria-checked={aan}
+                  aria-label={label}
                   tabIndex={aan ? 0 : -1}
-                  onClick={() => onTheme(id)}
+                  onClick={() => choose(id)}
                   onKeyDown={(e) => {
                     if (!e.key.startsWith('Arrow')) return
                     e.preventDefault()
-                    const ander = 1 - i
+                    const stap = e.key === 'ArrowRight' || e.key === 'ArrowDown' ? 1 : -1
+                    const ander = (i + stap + themas.length) % themas.length
                     themaknoppen.current[ander]?.focus()
-                    onTheme(THEMAS[ander].id)
+                    choose(themas[ander].id)
                   }}
-                  className={`flex h-8 min-w-0 flex-1 items-center justify-center gap-1.5 rounded-[var(--radius-capsule)] text-[13px] font-medium transition-colors duration-[var(--dur-fast)] ${
+                  className={`nav-thema flex h-8 min-w-0 flex-1 items-center justify-center gap-1.5 rounded-[var(--radius-capsule)] text-[13px] font-medium transition-colors duration-[var(--dur-fast)] ${
                     aan
                       ? 'bg-[var(--glass-tint-strong)] text-[var(--text)] shadow-[var(--glass-rim)]'
-                      : 'text-[var(--text-subtle)]'
+                      : system
+                        ? 'text-[var(--text-muted)]'
+                        : 'text-[var(--text-subtle)]'
                   }`}
                 >
-                  <Icon size={15} strokeWidth={2} />
-                  {label}
+                  <Icon size={system ? 16 : 15} strokeWidth={2} aria-hidden="true" />
+                  {system ? (
+                    <span
+                      role="tooltip"
+                      className="nav-tip pointer-events-none absolute left-0 bottom-[calc(100%+8px)] flex h-8 items-center rounded-full border border-[var(--border)] bg-[var(--surface-raised)] px-3 text-[13px] font-medium whitespace-nowrap text-[var(--text)] shadow-[var(--shadow-raised)]"
+                    >
+                      {themeTip(id, theme, systemDark)}
+                    </span>
+                  ) : (
+                    label
+                  )}
                 </button>
               )
             })}

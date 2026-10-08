@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.4.2
+
+- `Navigation` kan Systeem als derde keuze tonen: geef `system` mee, dan wordt
+  Weergave drie icoontjes (zon, maan, scherm, 16px) en is `theme` wat iemand
+  koos, ook `systeem`. Met een muis noemt een tooltip na 400ms de naam, bij
+  een gekozen Systeem met wat het nu volgt (", nu licht" of ", nu donker"),
+  live uit `prefers-color-scheme`. Pijltjes lopen rond door de keuzes.
+- Zonder `system` blijft het zoals het was: Licht en Donker met tekst. De
+  radiogroep heet nu wel "Weergave" in plaats van "Thema", en elke knop heeft
+  een `aria-label`.
+- Nieuw in `@yoim/ds/thema`: `themeTip`.
+
 ## 0.4.1
 
 - De sessie-proxy controleert het token met `getClaims` in plaats van

@@ -28,3 +28,11 @@ export const SURFACE = {
  * wakker wordt.
  */
 export const THEMA_SCRIPT = `try{var t=localStorage.getItem(${JSON.stringify(THEMA_SLEUTEL)});if(t==='licht'||t==='donker'){document.documentElement.dataset.thema=t}}catch(e){}`
+
+/** De tooltip bij een knop van Weergave; bij een gekozen Systeem ook wat het nu volgt. */
+export function themeTip(button: Thema, chosen: Thema | undefined, systemDark: boolean): string {
+  if (button === 'licht') return 'Licht'
+  if (button === 'donker') return 'Donker'
+  const now = chosen === 'systeem' ? `, nu ${systemDark ? 'donker' : 'licht'}` : ''
+  return `Systeem · volgt je apparaat${now}`
+}

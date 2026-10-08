@@ -484,6 +484,17 @@
   .zweeftint:hover {
     background: var(--surface-sunken);
   }
+
+  .nav-thema:hover .nav-tip {
+    opacity: 1;
+    transition-delay: 0.4s;
+  }
+}
+
+/* De naam van een Weergave-icoontje: alleen met een muis, na 400ms. */
+.nav-tip {
+  opacity: 0;
+  transition: opacity 0.12s;
 }
 
 /* Tailwind v4 heeft `cursor: pointer` uit zijn preflight gehaald, dus een knop
