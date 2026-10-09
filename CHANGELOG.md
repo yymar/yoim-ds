@@ -1,5 +1,12 @@
 # Changelog
 
+## Unreleased
+
+- De focusring volgt de ronding van een `.kaart`: het eerste en laatste kind van een
+  kaart (en de summary van een dichte `<details class="kaart">`) krijgt de
+  binnenradius van de kaart. Voorheen tekende de ring een harde rechthoek met
+  hoeken buiten de ronding, bijvoorbeeld op de kop van een uitklapkaart.
+
 ## 0.4.3
 
 - `color-scheme` volgt het thema, op dezelfde gevallen als de tokens (systeem,

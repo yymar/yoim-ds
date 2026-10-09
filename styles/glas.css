@@ -604,6 +604,22 @@ body {
   }
 }
 
+/* Een rij die tegen de rand van een `.kaart` ligt heeft zelf geen radius, en de
+   kaart knipt. De ring tekent dan een harde rechthoek waarvan de hoeken buiten
+   de ronding vallen. Het eerste en laatste kind krijgt daarom de binnenradius
+   van de kaart (radius min de rand), en een dichte `<details>` rondt ook zijn
+   onderkant af, want daar is de summary het hele kaartje. */
+.kaart > :first-child:focus-visible {
+  border-top-left-radius: calc(var(--radius-lg) - 1px);
+  border-top-right-radius: calc(var(--radius-lg) - 1px);
+}
+
+.kaart > :last-child:focus-visible,
+details.kaart:not([open]) > summary:focus-visible {
+  border-bottom-left-radius: calc(var(--radius-lg) - 1px);
+  border-bottom-right-radius: calc(var(--radius-lg) - 1px);
+}
+
 /* Tekstvelden niet. Een ring om een veld tekent een harde rechthoek, en de
    invoerbalk en het zoekveld zijn kale inputs zonder eigen radius in een
    glazen capsule: daar staat die rechthoek midden in het oppervlak. Focus is
