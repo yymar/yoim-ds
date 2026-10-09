@@ -1,11 +1,44 @@
 # Changelog
 
-## Unreleased
+## 0.5.0
 
+- `Navigation` zweeft op desktop. Vanaf `--bp-breed` is er geen rail van 15rem
+  meer, maar twee glazen capsules in de bovenhoeken die geen kolom kosten. Links
+  het merk (een link naar de eerste route) en de routes als iconen; de huidige
+  route houdt altijd zijn label. Met de muis op het merk klappen alle labels
+  uit, ze sluiten 300ms na het verlaten van de capsule of met Escape. Een los
+  icoon noemt na 400ms zijn naam in een tooltip eronder. Toetsenbordfocus klapt
+  ook uit; op touch zet een tik op het merk de labels open of dicht, en zijn de
+  vlakken 44px. Past de uitgeklapte capsule niet naast de rechter, dan wijkt de
+  rechter zolang de labels open zijn.
+- Rechts: één themaknop die doorschuift (licht, donker, systeem), een slotknop
+  als de app `onLock` meegeeft, en de avatar als link naar `account.href`.
+- De telefoon is ongewijzigd: de capsule onderaan, met dezelfde klassen.
+- Nieuw: `ThemeChoice`, de radiogroep van Weergave, voor de accountsheet op de
+  telefoon. Op desktop staat hij niet meer in de navigatie.
+- Nieuw in `@yoim/ds/thema`: `nextTheme`, en `themeTip` kan met een vierde
+  argument zeggen waar een klik heen gaat ("Licht. Klik voor donker").
+- Nieuwe token `--nav-boven` (5.5rem, op touch 5.75rem): de ruimte boven het
+  eerste vlak vanaf `--bp-breed`.
 - De focusring volgt de ronding van een `.kaart`: het eerste en laatste kind van een
   kaart (en de summary van een dichte `<details class="kaart">`) krijgt de
   binnenradius van de kaart. Voorheen tekende de ring een harde rechthoek met
   hoeken buiten de ronding, bijvoorbeeld op de kop van een uitklapkaart.
+
+Let op bij het bijwerken:
+
+- `--rail-b` en `--rail-nu` zijn weg. Elke `left-[var(--rail-b)]` of
+  `calc(... var(--rail-b) ...)` in een app wordt `0`, of `20px` voor iets dat
+  naast de capsules moet hangen.
+- `body` schuift niet meer opzij en `.vastekop` begint weer links. Een app die
+  `.schermkolom` gebruikt, centreert weer over de volle breedte.
+- Geef het eerste vlak vanaf `--bp-breed` `padding-top: var(--nav-boven)` en laat
+  daar de paginatitel weg: de capsule zegt al waar je bent. Op de telefoon blijft
+  de grote titel.
+- `account.href` is verplicht als je `account` meegeeft. `onSignOut` doet niets
+  meer en geeft een waarschuwing; uitloggen hoort op de profielpagina. Hij
+  verdwijnt in de volgende versie.
+- `.nav-foot` bestaat niet meer. CSS in een app die erop leunt, kan weg.
 
 ## 0.4.3
 

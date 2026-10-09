@@ -7,7 +7,7 @@ build: de app compileert de TypeScript en CSS zelf.
 ## Gebruiken in een app
 
 ```bash
-npm i github:yymar/yoim-ds#v0.3.0
+npm i github:yymar/yoim-ds#v0.5.0
 ```
 
 ```ts
@@ -68,26 +68,29 @@ export default async function Login(props: PageProps<'/auth/login'>) {
   `.rij`, `.kop`, `.schermkolom`, `.vastekop`, `.postertray`, `.overlay`, en de
   basisregels voor body, focus en selectie, en de scrollbalken in het thema
   (`.scroll-hoeken` voor een scrollcontainer tegen afgeronde hoeken). Ook de
-  vormen van `Navigation` (`.navigation`, `.nav-*`).
+  vormen van `Navigation` (`.navigation`, `.nav-rechts`, `.nav-*`): op de
+  telefoon een capsule onderaan, vanaf `--bp-breed` twee capsules in de
+  bovenhoeken. Geef het eerste vlak daar `padding-top: var(--nav-boven)`.
 - `auth/`: `proxy`, `createServerSupabase`, `createBrowserSupabase`,
   `cookieOptions`, `inlog-fout`, `moment`.
 - `components/`: `InlogPagina`, `InlogTray`, `GoogleKnop`, `Klok`, `Merk`,
-  `LeegStaat` (`leeg-staat`), `Navigation` (`navigation`), `StatusLine`
+  `LeegStaat` (`leeg-staat`), `Navigation` en `ThemeChoice` (`navigation`), `StatusLine`
   (`status-line`), `Bar` (`bar`), `DonutList` (`donut-list`), `Amount`
   (`amount`). Iconen zijn lucide: `lucide-react` is een peer dependency, en
   een icoon geef je mee als element (`icon={<Wallet />}`).
 - `money.ts`: `formatAmount` (`−€ 42,18`, `+€ 2.400,00`), `barState` (binnen,
   bijna, over; precies op het budget is binnen) en `heatLevel` (terciles van
   de dagen met uitgaven).
-- `thema.ts`: `SURFACE`, `THEMA_SCRIPT`, `THEMA_SLEUTEL`.
+- `thema.ts`: `SURFACE`, `THEMA_SCRIPT`, `THEMA_SLEUTEL`, `themeTip`,
+  `nextTheme`, `subscribeDark`.
 - `week.ts`: de week van dit huishouden, zaterdag tot en met vrijdag. Zit hier
   en niet in een app omdat weekl.yoim.nl en de hub op yoim.nl allebei dezelfde
   week moeten tonen; twee kopieen lopen uit elkaar.
 
 ## Tweaken en uitrollen
 
-Wijzig hier, `npm test`, commit, tag (`git tag v0.3.0 && git push --tags`).
-Per app: `npm i github:yymar/yoim-ds#v0.3.0`, build, deploy. Een app die je
+Wijzig hier, `npm test`, commit, tag (`git tag v0.5.0 && git push --tags`, pas als Yoran het zegt).
+Per app: `npm i github:yymar/yoim-ds#v0.5.0`, build, deploy. Een app die je
 niet bijwerkt blijft op zijn versie.
 
 Ontwerpwerk gebeurt in Claude Design op de bestaande kit en landt hier als

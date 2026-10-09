@@ -174,7 +174,7 @@
   /* Breakpoints. Layout only — behaviour (hover, keyboard) is gated on capability
   queries, because an iPad with a keyboard in a narrow window is not a phone.
   Below --bp-breed nothing changes: the phone design is the source of truth. */
-  --bp-breed:745px;    /* OnderNavigatie becomes ZijNavigatie; column stays centred */
+  --bp-breed:745px;    /* de capsule onderaan wordt twee capsules bovenin; de kolom blijft gecentreerd */
   --bp-plannen:1120px; /* the planning view unlocks — Week + Recepten only */
   /* 63,2px, gemeten aan de capsule zelf: 6px padding + 1px rand + 6px padding + 22px
   icoon + 3px gap + 13,2px label + 5px padding + 1px rand + 6px padding. De balk maat
@@ -183,7 +183,6 @@
   nam 11px voor de labelregel, maar dat is de font-size en de regel is 11 x 1,2 = 13,2px
   hoog, en de twee randen ontbraken. Nagemeten in de browser: 63,19px. */
   --nav-h:3.95rem;
-  --rail-b:15rem;      /* ZijNavigatie width — label beside the icon, plus room for the voet */
   /* The condensed tab bar: glass shrinks to a capsule of icons on scroll. */
   /* 50px, op dezelfde manier gemeten als --nav-h: 6px padding + 1px rand + 6px
   padding + 22px icoon + 3px gap + 5px padding + 1px rand + 6px padding. Het
@@ -485,6 +484,10 @@
   --radius-tray: 2.125rem;
   --radius-tray-knop: 1.625rem;
 
+  /* Vanaf --bp-breed: de ruimte boven het eerste vlak voor de capsules van
+     Navigation, 20px van de rand + 52px capsule + 16px lucht. */
+  --nav-boven: 5.5rem;
+
   /* De ingeklapte balk bovenaan: 44px knop plus 2x 10px padding. Schermen
      waar die balk altijd staat, zoals het recept, moeten er ruim onderdoor. */
   --kop-h: 4rem;
@@ -522,4 +525,11 @@
   --radius-xl: var(--radius-xl);
 
   --font-sans: var(--font-app-sans), ui-sans-serif, system-ui, sans-serif;
+}
+
+/* Op touch zijn de capsules 56px in plaats van 52. */
+@media (pointer: coarse) {
+  :root {
+    --nav-boven: 5.75rem;
+  }
 }

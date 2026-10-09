@@ -1,7 +1,7 @@
 /**
  * Het thema van de app.
  *
- * Standaard volgt de app de telefoon. Kiest iemand in de zijbalk licht of
+ * Standaard volgt de app de telefoon. Kiest iemand in de navigatie licht of
  * donker, dan staat die keuze als `data-thema` op `<html>` en blijft hij in
  * `localStorage`. Eén scherm gaat daar weer overheen: het inlogscherm zet
  * `data-thema` op zijn eigen `main`, want dat volgt het uur.
@@ -29,12 +29,26 @@ export const SURFACE = {
  */
 export const THEMA_SCRIPT = `try{var t=localStorage.getItem(${JSON.stringify(THEMA_SLEUTEL)});if(t==='licht'||t==='donker'){document.documentElement.dataset.thema=t}}catch(e){}`
 
-/** De tooltip bij een knop van Weergave; bij een gekozen Systeem ook wat het nu volgt. */
-export function themeTip(button: Thema, chosen: Thema | undefined, systemDark: boolean): string {
-  if (button === 'licht') return 'Licht'
-  if (button === 'donker') return 'Donker'
-  const now = chosen === 'systeem' ? `, nu ${systemDark ? 'donker' : 'licht'}` : ''
-  return `Systeem · volgt je apparaat${now}`
+/**
+ * De tooltip bij een knop van Weergave; bij een gekozen Systeem ook wat het nu
+ * volgt. Met `next` (de ene knop op desktop die doorschuift) ook waar een klik
+ * heen gaat.
+ */
+export function themeTip(button: Thema, chosen: Thema | undefined, systemDark: boolean, next?: Thema): string {
+  const tip =
+    button === 'licht'
+      ? 'Licht'
+      : button === 'donker'
+        ? 'Donker'
+        : `Systeem · volgt je apparaat${chosen === 'systeem' ? `, nu ${systemDark ? 'donker' : 'licht'}` : ''}`
+  return next ? `${tip}. Klik voor ${next}` : tip
+}
+
+/** Waar de ene themaknop op desktop heen schuift. */
+export function nextTheme(current: Thema, system: boolean): Thema {
+  if (current === 'licht') return 'donker'
+  if (current === 'donker' && system) return 'systeem'
+  return 'licht'
 }
 
 export const DARK = '(prefers-color-scheme: dark)'
