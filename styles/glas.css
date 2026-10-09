@@ -519,6 +519,57 @@ html {
   -webkit-text-size-adjust: 100%;
 }
 
+/* Scrollbalken: dun, zonder pijltjes, met een doorzichtig spoor en een duim in
+   de tekstkleur van het thema. Chrome negeert `::-webkit-scrollbar` zodra
+   `scrollbar-color` op het element staat, dus de standaardeigenschappen gelden
+   alleen waar die pseudo's niet bestaan (Firefox). */
+:root,
+[data-thema] {
+  --scrollbar-duim: color-mix(in oklab, var(--text) 26%, transparent);
+  --scrollbar-duim-hover: color-mix(in oklab, var(--text) 46%, transparent);
+}
+
+@supports not selector(::-webkit-scrollbar) {
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--scrollbar-duim) transparent;
+  }
+}
+
+::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+
+::-webkit-scrollbar-track,
+::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+::-webkit-scrollbar-button {
+  display: none;
+}
+
+/* De duim is een afgeronde streep met lucht eromheen, geen blok tegen de rand. */
+::-webkit-scrollbar-thumb {
+  border: 3px solid transparent;
+  border-radius: var(--radius-full);
+  background: var(--scrollbar-duim);
+  background-clip: content-box;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--scrollbar-duim-hover);
+  background-clip: content-box;
+}
+
+/* Opt-in voor een scrollcontainer die tegen afgeronde hoeken ligt: het spoor
+   begint en eindigt binnen de afronding, anders knipt die de duim af. Maat
+   aanpassen kan met `--scroll-hoek`. */
+.scroll-hoeken::-webkit-scrollbar-track {
+  margin-block: var(--scroll-hoek, var(--radius-lg));
+}
+
 /* Een element dat een thema scopet moet `color` opnieuw declareren. De regel
    hierboven lost `var(--text)` op bij `<body>`, dus buiten elke thema-scope, en
    die uitgerekende waarde erft door naar binnen. Zet een subtree dan het andere

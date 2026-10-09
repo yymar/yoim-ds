@@ -439,6 +439,31 @@
   --canvas-wash:radial-gradient(130% 90% at 18% -8%,#1b1f19 0%,#15170f 46%,#101208 100%),radial-gradient(60% 45% at 88% 26%,rgb(156 181 115 / 0.07),rgb(156 181 115 / 0) 70%);
 }
 
+/* Het systeem tekent scrollbalken, keuzelijsten en de tijdkiezer zelf. Met
+   `color-scheme` volgen die het thema, op dezelfde gevallen als de tokens
+   hierboven: zonder keuze het systeem, anders de gekozen kant. */
+:root {
+  color-scheme: light dark;
+}
+
+:root[data-thema="donker"]:not(:has([data-thema="licht"])),
+:root:has([data-thema="donker"]) {
+  color-scheme: dark;
+}
+
+:root[data-thema="licht"]:not(:has([data-thema="donker"])),
+:root:has([data-thema="licht"]) {
+  color-scheme: light;
+}
+
+[data-thema="donker"]:not(:root) {
+  color-scheme: dark;
+}
+
+[data-thema="licht"]:not(:root) {
+  color-scheme: light;
+}
+
 /* Tokens die de app zelf nodig heeft en die niet uit het design system komen.
    Ze staan apart zodat een volgende export van globals-tokens.css ze niet
    meeneemt en ook niet wegvaagt. */

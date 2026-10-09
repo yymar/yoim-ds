@@ -1,5 +1,22 @@
 # Changelog
 
+## 0.4.3
+
+- `color-scheme` volgt het thema, op dezelfde gevallen als de tokens (systeem,
+  `data-thema` op `<html>`, of een scherm dat het thema zelf zet). Daardoor
+  blijven de scrollbalken, keuzelijsten en de tijdkiezer van het systeem niet
+  meer licht in het donker.
+- Dunne scrollbalken in het thema (`styles/glas.css`): zonder pijltjes, met een
+  doorzichtig spoor en een duim in de tekstkleur. Nieuwe tokens
+  `--scrollbar-duim` en `--scrollbar-duim-hover`.
+- Nieuwe klasse `.scroll-hoeken` voor een scrollcontainer tegen afgeronde
+  hoeken: het spoor houdt `--scroll-hoek` (standaard `--radius-lg`) vrij aan
+  boven- en onderkant.
+
+Apps hoeven niets te veranderen. Een eigen `color-scheme` of scrollbarblok in
+een app kan weg; een app-specifieke regel zoals `.kaartvlak` wordt
+`.scroll-hoeken` op het element.
+
 ## 0.4.2
 
 - `Navigation` kan Systeem als derde keuze tonen: geef `system` mee, dan wordt
