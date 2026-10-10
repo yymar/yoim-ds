@@ -66,7 +66,8 @@ export default async function Login(props: PageProps<'/auth/login'>) {
   `.veldtekst` voor invoervelden, en de varianten `breed:` en `plannen:`.
 - `styles/glas.css`: `.glas`, `.glas-dun`, `.glas-dik`, `.sheen`, `.kaart`,
   `.rij`, `.kop`, `.groepkop`, `.schermkolom`, `.vastekop`, `.postertray`, `.overlay`,
-  `.avatar-link` (een ronde focusring om een avatar als link), en de
+  `.avatar-link` (een ronde focusring om een avatar als link), `.segment` en
+  `.segment-*` (de vorm van `SegmentedChoice`), en de
   basisregels voor body, focus en selectie, en de scrollbalken in het thema
   (`.scroll-hoeken` voor een scrollcontainer tegen afgeronde hoeken). Ook de
   vormen van `Navigation` (`.navigation`, `.nav-rechts`, `.nav-*`): op de
@@ -94,8 +95,32 @@ export default async function Login(props: PageProps<'/auth/login'>) {
 - `components/`: `InlogPagina`, `InlogTray`, `GoogleKnop`, `Klok`, `Merk`,
   `LeegStaat` (`leeg-staat`), `Navigation` en `ThemeChoice` (`navigation`), `StatusLine`
   (`status-line`), `Bar` (`bar`), `DonutList` (`donut-list`), `Amount`
-  (`amount`). Iconen zijn lucide: `lucide-react` is een peer dependency, en
-  een icoon geef je mee als element (`icon={<Wallet />}`).
+  (`amount`), `SegmentedChoice` en het type `SegmentedOption`
+  (`segmented-choice`). Iconen zijn lucide: `lucide-react` is een peer
+  dependency, en een icoon geef je mee als element (`icon={<Wallet />}`).
+
+  `SegmentedChoice` is een keuze uit twee tot vier als segmenten in een
+  capsule, met een plaatje dat onder de gekozen optie meeglijdt. Een optie
+  heeft een `icon`, of met `color` en `initial` een avatar; met `iconOnly`
+  alleen het icoon. `description` staat eronder (of met
+  `descriptionPlacement="above"` erboven) en wordt voorgelezen als hij
+  verandert. `renderSelectedIcon` geeft de gekozen optie een ander icoon.
+  `ThemeChoice` is er een dunne laag omheen.
+
+  ```tsx
+  import { SegmentedChoice } from '@yoim/ds/components/segmented-choice'
+
+  <SegmentedChoice
+    label="Wie kookt"
+    options={[
+      { id: 'yoran', label: 'Yoran', color: 'var(--member-yoran)', initial: 'Y' },
+      { id: 'imke', label: 'Imke', color: 'var(--member-imke)', initial: 'I' },
+      { id: 'auto', label: 'Automatisch', icon: <Sparkles size={16} /> },
+    ]}
+    value={kok}
+    onChange={setKok}
+  />
+  ```
 - `money.ts`: `formatAmount` (`−€ 42,18`, `+€ 2.400,00`), `barState` (binnen,
   bijna, over; precies op het budget is binnen) en `heatLevel` (terciles van
   de dagen met uitgaven).

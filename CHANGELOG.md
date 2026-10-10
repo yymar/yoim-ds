@@ -1,5 +1,47 @@
 # Changelog
 
+## 0.6.0
+
+- Nieuw: `SegmentedChoice` (`@yoim/ds/components/segmented-choice`), een keuze
+  uit twee tot vier als segmenten in een capsule, ontworpen in Claude Design.
+  Props: `label`, `showLabel`, `options`, `value`, `onChange`, `description`,
+  `descriptionPlacement` (`below` of `above`) en `renderSelectedIcon`. Een
+  optie (`SegmentedOption`) heeft `id`, `label` en optioneel `icon`,
+  `iconOnly`, en `color` met `initial` voor een avatar van 20px (op 75% als hij
+  niet gekozen is). Met minder dan twee of meer dan vier keuzes waarschuwt hij
+  in de console.
+- De baan is geen glas maar `--text` op 7%, zodat hij op elk vlak te zien is,
+  ook op een bijna wit vlak. Het dekkende plaatje onder de gekozen optie glijdt
+  mee in `--dur-glas` met `--ease-glas`; bij de eerste verf en met
+  `prefers-reduced-motion` springt het. Licht: `--surface-raised` met een
+  haarlijn in `--border-strong`. Donker: `--text` op 14% door
+  `--surface-raised`. Nieuwe token daarvoor: `--segment-plaat`.
+- Een optie groeit met zijn inhoud, is met een muis 30px hoog en op touch 38,
+  en heeft in beide gevallen een tikdoel van 44px. Gekozen: `--text` en
+  halfvet; anders `--text-muted`.
+- Toegankelijk als radiogroep: `aria-label` (of `aria-labelledby` met
+  `showLabel`), per optie `role="radio"` met `aria-checked`, een roving
+  tabindex, pijltjes die kiezen en rondlopen, Home en End. De uitleg is
+  `aria-live` en elke optie verwijst ernaar met `aria-describedby`. De
+  toetslogica en de waarschuwing als pure functies in `segment.ts`
+  (`nextIndex`, `optionCountWarning`), met tests.
+- `ThemeChoice` is nu een dunne laag om `SegmentedChoice`, met dezelfde props.
+  Hij ziet er anders uit: elke keuze heeft een icoon en een label (ook met
+  `system`, waar het eerst alleen iconen met een tooltip waren), en bij een
+  gekozen Systeem staat eronder "Volgt je apparaat, nu donker" (of licht).
+  `.nav-thema`, zijn tooltip en het tikdoel van 0.5.3 zijn weg uit `glas.css`.
+
+Let op bij het bijwerken (niet breaking, wel per app):
+
+- Eigen CSS op `.nav-thema` kan weg, maar geen app heeft die nog (de hub,
+  weekl, energ, mone.yoim, home en mone.yymar nagekeken). Niets te doen.
+- `ThemeChoice` houdt zijn props, dus de aanroepen typechecken zoals ze zijn:
+  de hub (`components/theme-choice.tsx`), weekl (`components/account.tsx`,
+  zonder `system`), energ (`components/thema-schakelaar.tsx`) en home
+  (`components/theme.tsx`). Kijk op de telefoon of hij goed staat: hij is met
+  de uitleg bij Systeem een regel hoger. mone.yoim gebruikt hem niet, en
+  mone.yymar heeft in zijn menu eigen rijen met een vinkje.
+
 ## 0.5.6
 
 - `Navigation` klapt op de telefoon zelf in bij scrollen, zoals mone.yoim en

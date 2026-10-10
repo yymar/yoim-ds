@@ -7,6 +7,7 @@ import { Lock, Monitor, Moon, Sun } from 'lucide-react'
 
 import { isScrolled, subscribeScrolled } from '../scroll'
 import { DARK, nextTheme, subscribeDark, themeTip, type Thema } from '../thema'
+import { SegmentedChoice } from './segmented-choice'
 
 export type NavigationRoute = {
   id: string
@@ -359,69 +360,30 @@ export function Navigation({
 }
 
 /**
- * Weergave als radiogroep, voor de accountsheet op de telefoon waar ruimte is
- * voor alle keuzes. Op desktop is het de ene knop in de navigatie.
+ * Weergave als `SegmentedChoice`, voor de accountsheet op de telefoon waar
+ * ruimte is voor alle keuzes. Op desktop is het de ene knop in de navigatie.
  */
 export function ThemeChoice({ system, theme, onTheme }: ThemeProps) {
-  const knoppen = useRef<Array<HTMLButtonElement | null>>([])
   const systemDark = useSystemDark()
-  const themas = system ? THEMAS : THEMAS.slice(0, 2)
   const choose = onTheme as ((theme: Thema) => void) | undefined
 
   if (!theme || !choose) return null
 
-  // Een keuze is een radiogroep: zo hoor je "1 van 3" en lopen de pijltjes erdoor.
-  return (
-    <span
-      role="radiogroup"
-      aria-label="Weergave"
-      className="glas-dun relative flex gap-0.5 rounded-[var(--radius-capsule)] p-[3px]"
-    >
-      {themas.map(({ id, label, Icon }, i) => {
-        const aan = theme === id
+  const themas = system ? THEMAS : THEMAS.slice(0, 2)
+  // "Systeem · volgt je apparaat, nu donker" wordt "Volgt je apparaat, nu donker".
+  const volgt = themeTip('systeem', 'systeem', systemDark).split(' · ')[1]
 
-        return (
-          <button
-            key={id}
-            ref={(knop) => {
-              knoppen.current[i] = knop
-            }}
-            type="button"
-            role="radio"
-            aria-checked={aan}
-            aria-label={label}
-            tabIndex={aan ? 0 : -1}
-            onClick={() => choose(id)}
-            onKeyDown={(e) => {
-              if (!e.key.startsWith('Arrow')) return
-              e.preventDefault()
-              const stap = e.key === 'ArrowRight' || e.key === 'ArrowDown' ? 1 : -1
-              const ander = (i + stap + themas.length) % themas.length
-              knoppen.current[ander]?.focus()
-              choose(themas[ander].id)
-            }}
-            className={`nav-thema flex h-8 min-w-0 flex-1 items-center justify-center gap-1.5 rounded-[var(--radius-capsule)] text-[13px] font-medium transition-colors duration-[var(--dur-fast)] ${
-              aan
-                ? 'bg-[var(--glass-tint-strong)] text-[var(--text)] shadow-[inset_0_0_0_1px_var(--border-strong),var(--glass-rim)]'
-                : system
-                  ? 'text-[var(--text-muted)]'
-                  : 'text-[var(--text-subtle)]'
-            }`}
-          >
-            <Icon size={system ? 16 : 15} strokeWidth={2} aria-hidden="true" />
-            {system ? (
-              <span
-                role="tooltip"
-                className="nav-tip pointer-events-none absolute left-0 bottom-[calc(100%+8px)] flex h-8 items-center rounded-full border border-[var(--border)] bg-[var(--surface-raised)] px-3 text-[13px] font-medium whitespace-nowrap text-[var(--text)] shadow-[var(--shadow-raised)]"
-              >
-                {themeTip(id, theme, systemDark)}
-              </span>
-            ) : (
-              label
-            )}
-          </button>
-        )
-      })}
-    </span>
+  return (
+    <SegmentedChoice<Thema>
+      label="Weergave"
+      options={themas.map(({ id, label, Icon }) => ({
+        id,
+        label,
+        icon: <Icon size={16} strokeWidth={2} aria-hidden="true" />,
+      }))}
+      value={theme}
+      onChange={choose}
+      description={system ? (theme === 'systeem' ? volgt[0].toUpperCase() + volgt.slice(1) : '') : undefined}
+    />
   )
 }

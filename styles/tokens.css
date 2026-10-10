@@ -26,6 +26,8 @@
   --text:#1c1e18;
   --text-muted:#6f7266;
   --text-subtle:#9a9c8f;
+  /* Het dekkende plaatje onder de gekozen optie van SegmentedChoice. */
+  --segment-plaat:var(--surface-raised);
 
   /* The one action colour. */
   --accent:#6b7f4b;
@@ -286,6 +288,7 @@
     --text:#eff1ea;
     --text-muted:#9aa091;
     --text-subtle:#767c6d;
+  --segment-plaat:color-mix(in oklab,var(--text) 14%,var(--surface-raised));
 
     --accent:#9cb573;
     --accent-hover:#b3ca8b;
@@ -370,6 +373,7 @@
   --text:#eff1ea;
   --text-muted:#9aa091;
   --text-subtle:#767c6d;
+  --segment-plaat:color-mix(in oklab,var(--text) 14%,var(--surface-raised));
 
   --accent:#9cb573;
   --accent-hover:#b3ca8b;
