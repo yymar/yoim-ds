@@ -59,3 +59,47 @@ export function subscribeDark(onChange: () => void) {
   query.addEventListener('change', onChange)
   return () => query.removeEventListener('change', onChange)
 }
+
+/** Het bericht dat `chooseTheme` zelf stuurt, want `storage` vuurt alleen in andere tabbladen. */
+const GEKOZEN = 'yoim-thema'
+
+function applyTheme(theme: string | null) {
+  if (theme === 'licht' || theme === 'donker') document.documentElement.setAttribute('data-thema', theme)
+  else document.documentElement.removeAttribute('data-thema')
+}
+
+/**
+ * De keuze als store voor `useSyncExternalStore`, samen met `chosenTheme`:
+ * `useSyncExternalStore(subscribeTheme, chosenTheme, () => 'systeem')`.
+ * Seint bij een keuze in dit tabblad en volgt een keuze in een ander.
+ */
+export function subscribeTheme(onChange: () => void) {
+  const elders = (e: StorageEvent) => {
+    // Zonder key is de hele opslag gewist, en dus ook de keuze.
+    if (e.key !== null && e.key !== THEMA_SLEUTEL) return
+    applyTheme(e.key === null ? null : e.newValue)
+    onChange()
+  }
+  window.addEventListener('storage', elders)
+  window.addEventListener(GEKOZEN, onChange)
+  return () => {
+    window.removeEventListener('storage', elders)
+    window.removeEventListener(GEKOZEN, onChange)
+  }
+}
+
+/** Wat iemand koos; zonder keuze volgt de app het systeem. */
+export function chosenTheme(): Thema {
+  const chosen = document.documentElement.getAttribute('data-thema')
+  return chosen === 'licht' || chosen === 'donker' ? chosen : 'systeem'
+}
+
+/** Zet de keuze op `<html>` en in `localStorage`; Systeem haalt hem weg. */
+export function chooseTheme(next: Thema) {
+  try {
+    if (next === 'systeem') localStorage.removeItem(THEMA_SLEUTEL)
+    else localStorage.setItem(THEMA_SLEUTEL, next)
+  } catch {}
+  applyTheme(next)
+  window.dispatchEvent(new Event(GEKOZEN))
+}

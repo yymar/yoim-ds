@@ -19,6 +19,14 @@
   groter. Het gekozen segment krijgt een haarlijn in `--border-strong` naast
   zijn glasrand, zodat het ook op een heel licht vlak te zien blijft (in het
   lichte palet van mone.yymar viel wit glas op wit glas weg).
+- Nieuw in `@yoim/ds/thema`: `chooseTheme`, `chosenTheme` en `subscribeTheme`,
+  de themakeuze als store voor `useSyncExternalStore`. Stonden als kopie in
+  mone.yoim, de hub, home en mone.yymar. Een verschil met die kopie:
+  `subscribeTheme` volgt nu echt een keuze in een ander tabblad. De kopie
+  luisterde wel naar `storage`, maar las daarna `data-thema` van zijn eigen
+  `<html>`, dat niet veranderd was. Hij luistert niet meer naar
+  `prefers-color-scheme`: dat veranderde `chosenTheme` nooit. Wie het systeem
+  wil volgen, gebruikt `subscribeDark`.
 
 ## 0.5.2
 

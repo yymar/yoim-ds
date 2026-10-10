@@ -88,7 +88,9 @@ export default async function Login(props: PageProps<'/auth/login'>) {
   bijna, over; precies op het budget is binnen) en `heatLevel` (terciles van
   de dagen met uitgaven).
 - `thema.ts`: `SURFACE`, `THEMA_SCRIPT`, `THEMA_SLEUTEL`, `themeTip`,
-  `nextTheme`, `subscribeDark`.
+  `nextTheme`, `subscribeDark`, en de keuze als store: `chooseTheme`,
+  `chosenTheme` en `subscribeTheme`, voor
+  `useSyncExternalStore(subscribeTheme, chosenTheme, () => 'systeem')`.
 - `week.ts`: de week van dit huishouden, zaterdag tot en met vrijdag. Zit hier
   en niet in een app omdat weekl.yoim.nl en de hub op yoim.nl allebei dezelfde
   week moeten tonen; twee kopieen lopen uit elkaar.
