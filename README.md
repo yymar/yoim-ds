@@ -7,7 +7,7 @@ build: de app compileert de TypeScript en CSS zelf.
 ## Gebruiken in een app
 
 ```bash
-npm i github:yymar/yoim-ds#v0.5.5
+npm i github:yymar/yoim-ds#v0.5.6
 ```
 
 ```ts
@@ -80,6 +80,15 @@ export default async function Login(props: PageProps<'/auth/login'>) {
   `--bp-breed` en met één route), bijvoorbeeld
   `--onder-ruimte: calc(var(--nav-onder) + 2.5rem)`. Voor iets anders dat moet
   wijken: `:root:has(.navigation[data-enkel])`.
+  Met twee of meer routes klapt de capsule op de telefoon in tot iconen zodra
+  de pagina voorbij 40px gescrold is, en weer uit onder 12px. De `<nav>` krijgt
+  dan `data-ingeklapt` en `<html>` krijgt `data-nav-ingeklapt`; op de telefoon
+  is `--nav-nu` dan `--nav-h-klein` en `--nav-zak` (anders 0) wat de bovenkant
+  van de capsule zakt. Chrome die op de capsule staat, zakt mee met
+  `transform: translateY(var(--nav-zak))`. `--nav-onder` blijft de uitgeklapte
+  maat, zodat de inhoud tijdens het scrollen niet verspringt. Uitzetten:
+  `collapseOnScroll={false}`. Voor een kop die op hetzelfde moment wisselt:
+  `useScrolled()` uit `components/navigation`, met dezelfde luisteraar.
 - `auth/`: `proxy`, `createServerSupabase`, `createBrowserSupabase`,
   `cookieOptions`, `inlog-fout`, `moment`.
 - `components/`: `InlogPagina`, `InlogTray`, `GoogleKnop`, `Klok`, `Merk`,
@@ -111,14 +120,16 @@ export default async function Login(props: PageProps<'/auth/login'>) {
   `media="not all"`; bij Systeem komt de oorspronkelijke `media` terug
   (`themeColorMedia`). Een enkele `themeColor` zonder `media`, zoals op het
   inlogscherm dat het uur volgt, blijft zoals hij is.
+- `scroll.ts`: de stand waarop de capsule inklapt, `nextScrolled` (de
+  drempels als pure functie) en de store `subscribeScrolled`/`isScrolled`.
 - `week.ts`: de week van dit huishouden, zaterdag tot en met vrijdag. Zit hier
   en niet in een app omdat weekl.yoim.nl en de hub op yoim.nl allebei dezelfde
   week moeten tonen; twee kopieen lopen uit elkaar.
 
 ## Tweaken en uitrollen
 
-Wijzig hier, `npm test`, commit, tag (`git tag v0.5.5 && git push --tags`, pas als Yoran het zegt).
-Per app: `npm i github:yymar/yoim-ds#v0.5.5`, build, deploy. Een app die je
+Wijzig hier, `npm test`, commit, tag (`git tag v0.5.6 && git push --tags`, pas als Yoran het zegt).
+Per app: `npm i github:yymar/yoim-ds#v0.5.6`, build, deploy. Een app die je
 niet bijwerkt blijft op zijn versie.
 
 Ontwerpwerk gebeurt in Claude Design op de bestaande kit en landt hier als

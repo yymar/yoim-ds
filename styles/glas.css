@@ -337,6 +337,46 @@
     .navigation[data-enkel] {
       display: none;
     }
+
+    /* Bij scrollen klapt de capsule in tot iconen (`data-ingeklapt`, uit
+       mone.yoim). Breedte in plaats van left/right, zodat het inklappen te
+       animeren is en de capsule gecentreerd blijft. */
+    .navigation {
+      right: auto;
+      left: 50%;
+      width: calc(100% - 2rem);
+      transform: translateX(-50%);
+      contain: layout;
+      will-change: width;
+      transition:
+        width var(--dur-glas) var(--ease-glas),
+        max-width var(--dur-glas) var(--ease-glas);
+    }
+
+    /* De hoogte is de regel plus de 2x 0,25em ruimte voor onderstokken, want
+       Tailwind rekent met border-box. Met 1,5em (zoals in mone.yoim) werd de
+       labelregel 11px in plaats van 13,2 en de capsule lager dan --nav-h. */
+    .navigation .nav-label {
+      max-width: 7rem;
+      max-height: calc(var(--lh-nav) * 1em + 0.5em);
+      transition:
+        max-width var(--dur-glas) var(--ease-glas),
+        max-height var(--dur-glas) var(--ease-glas),
+        opacity var(--dur-fast) var(--ease);
+    }
+
+    /* --nav-b-klein is de maat voor drie routes; elke route erbij is 3,125rem. */
+    .navigation[data-ingeklapt] {
+      --klein-b: calc(var(--nav-b-klein) + (var(--n, 3) - 3) * 3.125rem);
+      width: var(--klein-b);
+      max-width: var(--klein-b);
+    }
+
+    .navigation[data-ingeklapt] .nav-label {
+      max-width: 0;
+      max-height: 0;
+      opacity: 0;
+    }
   }
 
   .nav-routes {
@@ -673,6 +713,17 @@
 :root:has(.navigation[data-enkel]) {
   --nav-onder: 0px;
   --nav-nu: 0px;
+}
+
+/* Ingeklapt is de capsule --nav-h-klein hoog en zakt zijn bovenkant
+   --nav-zak. Chrome die op de capsule staat, zakt mee met
+   `transform: translateY(var(--nav-zak))`. --nav-onder blijft staan, anders
+   verspringt de inhoud tijdens het scrollen. De waarde is --bp-breed. */
+@media (width < 745px) {
+  :root[data-nav-ingeklapt] {
+    --nav-nu: var(--nav-h-klein);
+    --nav-zak: calc(var(--nav-h) - var(--nav-h-klein));
+  }
 }
 
 @keyframes nav-draai {

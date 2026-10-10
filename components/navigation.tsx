@@ -2,9 +2,10 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { useEffect, useRef, useState, useSyncExternalStore } from 'react'
+import { useEffect, useLayoutEffect, useRef, useState, useSyncExternalStore } from 'react'
 import { Lock, Monitor, Moon, Sun } from 'lucide-react'
 
+import { isScrolled, subscribeScrolled } from '../scroll'
 import { DARK, nextTheme, subscribeDark, themeTip, type Thema } from '../thema'
 
 export type NavigationRoute = {
@@ -49,6 +50,17 @@ function useSystemDark() {
   return useSyncExternalStore(subscribeDark, () => window.matchMedia(DARK).matches, () => false)
 }
 
+const geen = () => () => {}
+
+/**
+ * Of de pagina van bovenaf weg is gescrold (voorbij 40px, terug onder 12px).
+ * Dezelfde stand en dezelfde scrollluisteraar als waarop de capsule inklapt,
+ * voor een app die er ook een kop aan hangt. Met `enabled={false}` altijd false.
+ */
+export function useScrolled(enabled = true) {
+  return useSyncExternalStore(enabled ? subscribeScrolled : geen, () => enabled && isScrolled(), () => false)
+}
+
 /**
  * De navigatie, in twee vormen die hetzelfde ding zijn. Op de telefoon een
  * zwevende glazen capsule onderaan met de routes. Vanaf --bp-breed twee
@@ -61,6 +73,11 @@ function useSystemDark() {
  * Met één route is er niets om tussen te wisselen: dan staat er op de telefoon
  * geen capsule onderaan, en op desktop links alleen het merk, als link naar die
  * route. De rechter capsule blijft.
+ *
+ * Met twee of meer routes klapt de capsule op de telefoon bij scrollen in tot
+ * iconen, en weer uit als je terug bent bij de top. Dan staat
+ * `data-nav-ingeklapt` op `<html>` en zakt `--nav-zak` wat erop staat mee
+ * (`glas.css`). `collapseOnScroll={false}` zet dat uit.
  */
 export function Navigation({
   routes,
@@ -73,6 +90,7 @@ export function Navigation({
   onTheme,
   onLock,
   onSignOut,
+  collapseOnScroll = true,
 }: ThemeProps & {
   routes: NavigationRoute[]
   active: string
@@ -83,6 +101,8 @@ export function Navigation({
   onLock?: () => void
   /** @deprecated Sinds 0.5.0 staat uitloggen op de profielpagina. */
   onSignOut?: () => void
+  /** Op de telefoon inklappen tot iconen bij scrollen. Standaard aan. */
+  collapseOnScroll?: boolean
 }) {
   const [open, setOpen] = useState(false)
   const [wijkt, setWijkt] = useState(false)
@@ -98,6 +118,7 @@ export function Navigation({
   const choose = onTheme as ((theme: Thema) => void) | undefined
   const signOutGiven = Boolean(onSignOut)
   const enkel = routes.length === 1
+  const ingeklapt = useScrolled(collapseOnScroll && routes.length > 1)
 
   if (routes.length === 0 || routes.length > 5) {
     console.warn(`Navigation is ontworpen voor 1 tot 5 routes, niet ${routes.length}.`)
@@ -110,6 +131,13 @@ export function Navigation({
   }, [signOutGiven])
 
   useEffect(() => () => clearTimeout(sluiten.current), [])
+
+  // Voor de paint, zodat chrome die aan --nav-zak hangt in hetzelfde frame zakt als de capsule.
+  useLayoutEffect(() => {
+    const html = document.documentElement
+    html.toggleAttribute('data-nav-ingeklapt', ingeklapt)
+    return () => html.removeAttribute('data-nav-ingeklapt')
+  }, [ingeklapt])
 
   useEffect(() => {
     if (!open) return
@@ -191,6 +219,7 @@ export function Navigation({
         aria-label="Pagina's"
         data-open={open || undefined}
         data-enkel={enkel || undefined}
+        data-ingeklapt={ingeklapt || undefined}
         className="navigation glas sheen"
         style={{ '--i': index, '--n': routes.length } as React.CSSProperties}
         onPointerDown={(e) => {

@@ -481,6 +481,9 @@
      --bp-breed en met één route, want dan staat er onderaan niets. Een app
      rekent zijn --onder-ruimte hiermee. */
   --nav-onder: calc(var(--onder-b) + var(--nav-h));
+  /* Hoeveel de bovenkant van de capsule zakt als hij bij scrollen inklapt:
+     --nav-h min --nav-h-klein op de telefoon, anders 0 (glas.css). */
+  --nav-zak: 0px;
   /* De ingeklapte capsule: drie items van 22px icoon plus 2x14px padding, en
      2x6px om de balk heen. Als vaste maat, want `width: auto` is niet te
      interpoleren en dan springt de balk in plaats van te krimpen. De padding

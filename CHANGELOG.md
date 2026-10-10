@@ -1,5 +1,74 @@
 # Changelog
 
+## 0.5.6
+
+- `Navigation` klapt op de telefoon zelf in bij scrollen, zoals mone.yoim en
+  weekl het elk zelf deden (overgenomen uit mone.yoim, dezelfde drempels,
+  maten en timing). Met twee of meer routes: voorbij 40px van de top klapt de
+  capsule onderaan in tot iconen (labels weg, capsule smaller), onder 12px
+  klapt hij weer uit. De hysterese houdt de glasanimatie rustig rond de lijn.
+  Breedte en labels lopen in `--dur-glas` met `--ease-glas`, de labels
+  vervagen in `--dur-fast`; met `prefers-reduced-motion` springt het. Een
+  passieve scrollluisteraar die per frame hooguit een keer `scrollY` leest,
+  gedeeld door iedereen die meeluistert. Uitzetten met
+  `collapseOnScroll={false}`.
+- De stand voor chrome die meebeweegt: de `<nav>` krijgt `data-ingeklapt` en
+  `<html>` krijgt `data-nav-ingeklapt`. Op de telefoon is `--nav-nu` dan
+  `--nav-h-klein` en `--nav-zak` het verschil met `--nav-h` (wat de bovenkant
+  van de capsule zakt). Nieuwe token `--nav-zak`, standaard 0; iets dat op de
+  capsule staat, zakt mee met `transform: translateY(var(--nav-zak))`.
+  `--nav-onder` blijft de uitgeklapte maat: de ruimte onder de inhoud, en die
+  mag tijdens het scrollen niet verspringen.
+- `useScrolled(enabled = true)` uit `components/navigation`: dezelfde stand en
+  dezelfde luisteraar, voor een kop die op hetzelfde moment wisselt. De
+  drempels als pure functie in `scroll.ts` (`nextScrolled`, `COLLAPSE_AFTER`,
+  `EXPAND_BELOW`), met tests.
+- Een bewuste afwijking van mone.yoim: het label is uitgeklapt
+  `calc(var(--lh-nav) * 1em + 0.5em)` hoog in plaats van `1.5em`. Door de
+  border-box van Tailwind en de 2x 0,25em ruimte voor onderstokken (0.5.4)
+  werd de labelregel in mone 11px in plaats van 13,2, en de capsule 61px in
+  plaats van `--nav-h`. Nu is hij weer `--nav-h` hoog, net als in energ.
+
+Let op bij het bijwerken:
+
+- mone.yoim: haal het eigen inklappen weg, anders doet het twee keer hetzelfde
+  en wint de app-CSS van het DS.
+  - `components/app-navigation.tsx`: de import van `useScrolled` uit
+    `@/components/use-scrolled`, `const collapsed = useScrolled()` en de
+    wrapper `<div data-collapsed={collapsed || undefined} className="contents">`
+    weg; `<Navigation>` staat dan direct in de return.
+  - `components/use-scrolled.ts`: verwijderen (alleen app-navigation gebruikte
+    hem).
+  - `app/globals.css`: het hele blok onder "Op de telefoon klapt de capsule bij
+    scrollen in tot iconen" weg, dus `@media (max-width: 744px)` met
+    `.navigation`, `.navigation .nav-label`, `[data-collapsed] .navigation`
+    (`--klein-b`) en `[data-collapsed] .navigation .nav-label`.
+  - De capsule wordt 2,2px hoger (zie boven); de bankmelding, de melding van de
+    gezamenlijke rekening en de toast rekenen al met `--nav-h` en staan dus
+    goed.
+- weekl: hetzelfde, en `.onderchrome` blijft gewoon meezakken.
+  - `components/navigatie.tsx`: de import van `useGescrold` uit
+    `@/lib/gescrold`, `const collapsed = useGescrold()` en de wrapper
+    `<div data-collapsed={collapsed || undefined} className="contents">` weg.
+  - `app/globals.css`: `:root { --nav-zak: 0px; }` met zijn comment weg (de
+    token komt nu uit het DS), en het hele blok `@media (max-width: 744px)`
+    onder "Op de telefoon klapt de capsule van Navigation bij scrollen in",
+    met `:root:has([data-collapsed] .navigation)` (`--nav-nu`, `--nav-zak`),
+    `.navigation`, `.navigation .nav-label`, `[data-collapsed] .navigation`
+    (`--klein-b`) en `[data-collapsed] .navigation .nav-label`. `.onderchrome`
+    met `transform: translateY(var(--nav-zak))` en zijn transitie blijft
+    staan, net als `--nav-nu: 0px` vanaf 745px.
+  - `lib/gescrold.ts` gebruiken ook de compacte kop (`components/scherm.tsx`,
+    `components/plannen.tsx`, `components/recepten/lijst.tsx`). Vervang daar
+    `useGescrold()` door `useScrolled()` uit `@yoim/ds/components/navigation`
+    (dezelfde 40 en 12px, en een luisteraar voor kop en capsule samen) en
+    verwijder `lib/gescrold.ts`.
+- energ en mone.yymar: niets, alleen de versie ophogen. Ze hebben drie en vier
+  routes en klappen vanaf nu vanzelf in.
+- home: niets, een route en dus geen capsule onderaan.
+- De hub (`../yoim`) gebruikt `Navigation` niet en staat nog op v0.4.2: daar
+  verandert niets.
+
 ## 0.5.5
 
 - De balk boven de app (`meta[name=theme-color]`) volgt nu het gekozen thema.

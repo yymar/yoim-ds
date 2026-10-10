@@ -1,6 +1,6 @@
 {
   "name": "@yoim/ds",
-  "version": "0.5.5",
+  "version": "0.5.6",
   "private": true,
   "description": "Het design system en de inloglaag van de yoim-apps: tokens, glas, auth, inlogscherm.",
   "exports": {
@@ -9,7 +9,8 @@
     "./components/*": "./components/*.tsx",
     "./thema": "./thema.ts",
     "./week": "./week.ts",
-    "./money": "./money.ts"
+    "./money": "./money.ts",
+    "./scroll": "./scroll.ts"
   },
   "scripts": {
     "test": "vitest run",
