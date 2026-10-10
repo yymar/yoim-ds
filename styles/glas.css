@@ -325,8 +325,15 @@
     display: none;
   }
 
-  /* Met één route is er niets om te kiezen: op de telefoon geen capsule. */
+  /* Op de telefoon niet breder dan de kolom: tussen 600 en 744px (een iPad
+     mini staand) stond hij anders 712px breed onder een kolom van 512. Met één
+     route is er niets om te kiezen: dan geen capsule. */
   @media (width < 745px) {
+    .navigation {
+      max-width: var(--content-max);
+      margin-inline: auto;
+    }
+
     .navigation[data-enkel] {
       display: none;
     }
@@ -560,6 +567,13 @@
       color: var(--text);
     }
 
+    /* De avatar op zijn eigen pagina (Profiel, Instellingen) staat er net zo
+       bij als een actieve route. */
+    .nav-knop[aria-current="page"] {
+      background: var(--glass-tint-strong);
+      box-shadow: var(--glass-rim);
+    }
+
     .nav-item[aria-current="page"] svg {
       color: var(--accent);
       stroke-width: 2.2;
@@ -710,7 +724,8 @@
     }
 
     /* De actieve route houdt zijn vulling, ook onder de muis. */
-    .navigation .nav-item[aria-current="page"]:hover {
+    .navigation .nav-item[aria-current="page"]:hover,
+    .nav-rechts .nav-knop[aria-current="page"]:hover {
       background: var(--glass-tint-strong);
     }
   }
@@ -863,6 +878,15 @@ body {
 details.kaart:not([open]) > summary:focus-visible {
   border-bottom-left-radius: calc(var(--radius-lg) - 1px);
   border-bottom-right-radius: calc(var(--radius-lg) - 1px);
+}
+
+/* Een avatar als link, in de paginakop op de telefoon. Het tikdoel is groter
+   dan de ronde avatar, en zonder ronding tekende de ring een vierkant om een
+   cirkel. In een laag, zodat een `rounded-*` in de app nog wint. */
+@layer components {
+  .avatar-link {
+    border-radius: var(--radius-full);
+  }
 }
 
 /* Tekstvelden niet. Een ring om een veld tekent een harde rechthoek, en de

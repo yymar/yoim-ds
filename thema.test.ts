@@ -7,9 +7,13 @@ import {
   nextTheme,
   subscribeDark,
   subscribeTheme,
+  THEMA_SCRIPT,
   THEMA_SLEUTEL,
+  themeColorMedia,
   themeTip,
 } from './thema'
+
+const LICHT = '(prefers-color-scheme: light)'
 
 describe('themeTip', () => {
   it('noemt licht en donker bij naam', () => {
@@ -45,6 +49,75 @@ describe('nextTheme', () => {
   })
 })
 
+describe('themeColorMedia', () => {
+  it('laat bij een keuze alleen de meta van dat thema gelden', () => {
+    expect(themeColorMedia(DARK, 'donker')).toBe('all')
+    expect(themeColorMedia(LICHT, 'donker')).toBe('not all')
+    expect(themeColorMedia(DARK, 'licht')).toBe('not all')
+    expect(themeColorMedia(LICHT, 'licht')).toBe('all')
+  })
+
+  it('zet bij Systeem de oorspronkelijke media terug', () => {
+    expect(themeColorMedia(DARK, 'systeem')).toBe(DARK)
+    expect(themeColorMedia(LICHT, 'systeem')).toBe(LICHT)
+  })
+})
+
+/** Een meta als map van attributen, zoals Next hem in de head zet. */
+function themeColorMeta(media: string) {
+  const attributen = new Map([['media', media]])
+  return {
+    attributen,
+    getAttribute: (naam: string) => attributen.get(naam) ?? null,
+    setAttribute: (naam: string, waarde: string) => attributen.set(naam, waarde),
+  }
+}
+
+describe('THEMA_SCRIPT', () => {
+  afterEach(() => {
+    vi.unstubAllGlobals()
+  })
+
+  function draai(opgeslagen: string | null) {
+    const dataset: Record<string, string> = {}
+    const metas = [themeColorMeta(LICHT), themeColorMeta(DARK)]
+    const querySelectorAll = vi.fn(() => metas)
+    vi.stubGlobal('localStorage', { getItem: () => opgeslagen })
+    vi.stubGlobal('document', { documentElement: { dataset }, querySelectorAll })
+    new Function(THEMA_SCRIPT)()
+    return { dataset, metas, querySelectorAll }
+  }
+
+  it('zet een keuze op html en laat de balk die kleur volgen', () => {
+    const { dataset, metas, querySelectorAll } = draai('donker')
+    expect(dataset.thema).toBe('donker')
+    expect(querySelectorAll).toHaveBeenCalledWith('meta[name=theme-color][media]')
+    expect(metas.map((m) => m.getAttribute('media'))).toEqual(['not all', 'all'])
+    expect(metas.map((m) => m.getAttribute('data-media'))).toEqual([LICHT, DARK])
+  })
+
+  it('doet zonder keuze niets', () => {
+    const { dataset, metas } = draai(null)
+    expect(dataset.thema).toBeUndefined()
+    expect(metas.map((m) => m.getAttribute('media'))).toEqual([LICHT, DARK])
+  })
+
+  it('negeert een onbekende waarde', () => {
+    const { dataset, metas } = draai('paars')
+    expect(dataset.thema).toBeUndefined()
+    expect(metas[0].getAttribute('media')).toBe(LICHT)
+  })
+
+  it('breekt de pagina niet als de opslag niet mag', () => {
+    vi.stubGlobal('localStorage', {
+      getItem: () => {
+        throw new Error('SecurityError')
+      },
+    })
+    expect(() => new Function(THEMA_SCRIPT)()).not.toThrow()
+  })
+})
+
 describe('subscribeDark', () => {
   it('volgt een wissel van prefers-color-scheme tot je afmeldt', () => {
     const query = new EventTarget()
@@ -68,11 +141,13 @@ describe('de themakeuze', () => {
   let html: Map<string, string>
   let opslag: Map<string, string>
   let venster: EventTarget
+  let metas: ReturnType<typeof themeColorMeta>[]
 
   beforeEach(() => {
     html = new Map()
     opslag = new Map()
     venster = new EventTarget()
+    metas = [themeColorMeta(LICHT), themeColorMeta(DARK)]
     vi.stubGlobal('window', venster)
     vi.stubGlobal('document', {
       documentElement: {
@@ -80,6 +155,7 @@ describe('de themakeuze', () => {
         setAttribute: (naam: string, waarde: string) => html.set(naam, waarde),
         removeAttribute: (naam: string) => html.delete(naam),
       },
+      querySelectorAll: () => metas,
     })
     vi.stubGlobal('localStorage', {
       setItem: (sleutel: string, waarde: string) => opslag.set(sleutel, waarde),
@@ -153,6 +229,26 @@ describe('de themakeuze', () => {
     elders(null, null)
     expect(chosenTheme()).toBe('systeem')
     expect(onChange).toHaveBeenCalledTimes(3)
+    stop()
+  })
+
+  const media = () => metas.map((m) => m.getAttribute('media'))
+
+  it('laat de balk de keuze volgen en bij Systeem weer het apparaat', () => {
+    chooseTheme('licht')
+    expect(media()).toEqual(['all', 'not all'])
+    chooseTheme('donker')
+    expect(media()).toEqual(['not all', 'all'])
+    chooseTheme('systeem')
+    expect(media()).toEqual([LICHT, DARK])
+  })
+
+  it('laat de balk een keuze in een ander tabblad volgen', () => {
+    const stop = subscribeTheme(() => {})
+    elders(THEMA_SLEUTEL, 'donker')
+    expect(media()).toEqual(['not all', 'all'])
+    elders(null, null)
+    expect(media()).toEqual([LICHT, DARK])
     stop()
   })
 

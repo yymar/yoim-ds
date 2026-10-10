@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 import { useEffect, useRef, useState, useSyncExternalStore } from 'react'
 import { Lock, Monitor, Moon, Sun } from 'lucide-react'
 
@@ -22,7 +23,7 @@ export type NavigationAccount = {
   initial: string
   /** Een CSS-kleur, bijvoorbeeld `var(--member-yoran)`. */
   color: string
-  /** Waar de avatar heen gaat: Instellingen, of in mone Profiel. */
+  /** Waar de avatar heen gaat: Instellingen, of in mone Profiel. Sta je daar, dan is de avatar actief. */
   href: string
   /** Wat daar staat, voor de tooltip en de schermlezer. Standaard "Instellingen". */
   hrefLabel?: string
@@ -92,6 +93,7 @@ export function Navigation({
   const binnen = useRef(false)
   const aanwijzer = useRef('')
   const systemDark = useSystemDark()
+  const pathname = usePathname()
   // Zonder `system` komen hier alleen licht en donker langs.
   const choose = onTheme as ((theme: Thema) => void) | undefined
   const signOutGiven = Boolean(onSignOut)
@@ -180,6 +182,7 @@ export function Navigation({
   const volgende = theme ? nextTheme(theme, Boolean(system)) : undefined
   const ThemaIcoon = THEMAS.find(({ id }) => id === theme)?.Icon
   const accountLabel = account?.hrefLabel ?? 'Instellingen'
+  const accountHier = account ? pathname === account.href : false
 
   return (
     <>
@@ -306,7 +309,12 @@ export function Navigation({
           ) : null}
 
           {account ? (
-            <Link href={account.href} aria-label={`${accountLabel}, ${account.name}`} className="nav-knop zweeftint">
+            <Link
+              href={account.href}
+              aria-label={`${accountLabel}, ${account.name}`}
+              aria-current={accountHier ? 'page' : undefined}
+              className="nav-knop zweeftint"
+            >
               <span aria-hidden="true" className="nav-avatar" style={{ background: account.color }}>
                 {account.initial}
               </span>

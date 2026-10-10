@@ -1,5 +1,52 @@
 # Changelog
 
+## 0.5.5
+
+- De balk boven de app (`meta[name=theme-color]`) volgt nu het gekozen thema.
+  Koos iemand Donker op een lichte telefoon, dan bleef de statusbalk licht,
+  want de twee metas uit de root-layout volgden alleen `prefers-color-scheme`.
+  `THEMA_SCRIPT` (voor de eerste verf) en `chooseTheme`, ook bij een keuze in
+  een ander tabblad via `subscribeTheme`, zetten de `media` van elke
+  `meta[name=theme-color][media]`: `all` voor de meta van het gekozen thema,
+  `not all` voor de andere. Systeem zet de oorspronkelijke `media` terug (die
+  staat in `data-media`). De kleur zelf blijft staan: React herkent een meta
+  bij het hydrateren aan zijn `content`, en een andere `content` gaf een
+  tweede meta. Daardoor werkt het ook met eigen kleuren, zoals die van
+  mone.yymar. Een meta zonder `media` (het inlogscherm, dat het uur volgt)
+  blijft met rust. Nieuw: `themeColorMedia`, de regel als pure functie.
+- Nieuwe klasse `.avatar-link` (`border-radius: var(--radius-full)`): een
+  avatar als link in de paginakop op de telefoon. Het tikdoel (44 of 48px) is
+  vierkant en groter dan de avatar, dus de focusring tekende een vierkant om
+  een cirkel. Met de klasse is de ring rond.
+- `Navigation`: de avatar rechtsboven krijgt `aria-current="page"` en dezelfde
+  vulling en glasrand als een actieve route als je op zijn pagina staat
+  (`usePathname()` is gelijk aan `account.href`), zodat je ziet dat je op
+  Profiel of Instellingen bent.
+- `Navigation`: de capsule onderaan op de telefoon is niet breder dan
+  `--content-max` en staat in het midden. Tussen 600 en 744px (een iPad mini
+  staand) was hij 712px breed onder een kolom van 512.
+
+Let op bij het bijwerken (niet breaking, wel per app):
+
+- theme-color: niets, zolang de root-layout twee `themeColor`s met `media`
+  zet en `THEMA_SCRIPT` in de `<head>` heeft. Dat doen ze alle zes (de hub,
+  weekl, energ, mone.yoim, home en mone.yymar). Een app met één vaste
+  `themeColor` zonder `media` krijgt dit niet; geef hem dan de twee uit
+  `SURFACE`.
+- `.avatar-link` op de link om de avatar in de paginakop: de hub
+  (`app/(app)/page.tsx`), home (`app/(app)/page.tsx`), energ
+  (`components/page-title.tsx`) en mone.yoim (`PageHead` in
+  `components/overview.tsx`). weekl (`components/account.tsx`) rondt zijn
+  trigger al af met `rounded-[var(--radius-capsule)]` en mone.yymar heeft
+  geen avatar in de kop.
+- De smallere capsule onderaan werkt vanzelf in de hub, home, energ en
+  mone.yymar. weekl en mone.yoim zetten in `app/globals.css` (de capsule die
+  bij scrollen inklapt) zelf `max-width: 100vw` op `.navigation`, en die regel
+  wint van het DS: maak er `max-width: var(--content-max)` van. `width:
+  calc(100% - 2rem)` en de ingeklapte `max-width: var(--klein-b)` blijven.
+  De `.onderchrome` van weekl heeft die `max-width` al en blijft dus even breed
+  als de capsule.
+
 ## 0.5.4
 
 - `Navigation`: op desktop knipte de actieve route de onderkant van zijn label

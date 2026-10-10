@@ -7,7 +7,7 @@ build: de app compileert de TypeScript en CSS zelf.
 ## Gebruiken in een app
 
 ```bash
-npm i github:yymar/yoim-ds#v0.5.4
+npm i github:yymar/yoim-ds#v0.5.5
 ```
 
 ```ts
@@ -65,7 +65,8 @@ export default async function Login(props: PageProps<'/auth/login'>) {
   glas-tokens, `color-scheme` per thema, de Tailwind `@theme`, de utility
   `.veldtekst` voor invoervelden, en de varianten `breed:` en `plannen:`.
 - `styles/glas.css`: `.glas`, `.glas-dun`, `.glas-dik`, `.sheen`, `.kaart`,
-  `.rij`, `.kop`, `.groepkop`, `.schermkolom`, `.vastekop`, `.postertray`, `.overlay`, en de
+  `.rij`, `.kop`, `.groepkop`, `.schermkolom`, `.vastekop`, `.postertray`, `.overlay`,
+  `.avatar-link` (een ronde focusring om een avatar als link), en de
   basisregels voor body, focus en selectie, en de scrollbalken in het thema
   (`.scroll-hoeken` voor een scrollcontainer tegen afgeronde hoeken). Ook de
   vormen van `Navigation` (`.navigation`, `.nav-rechts`, `.nav-*`): op de
@@ -93,14 +94,31 @@ export default async function Login(props: PageProps<'/auth/login'>) {
   `nextTheme`, `subscribeDark`, en de keuze als store: `chooseTheme`,
   `chosenTheme` en `subscribeTheme`, voor
   `useSyncExternalStore(subscribeTheme, chosenTheme, () => 'systeem')`.
+  De balk boven de app (`theme-color`) volgt de keuze, niet alleen het
+  apparaat. Daarvoor zet de app in zijn root-layout twee kleuren, een per
+  `prefers-color-scheme`, en `THEMA_SCRIPT` in de `<head>`:
+
+  ```ts
+  export const viewport: Viewport = {
+    themeColor: [
+      { media: '(prefers-color-scheme: light)', color: SURFACE.licht },
+      { media: '(prefers-color-scheme: dark)', color: SURFACE.donker },
+    ],
+  }
+  ```
+
+  Bij een keuze krijgt de meta van dat thema `media="all"` en de andere
+  `media="not all"`; bij Systeem komt de oorspronkelijke `media` terug
+  (`themeColorMedia`). Een enkele `themeColor` zonder `media`, zoals op het
+  inlogscherm dat het uur volgt, blijft zoals hij is.
 - `week.ts`: de week van dit huishouden, zaterdag tot en met vrijdag. Zit hier
   en niet in een app omdat weekl.yoim.nl en de hub op yoim.nl allebei dezelfde
   week moeten tonen; twee kopieen lopen uit elkaar.
 
 ## Tweaken en uitrollen
 
-Wijzig hier, `npm test`, commit, tag (`git tag v0.5.4 && git push --tags`, pas als Yoran het zegt).
-Per app: `npm i github:yymar/yoim-ds#v0.5.4`, build, deploy. Een app die je
+Wijzig hier, `npm test`, commit, tag (`git tag v0.5.5 && git push --tags`, pas als Yoran het zegt).
+Per app: `npm i github:yymar/yoim-ds#v0.5.5`, build, deploy. Een app die je
 niet bijwerkt blijft op zijn versie.
 
 Ontwerpwerk gebeurt in Claude Design op de bestaande kit en landt hier als

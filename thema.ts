@@ -23,11 +23,30 @@ export const SURFACE = {
 } as const
 
 /**
+ * De metas die de balk boven de app kleuren, één per `prefers-color-scheme`.
+ * Een enkele meta zonder `media` (het inlogscherm, dat het uur volgt) blijft
+ * zoals hij is.
+ */
+const THEME_COLOR = 'meta[name=theme-color][media]'
+
+/**
+ * De `media` van zo'n meta bij een keuze. Licht of donker: de meta van dat
+ * thema geldt altijd (`all`), de andere nooit (`not all`). De kleur blijft
+ * staan, want React herkent een meta bij het hydrateren aan zijn `content`.
+ * Systeem: de oorspronkelijke `media` terug.
+ */
+export function themeColorMedia(original: string, theme: Thema): string {
+  if (theme === 'systeem') return original
+  return /dark/.test(original) === (theme === 'donker') ? 'all' : 'not all'
+}
+
+/**
  * Dit draait als eerste in de `<head>`, vóór de eerste verf. Zonder dit staat
  * de app een frame lang in het systeemthema en flitst hij om zodra React
- * wakker wordt.
+ * wakker wordt. Met een keuze zet het ook de balk boven de app goed, zoals
+ * `themeColorMedia` (de metas staan in de HTML van Next vóór dit script).
  */
-export const THEMA_SCRIPT = `try{var t=localStorage.getItem(${JSON.stringify(THEMA_SLEUTEL)});if(t==='licht'||t==='donker'){document.documentElement.dataset.thema=t}}catch(e){}`
+export const THEMA_SCRIPT = `try{var t=localStorage.getItem(${JSON.stringify(THEMA_SLEUTEL)});if(t==='licht'||t==='donker'){document.documentElement.dataset.thema=t;document.querySelectorAll(${JSON.stringify(THEME_COLOR)}).forEach(function(m){var o=m.getAttribute('media')||'';m.setAttribute('data-media',o);m.setAttribute('media',/dark/.test(o)===(t==='donker')?'all':'not all')})}}catch(e){}`
 
 /**
  * De tooltip bij een knop van Weergave; bij een gekozen Systeem ook wat het nu
@@ -64,8 +83,14 @@ export function subscribeDark(onChange: () => void) {
 const GEKOZEN = 'yoim-thema'
 
 function applyTheme(theme: string | null) {
-  if (theme === 'licht' || theme === 'donker') document.documentElement.setAttribute('data-thema', theme)
-  else document.documentElement.removeAttribute('data-thema')
+  const chosen: Thema = theme === 'licht' || theme === 'donker' ? theme : 'systeem'
+  if (chosen === 'systeem') document.documentElement.removeAttribute('data-thema')
+  else document.documentElement.setAttribute('data-thema', chosen)
+  document.querySelectorAll(THEME_COLOR).forEach((meta) => {
+    const original = meta.getAttribute('data-media') ?? meta.getAttribute('media') ?? ''
+    meta.setAttribute('data-media', original)
+    meta.setAttribute('media', themeColorMedia(original, chosen))
+  })
 }
 
 /**
