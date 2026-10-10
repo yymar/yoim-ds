@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 0.5.3
 
 - `Navigation` met één of twee routes. Geen waarschuwing meer in de console,
   alleen nog bij 0 of meer dan 5. Met twee routes staat de capsule onderaan er
