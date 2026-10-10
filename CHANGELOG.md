@@ -1,5 +1,19 @@
 # Changelog
 
+## 0.5.4
+
+- `Navigation`: op desktop knipte de actieve route de onderkant van zijn label
+  af, zoals de staart van de g in "Vandaag". Het label klapt uit binnen een
+  span met `overflow: hidden`, en vanaf `--bp-breed` heeft een item
+  `line-height: 1`: de regel is dan precies zo hoog als de letter groot is, en
+  onderstokken (g, j, p, y) en accenten vallen erbuiten. Het label en zijn span
+  krijgen nu boven en onder `0.25em` padding met een even grote negatieve
+  margin. Wat geknipt wordt is daardoor hoger, de regel en de capsule niet:
+  hoogte en breedte blijven gelijk, dicht en open, op desktop en in de capsule
+  onderaan op de telefoon.
+
+Let op bij het bijwerken: niets, alleen de versie ophogen.
+
 ## 0.5.3
 
 - `Navigation` met één of twee routes. Geen waarschuwing meer in de console,

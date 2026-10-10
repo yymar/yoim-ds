@@ -392,6 +392,14 @@
     stroke-width: 2.4;
   }
 
+  /* Wat geknipt wordt, krijgt boven en onder ruimte voor onderstokken en accenten
+     (de g van Vandaag), zonder dat de regel hoger wordt. */
+  .nav-label,
+  .nav-label > span {
+    padding-block: 0.25em;
+    margin-block: -0.25em;
+  }
+
   .nav-label {
     max-width: 100%;
     overflow: hidden;

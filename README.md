@@ -7,7 +7,7 @@ build: de app compileert de TypeScript en CSS zelf.
 ## Gebruiken in een app
 
 ```bash
-npm i github:yymar/yoim-ds#v0.5.3
+npm i github:yymar/yoim-ds#v0.5.4
 ```
 
 ```ts
@@ -99,8 +99,8 @@ export default async function Login(props: PageProps<'/auth/login'>) {
 
 ## Tweaken en uitrollen
 
-Wijzig hier, `npm test`, commit, tag (`git tag v0.5.3 && git push --tags`, pas als Yoran het zegt).
-Per app: `npm i github:yymar/yoim-ds#v0.5.3`, build, deploy. Een app die je
+Wijzig hier, `npm test`, commit, tag (`git tag v0.5.4 && git push --tags`, pas als Yoran het zegt).
+Per app: `npm i github:yymar/yoim-ds#v0.5.4`, build, deploy. Een app die je
 niet bijwerkt blijft op zijn versie.
 
 Ontwerpwerk gebeurt in Claude Design op de bestaande kit en landt hier als
