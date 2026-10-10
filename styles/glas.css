@@ -203,6 +203,17 @@
   padding-bottom: calc(var(--onder-ruimte) + env(safe-area-inset-bottom));
 }
 
+/* Vanaf --bp-breed hangen de capsules van Navigation bovenin, dus begint de
+   kolom eronder. Alleen als er een Navigation is: het inlogscherm, een
+   foutscherm of een app met een eigen kop houdt zijn 1rem. `:where` houdt de
+   specificiteit gelijk aan die van `.schermkolom`, zodat een regel in de app
+   die later komt nog steeds wint. De waarde is --bp-breed. */
+@media (min-width: 745px) {
+  :where(:root:has(.navigation)) .schermkolom {
+    padding-top: var(--nav-boven);
+  }
+}
+
 /* De ingeklapte balk bovenaan, over de volle breedte. */
 .vastekop {
   position: fixed;

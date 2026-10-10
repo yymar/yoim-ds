@@ -70,7 +70,9 @@ export default async function Login(props: PageProps<'/auth/login'>) {
   (`.scroll-hoeken` voor een scrollcontainer tegen afgeronde hoeken). Ook de
   vormen van `Navigation` (`.navigation`, `.nav-rechts`, `.nav-*`): op de
   telefoon een capsule onderaan, vanaf `--bp-breed` twee capsules in de
-  bovenhoeken. Geef het eerste vlak daar `padding-top: var(--nav-boven)`.
+  bovenhoeken. Een `.schermkolom` begint daar vanzelf onder de capsules
+  (`padding-top: var(--nav-boven)` zodra er een `.navigation` op de pagina
+  staat); een eigen eerste vlak geef je die padding zelf.
   Met één route staat er op de telefoon geen capsule onderaan (de `<nav>` krijgt
   `data-enkel`) en op desktop links alleen het merk. Reken de ruimte onder de
   inhoud daarom met `--nav-onder`, wat de capsule onderaan inneemt (0 vanaf

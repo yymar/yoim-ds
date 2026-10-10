@@ -27,6 +27,37 @@
   `<html>`, dat niet veranderd was. Hij luistert niet meer naar
   `prefers-color-scheme`: dat veranderde `chosenTheme` nooit. Wie het systeem
   wil volgen, gebruikt `subscribeDark`.
+- `.schermkolom` begint vanaf `--bp-breed` zelf onder de capsules
+  (`padding-top: var(--nav-boven)`), maar alleen als er een `Navigation` op de
+  pagina staat. Het inlogscherm, een foutscherm en energ met zijn eigen kop
+  houden hun 1rem. De regel heeft de specificiteit van `.schermkolom`, dus een
+  regel in de app die later komt wint nog steeds. `.schermkolom` blijft buiten
+  een laag: een Tailwind-utility wint er nog steeds niet van.
+
+Let op bij het bijwerken (niet breaking, wel per app):
+
+- Haal de eigen kopie van `subscribeTheme`, `chosenTheme` en `chooseTheme` weg
+  en importeer ze uit `@yoim/ds/thema`: mone.yoim (`components/theme.tsx`),
+  de hub (`components/theme.ts`), home (`components/theme.tsx`) en mone.yymar
+  (`components/nav.tsx`). weekl (`components/thema-schakelaar.tsx`) kan
+  `chooseTheme` ook gebruiken; het verschil is alleen dat die van het DS een
+  opslag die niet mag overleeft.
+- De regel `.schermkolom { padding-top: var(--nav-boven) }` vanaf `--bp-breed`
+  in `app/globals.css` kan weg in de hub en weekl. Laten staan breekt niets,
+  want hij zet dezelfde waarde.
+- `breed:pt-[var(--nav-boven)]` naast `.schermkolom` kan weg: home (`page.tsx`
+  en `profiel/page.tsx`) en de takken van energ. Die utility verloor altijd al
+  van `.schermkolom` en deed dus niets; nu staat de padding er wel.
+- mone.yoim en mone.yymar hoeven hiervoor niets te doen: hun schermen gebruiken
+  geen `.schermkolom` maar zetten `breed:pt-[var(--nav-boven)]` zelf, en de
+  `.schermkolom` op privacy, voorwaarden en het foutscherm staat zonder
+  `Navigation`. Er verdubbelt niets, want het is een `padding-top` en geen
+  optelling.
+- home kan de regel voor `.nav-thema` in `app/globals.css` weghalen, die staat
+  nu in het DS (alleen op touch).
+- Een app met één route rekent `--onder-ruimte` op de telefoon met
+  `--nav-onder` in plaats van een vaste maat, anders blijft er onderaan ruimte
+  voor een capsule die er niet is.
 
 ## 0.5.2
 
