@@ -66,8 +66,8 @@ Let op bij het bijwerken:
 - energ en mone.yymar: niets, alleen de versie ophogen. Ze hebben drie en vier
   routes en klappen vanaf nu vanzelf in.
 - home: niets, een route en dus geen capsule onderaan.
-- De hub (`../yoim`) gebruikt `Navigation` niet en staat nog op v0.4.2: daar
-  verandert niets.
+- De hub (`../yoim`): niets, alleen de versie ophogen. Hij heeft vier routes
+  en klapt vanaf nu vanzelf in.
 
 ## 0.5.5
 
