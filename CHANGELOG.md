@@ -1,5 +1,22 @@
 # Changelog
 
+## 0.5.2
+
+- Nieuw: `--botergoud-tekst`, botergoud als tekstkleur, voor het bedrag van de
+  vergoeding. In donker is het `--botergoud` (#d9b458); in licht
+  `color-mix(in oklab, var(--botergoud) 62%, #000)` (#644b0b). Het ruwe goud haalt
+  in licht maar 2,6:1 op de kaart. Contrast van de nieuwe tekstkleur: 8,2:1 op
+  `--surface-raised` (#fff), 7,6:1 op `--surface` en 7,0:1 op `--botergoud-soft`;
+  in donker 8,3:1 op `--surface-raised` en 9,3:1 op `--surface`.
+- Niet in dit pakket: `AutoPodium`, `LaadGeschiedenis`, `LaadKosten`,
+  `LaadMomenten` en het potje zijn componenten van `../energ.yoim`, niet van
+  `@yoim/ds`. Een breedtegrens op de laag van het podium en een prop `kop` voor
+  hun titel horen daar.
+
+Niet breaking, geen actie nodig: een app die `--botergoud-tekst` wil gebruiken
+vervangt `text-[var(--botergoud)]` voor een bedrag door
+`text-[var(--botergoud-tekst)]`.
+
 ## 0.5.1
 
 - Nieuw: `.groepkop`, de titel boven een kaart: 13px semibold in

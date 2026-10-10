@@ -42,6 +42,8 @@
   --olijf-diep:#4c5c35;
   --botergoud:#c2941f;
   --botergoud-soft:#f7ecd2;
+  /* Botergoud als tekst: het ruwe goud haalt op de kaart geen 4,5:1 (2,6:1). */
+  --botergoud-tekst:color-mix(in oklab,var(--botergoud) 62%,#000);
 
   /* Horizon planes for the login screen — one resolved colour per moment of the day, because
   mixing a support tone into --surface flips direction between the two themes. */
@@ -297,6 +299,7 @@
     --olijf-diep:#c3d6a1;
     --botergoud:#d9b458;
     --botergoud-soft:#2b2515;
+    --botergoud-tekst:var(--botergoud);
 
     --lucht-dageraad:#2e2618;
     --lucht-ochtend:#2a2519;
@@ -380,6 +383,7 @@
   --olijf-diep:#c3d6a1;
   --botergoud:#d9b458;
   --botergoud-soft:#2b2515;
+  --botergoud-tekst:var(--botergoud);
 
   --lucht-dageraad:#2e2618;
   --lucht-ochtend:#2a2519;
