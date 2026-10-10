@@ -148,10 +148,8 @@ export function Navigation({
     setOpen(true)
   }
 
-  const index = Math.max(
-    0,
-    routes.findIndex(({ id }) => id === active),
-  )
+  const found = routes.findIndex(({ id }) => id === active)
+  const index = Math.max(0, found)
   const eerste = routes[0]
   const aanraking = () => aanwijzer.current === 'touch' || aanwijzer.current === 'pen'
 
@@ -218,7 +216,7 @@ export function Navigation({
         <span aria-hidden="true" className="nav-scheiding" />
 
         <span className="nav-routes">
-          <span aria-hidden="true" className="nav-pill" />
+          {found >= 0 ? <span aria-hidden="true" className="nav-pill" /> : null}
           {routes.map(({ id, label, icon, count, href }) => {
             const inhoud = (
               <>

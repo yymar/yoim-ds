@@ -8,6 +8,8 @@
   in licht maar 2,6:1 op de kaart. Contrast van de nieuwe tekstkleur: 8,2:1 op
   `--surface-raised` (#fff), 7,6:1 op `--surface` en 7,0:1 op `--botergoud-soft`;
   in donker 8,3:1 op `--surface-raised` en 9,3:1 op `--surface`.
+- Fix: `Navigation` toont geen pil meer als `active` geen route is (zoals op
+  Instellingen). Hij stond dan op de eerste route, alsof die actief was.
 - Niet in dit pakket: `AutoPodium`, `LaadGeschiedenis`, `LaadKosten`,
   `LaadMomenten` en het potje zijn componenten van `../energ.yoim`, niet van
   `@yoim/ds`. Een breedtegrens op de laag van het podium en een prop `kop` voor
