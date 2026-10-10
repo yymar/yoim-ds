@@ -19,7 +19,7 @@ Design system en inloglaag van de yoim-apps. Zie `README.md` voor gebruik.
 - **Nooit iets met Info Support (Yorans werkgever) op GitHub.** Geen rechten vragen of goedkeuren
   die de organisaties `infosupport` of `InfoSupportNederland` raken (geen `gh auth refresh` of
   `gh auth login` met extra scopes, geen OAuth-schermen), en nooit hun repo's lezen of wijzigen.
-  Alleen `yymar/*`; pushen gaat via SSH.
+  Alleen `yymar/*`; op de MacBook gaat pushen via SSH, op de Windows-desktop via https met Yorans eigen Git-login; nooit een token of login met extra scopes.
 
 ## Schrijfstijl
 
