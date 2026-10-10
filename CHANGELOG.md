@@ -1,5 +1,20 @@
 # Changelog
 
+## Unreleased
+
+- `Navigation` met één of twee routes. Geen waarschuwing meer in de console,
+  alleen nog bij 0 of meer dan 5. Met twee routes staat de capsule onderaan er
+  gewoon. Met één route is er niets om tussen te wisselen: op de telefoon staat
+  er geen capsule onderaan, en op desktop staat links alleen het merk, als link
+  naar die route (met `aria-current` als je erop staat). Een pil met dezelfde
+  naam naast het merk zou twee keer hetzelfde zeggen. Een tik op het merk
+  navigeert dan ook op touch, want er zijn geen labels om uit te klappen. De
+  rechter capsule (thema, slot, avatar) blijft.
+- Nieuwe token `--nav-onder`: wat de capsule onderaan inneemt (`--onder-b` plus
+  `--nav-h`), 0 vanaf `--bp-breed` en 0 met één route. `--nav-nu` is met één
+  route ook 0. De `<nav>` krijgt dan `data-enkel`, dus iets anders dat moet
+  wijken hangt aan `:root:has(.navigation[data-enkel])`.
+
 ## 0.5.2
 
 - Nieuw: `--botergoud-tekst`, botergoud als tekstkleur, voor het bedrag van de

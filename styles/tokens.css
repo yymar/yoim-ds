@@ -477,6 +477,10 @@
   --onder-b: 0.75rem;
   --onder-ruimte: 13rem;
   --nav-nu: var(--nav-h);
+  /* Wat de capsule van Navigation onderaan inneemt, rand meegeteld. 0 vanaf
+     --bp-breed en met één route, want dan staat er onderaan niets. Een app
+     rekent zijn --onder-ruimte hiermee. */
+  --nav-onder: calc(var(--onder-b) + var(--nav-h));
   /* De ingeklapte capsule: drie items van 22px icoon plus 2x14px padding, en
      2x6px om de balk heen. Als vaste maat, want `width: auto` is niet te
      interpoleren en dan springt de balk in plaats van te krimpen. De padding
@@ -544,6 +548,12 @@
 
 @utility veldtekst {
   font-size: var(--text-veld);
+}
+
+@media (min-width: 745px) {
+  :root {
+    --nav-onder: 0px;
+  }
 }
 
 /* Op touch zijn de capsules 56px in plaats van 52. */

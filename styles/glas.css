@@ -314,6 +314,13 @@
     display: none;
   }
 
+  /* Met één route is er niets om te kiezen: op de telefoon geen capsule. */
+  @media (width < 745px) {
+    .navigation[data-enkel] {
+      display: none;
+    }
+  }
+
   .nav-routes {
     position: relative;
     display: flex;
@@ -626,6 +633,13 @@
       height: 32px;
     }
   }
+}
+
+/* Zonder capsule onderaan hoeft de inhoud er ook geen ruimte voor vrij te
+   houden. */
+:root:has(.navigation[data-enkel]) {
+  --nav-onder: 0px;
+  --nav-nu: 0px;
 }
 
 @keyframes nav-draai {

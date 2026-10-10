@@ -71,6 +71,12 @@ export default async function Login(props: PageProps<'/auth/login'>) {
   vormen van `Navigation` (`.navigation`, `.nav-rechts`, `.nav-*`): op de
   telefoon een capsule onderaan, vanaf `--bp-breed` twee capsules in de
   bovenhoeken. Geef het eerste vlak daar `padding-top: var(--nav-boven)`.
+  Met één route staat er op de telefoon geen capsule onderaan (de `<nav>` krijgt
+  `data-enkel`) en op desktop links alleen het merk. Reken de ruimte onder de
+  inhoud daarom met `--nav-onder`, wat de capsule onderaan inneemt (0 vanaf
+  `--bp-breed` en met één route), bijvoorbeeld
+  `--onder-ruimte: calc(var(--nav-onder) + 2.5rem)`. Voor iets anders dat moet
+  wijken: `:root:has(.navigation[data-enkel])`.
 - `auth/`: `proxy`, `createServerSupabase`, `createBrowserSupabase`,
   `cookieOptions`, `inlog-fout`, `moment`.
 - `components/`: `InlogPagina`, `InlogTray`, `GoogleKnop`, `Klok`, `Merk`,

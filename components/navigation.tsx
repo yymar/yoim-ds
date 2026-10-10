@@ -56,6 +56,10 @@ function useSystemDark() {
  *
  * Op de telefoon staat de rechter capsule er niet: de app zet dan een avatar
  * in zijn paginakop en Weergave (`ThemeChoice`) in zijn accountsheet.
+ *
+ * Met één route is er niets om tussen te wisselen: dan staat er op de telefoon
+ * geen capsule onderaan, en op desktop links alleen het merk, als link naar die
+ * route. De rechter capsule blijft.
  */
 export function Navigation({
   routes,
@@ -91,9 +95,10 @@ export function Navigation({
   // Zonder `system` komen hier alleen licht en donker langs.
   const choose = onTheme as ((theme: Thema) => void) | undefined
   const signOutGiven = Boolean(onSignOut)
+  const enkel = routes.length === 1
 
-  if (routes.length < 3 || routes.length > 5) {
-    console.warn(`Navigation is ontworpen voor 3 tot 5 routes, niet ${routes.length}.`)
+  if (routes.length === 0 || routes.length > 5) {
+    console.warn(`Navigation is ontworpen voor 1 tot 5 routes, niet ${routes.length}.`)
   }
 
   useEffect(() => {
@@ -157,11 +162,12 @@ export function Navigation({
   // is er geen hover, dus daar zet een tik de labels open of dicht.
   const merk = {
     className: 'nav-brand',
+    'aria-current': enkel && active === eerste.id ? ('page' as const) : undefined,
     onPointerEnter: (e: React.PointerEvent) => {
-      if (e.pointerType === 'mouse') openen()
+      if (e.pointerType === 'mouse' && !enkel) openen()
     },
     onClick: (e: React.MouseEvent) => {
-      if (aanraking()) {
+      if (aanraking() && !enkel) {
         e.preventDefault()
         setOpen((o) => !o)
       } else {
@@ -181,6 +187,7 @@ export function Navigation({
         ref={links}
         aria-label="Pagina's"
         data-open={open || undefined}
+        data-enkel={enkel || undefined}
         className="navigation glas sheen"
         style={{ '--i': index, '--n': routes.length } as React.CSSProperties}
         onPointerDown={(e) => {
@@ -213,45 +220,49 @@ export function Navigation({
             {brand}
           </button>
         )}
-        <span aria-hidden="true" className="nav-scheiding" />
+        {enkel ? null : (
+          <>
+            <span aria-hidden="true" className="nav-scheiding" />
 
-        <span className="nav-routes">
-          {found >= 0 ? <span aria-hidden="true" className="nav-pill" /> : null}
-          {routes.map(({ id, label, icon, count, href }) => {
-            const inhoud = (
-              <>
-                {icon}
-                <span className="nav-label">
-                  <span>{label}</span>
-                </span>
-                {count ? <span className="nav-count">{count}</span> : null}
-                <span aria-hidden="true" className="nav-tip nav-tip-onder">
-                  {label}
-                </span>
-              </>
-            )
-            const vorm = {
-              'aria-current': id === active ? ('page' as const) : undefined,
-              'aria-label': count ? `${label}, ${count}` : label,
-              className: 'nav-item zweeftint',
-              onClick: () => {
-                onSelect?.(id)
-                if (aanraking()) setOpen(false)
-                aanwijzer.current = ''
-              },
-            }
+            <span className="nav-routes">
+              {found >= 0 ? <span aria-hidden="true" className="nav-pill" /> : null}
+              {routes.map(({ id, label, icon, count, href }) => {
+                const inhoud = (
+                  <>
+                    {icon}
+                    <span className="nav-label">
+                      <span>{label}</span>
+                    </span>
+                    {count ? <span className="nav-count">{count}</span> : null}
+                    <span aria-hidden="true" className="nav-tip nav-tip-onder">
+                      {label}
+                    </span>
+                  </>
+                )
+                const vorm = {
+                  'aria-current': id === active ? ('page' as const) : undefined,
+                  'aria-label': count ? `${label}, ${count}` : label,
+                  className: 'nav-item zweeftint',
+                  onClick: () => {
+                    onSelect?.(id)
+                    if (aanraking()) setOpen(false)
+                    aanwijzer.current = ''
+                  },
+                }
 
-            return href ? (
-              <Link key={id} href={href} {...vorm}>
-                {inhoud}
-              </Link>
-            ) : (
-              <button key={id} type="button" {...vorm}>
-                {inhoud}
-              </button>
-            )
-          })}
-        </span>
+                return href ? (
+                  <Link key={id} href={href} {...vorm}>
+                    {inhoud}
+                  </Link>
+                ) : (
+                  <button key={id} type="button" {...vorm}>
+                    {inhoud}
+                  </button>
+                )
+              })}
+            </span>
+          </>
+        )}
       </nav>
 
       {(theme && choose) || onLock || account ? (
