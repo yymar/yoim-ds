@@ -365,7 +365,7 @@ export function ThemeChoice({ system, theme, onTheme }: ThemeProps) {
             }}
             className={`nav-thema flex h-8 min-w-0 flex-1 items-center justify-center gap-1.5 rounded-[var(--radius-capsule)] text-[13px] font-medium transition-colors duration-[var(--dur-fast)] ${
               aan
-                ? 'bg-[var(--glass-tint-strong)] text-[var(--text)] shadow-[var(--glass-rim)]'
+                ? 'bg-[var(--glass-tint-strong)] text-[var(--text)] shadow-[inset_0_0_0_1px_var(--border-strong),var(--glass-rim)]'
                 : system
                   ? 'text-[var(--text-muted)]'
                   : 'text-[var(--text-subtle)]'

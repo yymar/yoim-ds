@@ -703,6 +703,26 @@
   transition: opacity 0.12s;
 }
 
+/* Een segment van ThemeChoice is 32px hoog. Op touch haalt een rand eromheen
+   het tikdoel naar 44px zonder dat het groter oogt. Alleen daar, want met een
+   muis hangt de tooltip aan de radiogroep en niet aan het segment; op touch
+   verschijnt hij nooit. Buiten een laag, anders wint de `flex` van de tooltip. */
+@media (pointer: coarse) {
+  .nav-thema {
+    position: relative;
+  }
+
+  .nav-thema::after {
+    content: "";
+    position: absolute;
+    inset: -6px 0;
+  }
+
+  .nav-thema .nav-tip {
+    display: none;
+  }
+}
+
 /* Tailwind v4 heeft `cursor: pointer` uit zijn preflight gehaald, dus een knop
    staat op de browserstandaard en verandert de cursor niet. Links hebben dat
    vanzelf; alles wat wij zelf tot besturing maken krijgt het hier. In @layer

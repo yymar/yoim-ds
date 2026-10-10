@@ -14,6 +14,11 @@
   `--nav-h`), 0 vanaf `--bp-breed` en 0 met één route. `--nav-nu` is met één
   route ook 0. De `<nav>` krijgt dan `data-enkel`, dus iets anders dat moet
   wijken hangt aan `:root:has(.navigation[data-enkel])`.
+- `ThemeChoice`: op touch heeft elk segment een tikdoel van 44px, met een
+  onzichtbare rand van 6px boven en onder het segment van 32px. Het oogt niet
+  groter. Het gekozen segment krijgt een haarlijn in `--border-strong` naast
+  zijn glasrand, zodat het ook op een heel licht vlak te zien blijft (in het
+  lichte palet van mone.yymar viel wit glas op wit glas weg).
 
 ## 0.5.2
 
