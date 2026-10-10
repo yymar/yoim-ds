@@ -133,6 +133,7 @@
   --lh-body:1.5;
   --text-small:0.875rem;    /* text-sm — helper text */
   --lh-small:1.45;
+  --text-veld:1rem;         /* .veldtekst: invoervelden, 15px met een muis */
   --text-caption:0.8125rem; /* text-[13px] — provenance lines */
   --lh-caption:1.35;
   --text-nav:0.6875rem;     /* text-[0.6875rem] — bottom-nav labels */
@@ -525,6 +526,20 @@
   --radius-xl: var(--radius-xl);
 
   --font-sans: var(--font-app-sans), ui-sans-serif, system-ui, sans-serif;
+}
+
+/* Safari op iPhone zoomt in op een veld onder 16px en zoomt niet terug, dus
+   alleen met een muis of trackpad mag de tekst in een veld kleiner. Aan de
+   pointer, niet aan een breedte: een iPad in een breed venster is nog steeds
+   touch. Ook voor <select> en contenteditable. */
+@media (pointer: fine) {
+  :root {
+    --text-veld: var(--text-body);
+  }
+}
+
+@utility veldtekst {
+  font-size: var(--text-veld);
 }
 
 /* Op touch zijn de capsules 56px in plaats van 52. */

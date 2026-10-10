@@ -62,8 +62,8 @@ export default async function Login(props: PageProps<'/auth/login'>) {
 ## Wat erin zit
 
 - `styles/tokens.css`: kleuren (licht en donker), typografie, maten, motion,
-  glas-tokens, `color-scheme` per thema, de Tailwind `@theme` en de varianten
-  `breed:` en `plannen:`.
+  glas-tokens, `color-scheme` per thema, de Tailwind `@theme`, de utility
+  `.veldtekst` voor invoervelden, en de varianten `breed:` en `plannen:`.
 - `styles/glas.css`: `.glas`, `.glas-dun`, `.glas-dik`, `.sheen`, `.kaart`,
   `.rij`, `.kop`, `.groepkop`, `.schermkolom`, `.vastekop`, `.postertray`, `.overlay`, en de
   basisregels voor body, focus en selectie, en de scrollbalken in het thema

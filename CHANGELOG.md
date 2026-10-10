@@ -8,12 +8,21 @@
   nog een wegwijzer binnen een kaart, naast een getal.
 - Twee soorten kaart: een lijstkaart is een kale `.kaart` met `.rij`-kinderen,
   een inhoudkaart is `.kaart p-5`, op elke breedte.
+- Nieuw: `.veldtekst` (token `--text-veld`) voor de tekst in invoervelden:
+  16px op een aanraakscherm, 15px vanaf `(pointer: fine)`. Safari op iPhone
+  zoomt in op een veld onder 16px en zoomt niet terug. Gekoppeld aan de
+  pointer, niet aan een breedte: een iPad in een breed venster is nog steeds
+  touch.
 
 Let op bij het bijwerken (niet breaking, wel per app):
 
 - `.kop` als titel van een kaart of groep wordt `.groepkop` boven de kaart.
 - `p-1.5`, `p-3` en `p-4` op `.kaart` vervallen. Een lijstkaart heeft
   `.rij`-kinderen zonder padding, een inhoudkaart heeft `p-5`.
+- Elk veld krijgt `.veldtekst` in plaats van een eigen maat (`text-sm`,
+  `text-[15px]`, of `text-base pointer-fine:text-[15px]` zoals in mone). Ook
+  `<select>` en contenteditable, en de kale velden in een `.capsuleveld` (het
+  zoekveld en de invoerbalk). Een placeholder krijgt geen eigen kleinere maat.
 
 ## 0.5.0
 
