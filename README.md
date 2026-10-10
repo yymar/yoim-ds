@@ -7,7 +7,7 @@ build: de app compileert de TypeScript en CSS zelf.
 ## Gebruiken in een app
 
 ```bash
-npm i github:yymar/yoim-ds#v0.5.0
+npm i github:yymar/yoim-ds#v0.5.1
 ```
 
 ```ts
@@ -65,7 +65,7 @@ export default async function Login(props: PageProps<'/auth/login'>) {
   glas-tokens, `color-scheme` per thema, de Tailwind `@theme` en de varianten
   `breed:` en `plannen:`.
 - `styles/glas.css`: `.glas`, `.glas-dun`, `.glas-dik`, `.sheen`, `.kaart`,
-  `.rij`, `.kop`, `.schermkolom`, `.vastekop`, `.postertray`, `.overlay`, en de
+  `.rij`, `.kop`, `.groepkop`, `.schermkolom`, `.vastekop`, `.postertray`, `.overlay`, en de
   basisregels voor body, focus en selectie, en de scrollbalken in het thema
   (`.scroll-hoeken` voor een scrollcontainer tegen afgeronde hoeken). Ook de
   vormen van `Navigation` (`.navigation`, `.nav-rechts`, `.nav-*`): op de
@@ -89,8 +89,8 @@ export default async function Login(props: PageProps<'/auth/login'>) {
 
 ## Tweaken en uitrollen
 
-Wijzig hier, `npm test`, commit, tag (`git tag v0.5.0 && git push --tags`, pas als Yoran het zegt).
-Per app: `npm i github:yymar/yoim-ds#v0.5.0`, build, deploy. Een app die je
+Wijzig hier, `npm test`, commit, tag (`git tag v0.5.1 && git push --tags`, pas als Yoran het zegt).
+Per app: `npm i github:yymar/yoim-ds#v0.5.1`, build, deploy. Een app die je
 niet bijwerkt blijft op zijn versie.
 
 Ontwerpwerk gebeurt in Claude Design op de bestaande kit en landt hier als

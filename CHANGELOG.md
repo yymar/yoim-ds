@@ -1,5 +1,20 @@
 # Changelog
 
+## 0.5.1
+
+- Nieuw: `.groepkop`, de titel boven een kaart: 13px semibold in
+  `--text-muted`, als zin, met een waarde of actie rechts op dezelfde basislijn.
+  De regel: een kaart heeft zijn titel erboven en nooit erin. `.kop` is alleen
+  nog een wegwijzer binnen een kaart, naast een getal.
+- Twee soorten kaart: een lijstkaart is een kale `.kaart` met `.rij`-kinderen,
+  een inhoudkaart is `.kaart p-5`, op elke breedte.
+
+Let op bij het bijwerken (niet breaking, wel per app):
+
+- `.kop` als titel van een kaart of groep wordt `.groepkop` boven de kaart.
+- `p-1.5`, `p-3` en `p-4` op `.kaart` vervallen. Een lijstkaart heeft
+  `.rij`-kinderen zonder padding, een inhoudkaart heeft `p-5`.
+
 ## 0.5.0
 
 - `Navigation` zweeft op desktop. Vanaf `--bp-breed` is er geen rail van 15rem

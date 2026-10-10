@@ -95,13 +95,33 @@
     background: var(--surface-sunken);
   }
 
-  /* Een 11px signpost-kop: categoriekoppen, "In de kar", receptkoppen,
-     macrolabels. Niets wat je leest is uppercase, en niets boven 11px ooit. */
+  /* Een wegwijzer binnen een kaart, naast een getal. Nooit de titel van een
+     kaart of groep: dat is `.groepkop`. */
   .kop {
     font-size: 0.6875rem;
     font-weight: 600;
     letter-spacing: 0.08em;
     text-transform: uppercase;
+  }
+
+  /* De titel van een kaart, erboven en nooit erin. Als zin; een waarde of
+     actie rechts op dezelfde basislijn. */
+  .groepkop {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.75rem;
+    margin: 0 0 0.5rem;
+    padding: 0 0.25rem;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    line-height: 1.3;
+    color: var(--text-muted);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .groepkop > :last-child:not(:first-child) {
+    font-weight: 600;
   }
 
   /* De sheet groeit uit wat hem opriep; een fade vertelt niets. */

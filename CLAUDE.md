@@ -25,6 +25,8 @@ Harde regels. De rest van dit bestand is voorkeur; dit niet.
   genereert Tailwind de utility-klassen uit dit pakket niet.
 - **Nooit een buitenschaduw op een oppervlak met `backdrop-filter`.** Zie de
   toelichting in `styles/glas.css`.
+- **Een kaart heeft zijn titel erboven (`.groepkop`).** `.kaart` is een lijst
+  van `.rij` zonder padding, of inhoud met `p-5`.
 - **Elke wijziging is een versie.** Tag na elke merge die apps raakt; apps
   pinnen een tag, nooit `main`. Een breaking change krijgt in `CHANGELOG.md` een
   blok "Let op bij het bijwerken" met wat elke app moet aanpassen.
