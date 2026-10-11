@@ -1,0 +1,52 @@
+# Merget een Dependabot-PR voor minor of patch zodra alle andere checks
+# (de CI en Vercel) groen zijn. Een rode check of een major blijft liggen.
+# Alleen npm: een PR die een workflow wijzigt mag het GITHUB_TOKEN niet mergen.
+name: Dependabot automerge
+
+on: pull_request
+
+concurrency:
+  group: automerge-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+  pull-requests: write
+  checks: read
+  statuses: read
+
+jobs:
+  automerge:
+    if: github.event.pull_request.user.login == 'dependabot[bot]'
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - id: meta
+        uses: dependabot/fetch-metadata@v3
+      - name: Wacht op groene checks en merge
+        if: >-
+          steps.meta.outputs.package-ecosystem == 'npm_and_yarn' &&
+          (steps.meta.outputs.update-type == 'version-update:semver-minor' ||
+          steps.meta.outputs.update-type == 'version-update:semver-patch')
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR: ${{ github.event.pull_request.html_url }}
+          SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          for i in $(seq 1 80); do
+            sleep 30
+            gh pr checks "$PR" --json name,bucket > checks.json || true
+            # Deze job zelf telt niet mee, anders wacht hij op zichzelf.
+            jq '[.[] | select(.name != "automerge")]' checks.json > others.json
+            if jq -e 'any(.[]; .bucket == "fail" or .bucket == "cancel")' others.json > /dev/null; then
+              echo "Een check is rood, niet gemerged."
+              jq -r '.[] | "\(.name): \(.bucket)"' others.json
+              exit 1
+            fi
+            if jq -e 'any(.[]; .name == "check" and .bucket == "pass") and all(.[]; .bucket == "pass" or .bucket == "skipping")' others.json > /dev/null; then
+              gh pr merge "$PR" --squash --match-head-commit "$SHA"
+              exit 0
+            fi
+          done
+          echo "Checks niet binnen 40 minuten klaar, niet gemerged."
+          exit 1

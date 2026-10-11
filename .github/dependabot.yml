@@ -1,3 +1,7 @@
+# Gelijk in alle yoim-repo's: houd dit bestand overal hetzelfde.
+# Klein (minor en patch) komt als een gegroepeerde PR en wordt automatisch
+# gemerged zodra de CI groen is (.github/workflows/dependabot-automerge.yml).
+# Een major komt los en beoordelen we met de hand, voor alle repo's tegelijk.
 version: 2
 updates:
   - package-ecosystem: npm
@@ -5,10 +9,39 @@ updates:
     schedule:
       interval: weekly
       day: monday
-      time: "06:00"
+      time: '06:00'
       timezone: Europe/Amsterdam
     open-pull-requests-limit: 5
+    cooldown:
+      default-days: 3
+    ignore:
+      # Komt van github: en bumpen we zelf, per tag van yoim-ds.
+      - dependency-name: '@yoim/ds'
+      # TypeScript 7 (de Go-versie) heeft de oude compiler-API niet meer;
+      # typescript-eslint 8 ondersteunt tot 6.0 en lint crasht erop. Opnieuw
+      # bekijken zodra typescript-eslint TS 7 ondersteunt (issue 10940).
+      - dependency-name: typescript
+        update-types: ['version-update:semver-major']
+      # ESLint 10: eslint-plugin-react, -import en -jsx-a11y uit
+      # eslint-config-next staan nog op ESLint 9 (peer). Opnieuw bekijken
+      # zodra eslint-config-next ze meelevert met ESLint 10 in hun peer-range.
+      - dependency-name: eslint
+        update-types: ['version-update:semver-major']
     groups:
       klein:
-        patterns: ["*"]
+        patterns: ['*']
+        update-types: [minor, patch]
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+      time: '06:00'
+      timezone: Europe/Amsterdam
+    open-pull-requests-limit: 5
+    cooldown:
+      default-days: 3
+    groups:
+      klein:
+        patterns: ['*']
         update-types: [minor, patch]
