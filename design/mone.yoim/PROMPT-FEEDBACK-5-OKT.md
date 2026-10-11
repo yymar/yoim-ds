@@ -125,7 +125,7 @@ create table mone.budget_amounts (
 
 ## 7. Imke's spaarrekening
 
-Imke's SNS-spaarrekening: **NL41 SNSB 8815 5769 91**. Voeg hem voor Imke toe als rekening zonder koppeling (bank SNS, naam "SNS Spaarrekening", privé), zodat overboekingen ernaartoe als overboeking herkend worden. Dat is ook de eerste stap voor het open punt "spaardoel dat overboekingen naar een spaarrekening telt" (haar budget Spaarrekening € 50).
+Imke's SNS-spaarrekening (het IBAN staat in mone.yoim zelf, niet hier). Voeg hem voor Imke toe als rekening zonder koppeling (bank SNS, naam "SNS Spaarrekening", privé), zodat overboekingen ernaartoe als overboeking herkend worden. Dat is ook de eerste stap voor het open punt "spaardoel dat overboekingen naar een spaarrekening telt" (haar budget Spaarrekening € 50).
 
 ## Volgorde
 

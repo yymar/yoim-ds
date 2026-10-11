@@ -76,7 +76,7 @@ Eén zin en een stille knop "Budget instellen". Geen lege lijst.
 
 ## Nog open
 
-- Spaardoel dat overboekingen naar een spaarrekening telt (Imke's "Spaarrekening" € 50). Haar spaarrekening is SNS NL41 SNSB 8815 5769 91; die staat er eerst als rekening zonder koppeling, zodat overboekingen ernaartoe herkend worden.
+- Spaardoel dat overboekingen naar een spaarrekening telt (Imke's "Spaarrekening" € 50). Haar spaarrekening is een SNS-rekening (het IBAN staat in mone.yoim zelf, niet hier); die staat er eerst als rekening zonder koppeling, zodat overboekingen ernaartoe herkend worden.
 
 ## Klaar als
 
