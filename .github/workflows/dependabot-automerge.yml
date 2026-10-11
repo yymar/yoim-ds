@@ -35,15 +35,23 @@ jobs:
         run: |
           for i in $(seq 1 80); do
             sleep 30
-            gh pr checks "$PR" --json name,bucket > checks.json || true
             # Deze job zelf telt niet mee, anders wacht hij op zichzelf.
-            jq '[.[] | select(.name != "automerge")]' checks.json > others.json
-            if jq -e 'any(.[]; .bucket == "fail" or .bucket == "cancel")' others.json > /dev/null; then
+            if ! gh api "repos/$GITHUB_REPOSITORY/commits/$SHA/check-runs?per_page=100" \
+                --jq '[.check_runs[] | select(.name != "automerge") | {name, status, conclusion}]' > runs.json; then
+              echo "Check-runs niet te lezen, opnieuw."; continue
+            fi
+            if ! gh api "repos/$GITHUB_REPOSITORY/commits/$SHA/status" \
+                --jq '[.statuses[] | {name: .context, state}]' > statuses.json; then
+              echo "Statussen niet te lezen, opnieuw."; continue
+            fi
+            echo "$(jq -c '[.[] | "\(.name)=\(.conclusion // .status)"]' runs.json) $(jq -c '[.[] | "\(.name)=\(.state)"]' statuses.json)"
+            if jq -e 'any(.[]; .status == "completed" and (.conclusion | IN("success", "skipped", "neutral") | not))' runs.json > /dev/null ||
+               jq -e 'any(.[]; .state == "failure" or .state == "error")' statuses.json > /dev/null; then
               echo "Een check is rood, niet gemerged."
-              jq -r '.[] | "\(.name): \(.bucket)"' others.json
               exit 1
             fi
-            if jq -e 'any(.[]; .name == "check" and .bucket == "pass") and all(.[]; .bucket == "pass" or .bucket == "skipping")' others.json > /dev/null; then
+            if jq -e 'any(.[]; .name == "check" and .conclusion == "success") and all(.[]; .status == "completed")' runs.json > /dev/null &&
+               jq -e 'all(.[]; .state == "success")' statuses.json > /dev/null; then
               gh pr merge "$PR" --squash --match-head-commit "$SHA"
               exit 0
             fi
