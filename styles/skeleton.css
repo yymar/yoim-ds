@@ -42,7 +42,9 @@
 }
 
 @media (prefers-color-scheme: dark) {
-  :root {
+  /* Zonder :not() wint deze regel (later, even specifiek) van [data-thema="licht"]
+     op <html>: wie licht kiest op een donkere telefoon kreeg donkere vlakken. */
+  :root:not([data-thema="licht"]) {
     --skeleton-fill: #292d24;
     --skeleton-fill-canvas: #20231c;
     --skeleton-fill-glass: rgb(255 255 255 / 0.075);
