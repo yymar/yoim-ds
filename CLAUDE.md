@@ -27,6 +27,9 @@ Harde regels. De rest van dit bestand is voorkeur; dit niet.
   toelichting in `styles/glas.css`.
 - **Een kaart heeft zijn titel erboven (`.groepkop`).** `.kaart` is een lijst
   van `.rij` zonder padding, of inhoud met `p-5`.
+- **Een pagina laadt in de vorm van wat er komt:** `PageSkeleton` en
+  `SkeletonCard` met de layoutklassen van de echte pagina, nooit een spinner.
+  Vaste tekst is echt, alleen data is een vlak.
 - **Elke wijziging is een versie.** Tag na elke merge die apps raakt; apps
   pinnen een tag, nooit `main`. Een breaking change krijgt in `CHANGELOG.md` een
   blok "Let op bij het bijwerken" met wat elke app moet aanpassen.

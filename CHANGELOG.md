@@ -1,5 +1,68 @@
 # Changelog
 
+## 0.7.0
+
+- Nieuw: `styles/skeleton.css`, laden voor alle apps, letterlijk uit Claude
+  Design (`tokens/skeleton.css`). Tokens `--skeleton-fill`,
+  `--skeleton-fill-canvas`, `--skeleton-fill-glass`, `--skeleton-line` (licht,
+  donker en per `data-thema`), `--skeleton-pulse`, `--skeleton-ease`,
+  `--skeleton-delay`, `--skeleton-reveal`; de klok `@property --skeleton-tone`;
+  de klassen `.skeleton-*`. Los bestand zoals `studio.css`, maar elke app
+  importeert hem.
+- Nieuw: `components/skeleton` met `Skeleton`, `SkeletonLine`,
+  `SkeletonNumber`, `SkeletonCircle`, `SkeletonButton`, `SkeletonImage`,
+  `SkeletonGroupHead`, `SkeletonRow`, `SkeletonCard`, `SkeletonChart`,
+  `SkeletonCalendar`, `PageSkeleton` en `skeletonWidth` (met test). Server
+  components, dus ook in `loading.tsx` en als Suspense-fallback.
+- De regels (README, sectie Laden): een skeleton alleen als de vorm vaststaat,
+  `fallback={null}` voor wat misschien niet komt, verversen dimt
+  (`.skeleton-stale`), een bezige knop houdt zijn breedte en zegt wat hij doet.
+  Het skeleton gebruikt de echte layoutklassen, `.kaart`, `.rij` en
+  `.groepkop`; vaste tekst is echt, alleen data is een vlak. CLS 0. Zichtbaar
+  na 150 ms, fade van 200 ms, de echte inhoud komt op met `.skeleton-reveal`.
+  Eén pulse van 1,6 s op `<html>`, geen shimmer; stil met
+  `prefers-reduced-motion` of `[data-beweging="stil"]`. `aria-busy` op het
+  geheel, één sr-only statusregel, elk vlak `aria-hidden`. De vulling volgt
+  canvas, `.kaart` of glas vanzelf.
+
+Let op bij het bijwerken (niet breaking, maar elke app vervangt zijn eigen
+laadstaat; de code staat in `design/skeletons/PROMPT-CLAUDE-CODE.md`, sectie 2,
+de maten in `templates/skeletons/` in Claude Design):
+
+- Elke app: pin `#v0.7.0`, zet `@import "@yoim/ds/styles/skeleton.css";` in
+  `app/globals.css` onder `glas.css`, en geef de echte inhoud die een skeleton
+  vervangt `className="skeleton-reveal"` en `data-slot` met dezelfde naam als
+  `slot`/`area` van het skeleton. Controleer in de build dat `@property` en de
+  pulse blijven staan (Chrome en Safari).
+- mone.yoim:
+  - Eerst de kaartregel van 0.5.1 afmaken: `Group`
+    (`components/budgets.tsx`) krijgt `<h2 className="groepkop">` en de
+    `gap-2` van de `section` gaat weg.
+  - `components/page-loading.tsx` kan weg. `PAGE_CLASS` in
+    `components/page.ts`, gebruikt door de routes en de skeletons.
+  - Nieuw `components/skeletons.tsx` (`ROW`, `LIST`, `HeadSkeleton`,
+    `PeriodNavSkeleton`, `DaySkeleton`, `BudgetRowSkeleton`) en een
+    `loading.tsx` voor transacties, inzicht en budgetten. Volg de volgorde van
+    `.zijkolom` in `transacties/page.tsx` en de plek van `-order-1` in
+    `inzicht/page.tsx`; haal de `border-t` van `BudgetRowSkeleton` weg als de
+    echte `BudgetRow` er geen heeft. Profiel nog niet.
+- energ.yoim:
+  - Weg: `components/skeleton.tsx`; in `app/globals.css` de oude
+    `.skeleton`-animatie, `@keyframes skeleton` met zijn reduced-motion-regel,
+    de `min-height`-lijst per `data-vak` met de twee media queries, en het
+    opkomen van de blokken (`animation: opkomen` met de delays).
+  - Nieuw `components/skeletons.tsx` met een skeleton per vak, als fallback
+    op Vandaag, BaYmax en Geld, plus `loading.tsx` voor Vandaag, BaYmax, Geld
+    en Profiel. `CardGroup` krijgt `data-slot={area}` en
+    `className="vak skeleton-reveal"`. Haal `px-1.5 pt-1.5` uit
+    `TripsSkeleton` als `.trips-kaart` die padding zelf zet.
+- weekl.yoim: drie nieuwe `loading.tsx` (Boodschappen, Week, Recepten) met de
+  klassen van de echte schermen (`lijstkolommen`, `plannen`, `receptkop`); de
+  invoerbalk neemt de klassen over uit `lijst.tsx`.
+- yoim (hub): `app/(app)/loading.tsx` met de echte kop en panelen, alleen de
+  cijfers als vlak; de regels en `href` uit de echte panelen.
+- home.yoim: alleen de pin en de import.
+
 ## 0.6.1
 
 - Nieuw: `styles/studio.css`, de auto als studio-render (de hero van energ

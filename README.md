@@ -27,6 +27,7 @@ const nextConfig: NextConfig = { transpilePackages: ['@yoim/ds'] }
 
 @import "@yoim/ds/styles/tokens.css";
 @import "@yoim/ds/styles/glas.css";
+@import "@yoim/ds/styles/skeleton.css";
 /* Alleen in een app die de auto als studio-render toont (energ): */
 @import "@yoim/ds/styles/studio.css";
 ```
@@ -106,6 +107,36 @@ export default async function Login(props: PageProps<'/auth/login'>) {
   (bij `weg`, `rijdt` en `los` komt hij alleen aanzetten), de glans glijdt om
   de 11 s; met `prefers-reduced-motion` staat alles stil. Plaats en maat van de
   lagen zet de app zelf.
+- `styles/skeleton.css`: laden (zie Laden hieronder). Tokens
+  `--skeleton-fill`, `--skeleton-fill-canvas`, `--skeleton-fill-glass`,
+  `--skeleton-line` (licht, donker en per `data-thema`), `--skeleton-pulse`,
+  `--skeleton-ease`, `--skeleton-delay`, `--skeleton-reveal`; de klok
+  (`@property --skeleton-tone`, een pulse op `<html>` zolang er een
+  `[data-skeleton]` staat); de klassen `.skeleton-bone`, `.skeleton-line`,
+  `.skeleton-circle`, `.skeleton-button`, `.skeleton-image`, `.skeleton-row`,
+  `.skeleton-card`, `.skeleton-card-body`, `.skeleton-chart`,
+  `.skeleton-calendar`, `.skeleton-page`, `.skeleton-reveal` en
+  `.skeleton-stale`. Elke app importeert hem.
+- `components/skeleton`: de bouwstenen van een skeleton, server components
+  (geen `'use client'`), dus ook in `loading.tsx` en als Suspense-fallback.
+
+  | Component | Props | Wat |
+  | --- | --- | --- |
+  | `Skeleton` | `width`, `height`, `radius` (`sm` `md` `lg` `xl` `capsule` `full` `none`), `className`, `style` | een vlak |
+  | `SkeletonLine` | `size` (`title` `heading` `lead` `body` `small` `caption` `nav`) of `fontSize` + `lineHeight` (px), `width` (getal = %, of `'12ch'`), `variant` | een regel tekst: zo hoog als de regel, het vlak zo hoog als de letters |
+  | `SkeletonNumber` | `fontSize`, `lineHeight`, `width` | een groot cijfer, met hoekjes |
+  | `SkeletonCircle` | `size` | avatar, icoon, bolletje |
+  | `SkeletonButton` | `width`, `height` | capsule |
+  | `SkeletonImage` | `width`, `height` (intrinsiek), `radius` | vlak met de verhouding van het beeld |
+  | `SkeletonGroupHead` | `title` (vaste tekst), `titleWidth`, `value` (node, of een breedte als string die met een cijfer begint) | de `.groepkop` |
+  | `SkeletonRow` | `index`, `leading`, `leadingSize`, `lines`, `title`, `subtitle`, `trailing`, `trailingWidth`, `minHeight`, `padding` (`rij` of `none`), `gap` | een echte `.rij` |
+  | `SkeletonCard` | `title`, `titleWidth`, `value`, `rows` + `row`, of `children` (inhoudkaart, p-5), `height`, `padding`, `className` (op de `.kaart`), `area` (`data-vak`), `slot` | groepkop plus kaart, `aria-busy` |
+  | `SkeletonChart` | `height`, `xLabels`, `yLabels` | rustig vlak met as en hulplijnen |
+  | `SkeletonCalendar` | `columns`, `rows`, `weekdays`, `cellHeight`, `gap` | raster met dagen |
+  | `PageSkeleton` | `as`, `className` (de klassen van de echte pagina), `label`, `style` | `aria-busy`, één statusregel |
+
+  `skeletonWidth(index, shift)` geeft per index een breedte in procent (44 tot
+  76) die op server en client gelijk is.
 - `auth/`: `proxy`, `createServerSupabase`, `createBrowserSupabase`,
   `cookieOptions`, `inlog-fout`, `moment`.
 - `components/`: `InlogPagina`, `InlogTray`, `GoogleKnop`, `Klok`, `Merk`,
@@ -166,6 +197,53 @@ export default async function Login(props: PageProps<'/auth/login'>) {
 - `week.ts`: de week van dit huishouden, zaterdag tot en met vrijdag. Zit hier
   en niet in een app omdat weekl.yoim.nl en de hub op yoim.nl allebei dezelfde
   week moeten tonen; twee kopieen lopen uit elkaar.
+
+## Laden
+
+Eén manier van laden voor alle apps, ontworpen in Claude Design
+(`templates/skeletons/`). Bij twijfel over een maat wint de template.
+
+1. **Wanneer wat.**
+   - *Skeleton:* een tab die op data wacht (`loading.tsx`) en een kaart die op
+     zijn eigen query wacht (Suspense). Alleen als de vorm vaststaat.
+   - *Niets:* wat er misschien niet komt (de foutbalk van energ, `BankNotice`,
+     `JointNotice`): `fallback={null}`. Inhoud die al staat en ververst (een
+     andere periode, een filter) blijft staan; zet `className="skeleton-stale"`
+     en `aria-busy` tijdens de transition, dan dimt hij pas na 150 ms naar 60%.
+   - *Inline:* een knop die iets doet houdt zijn breedte, zegt wat hij doet
+     ("Ophalen…", "Bezig met inloggen…"), is `disabled` (60%) en krijgt
+     `aria-busy`. Nooit een spinner voor een pagina.
+2. **De echte layoutklassen, alleen de inhoud is vlak.** Een skeleton gebruikt
+   de klassen van de pagina zelf (`schermkolom`, `werkvlak`, `paneel`, `vak`,
+   `lijstkolommen`, `plannen`, `zijkolom`, `receptkop`) en de echte `.kaart`,
+   `.rij` en `.groepkop`. Zo kloppen breedte, rooster en breekpunten vanzelf.
+   Vaste tekst (de paginatitel, "Zet aan om", "Uitgaven", de namen op de hub)
+   staat er echt; alleen wat uit de database komt is een vlak.
+3. **Precies de maat van wat er komt.** CLS 0. Hoogtes die variëren zijn
+   gemeten en staan in de template; bij twijfel liever iets te hoog dan te
+   laag. Een beeld krijgt zijn intrinsieke verhouding
+   (`SkeletonImage width={1687} height={907}`).
+4. **Verschijnen en overnemen.** Het skeleton staat meteen in de layout maar is
+   de eerste 150 ms (`--skeleton-delay`) onzichtbaar; daarna een fade van
+   200 ms (`--skeleton-reveal`). Wat sneller binnen is, flitst dus nooit. De
+   echte inhoud krijgt `.skeleton-reveal`: dezelfde fade, geen sprong.
+5. **Eén beweging.** Een pulse in de doorzichtigheid, 1,6 s, `--skeleton-ease`,
+   op één klok op `<html>` zolang er een `[data-skeleton]` staat. Een pagina en
+   drie kaarten die later binnenkomen lopen in de maat. Geen shimmer (op glas
+   leest die als een reflectie, en synchroon over losse blokken kan alleen met
+   `background-attachment: fixed`, wat iOS niet doet). `prefers-reduced-motion`
+   of `[data-beweging="stil"]`: alles stil op de volle toon, en de fade is 0 ms.
+6. **Toegankelijk.** `aria-busy` op het geheel, één `role="status"` sr-only
+   "… laden…", elk vlak `aria-hidden`. Een kaart binnen een pagina die al staat
+   zegt niets hardop: alleen `aria-busy` op zijn vak.
+7. **Licht, donker, glas.** De vulling volgt de ondergrond vanzelf: canvas
+   (`--skeleton-fill-canvas`), binnen `.kaart` (`--skeleton-fill`), binnen
+   `.glas`, `.glas-dun`, `.glas-dik` (`--skeleton-fill-glass`, een sluier).
+   Overschrijven met `data-skeleton-surface="canvas|card|glass"`.
+
+De echte inhoud die een skeleton vervangt krijgt `className="skeleton-reveal"`
+en `data-slot` met dezelfde naam als `slot` (of `area`) van het skeleton, voor
+de maatcontrole.
 
 ## Tweaken en uitrollen
 
