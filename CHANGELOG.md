@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.6.1
+
+- Nieuw: `styles/studio.css`, de auto als studio-render (de hero van energ
+  /baymax, uit Claude Design). Tokens `--studio-*` in licht en donker, de
+  klassen `.yoimStudio…` voor spot, vloer, parkeervak, auto en glans, en de
+  toestanden via `data-toestand` (`thuis`, `laadt`, `slaapt`, `weg`, `rijdt`,
+  `los`). Inrijden en glans alleen in CSS, stil met `prefers-reduced-motion`.
+  Niet in `tokens.css` of `glas.css`: een app die hem wil, importeert hem los.
+  Niets te doen voor apps die hem niet gebruiken.
+
 ## 0.6.0
 
 - Nieuw: `SegmentedChoice` (`@yoim/ds/components/segmented-choice`), een keuze

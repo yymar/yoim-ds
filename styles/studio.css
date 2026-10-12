@@ -1,0 +1,240 @@
+/* @yoim/ds: de studio. De auto als gefotografeerd product (AutoPodium zonder
+   3D-oprit), ontworpen in Claude Design. Een stilstaande render op transparant
+   staat op een spot en een zachte vloer; de toestand van de auto (laadt, slaapt,
+   weg, onderweg, niet gekoppeld) wordt alleen met licht en helderheid verteld,
+   nooit met een tweede render.
+
+   Tokens: --studio-spot (de lichtbundel achter de auto), --studio-vloer en
+   --studio-vloer-glans (de zachte vloer waar de contactschaduw in ligt),
+   --studio-laad (het groene licht onder de auto tijdens laden), --studio-glans
+   (het lichtbandje dat over de lak glijdt), --studio-weg en --studio-slaap (hoe
+   ver de auto dimt als hij weg is of slaapt: 0 is weg, 1 is ongedimd).
+
+   Het donkere thema heeft een olijfkleurige spot en een lichtere vloer: de
+   render is diamond black, en op --surface verdwijnen onderkant en wielen
+   zonder dat licht. Donker geldt op dezelfde gevallen als in tokens.css. Plaats
+   en maat van de lagen kiest de app. */
+
+:root {
+  --studio-spot: rgb(255 255 255 / 0.92);
+  --studio-vloer: rgb(28 30 24 / 0.075);
+  --studio-vloer-glans: rgb(255 255 255 / 0.55);
+  --studio-laad: rgb(107 127 75 / 0.5);
+  --studio-glans: rgb(255 255 255 / 0.85);
+  --studio-weg: 0.34;
+  --studio-slaap: 0.8;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-thema="licht"]):not(:has([data-thema="licht"])) {
+    --studio-spot: rgb(188 205 150 / 0.17);
+    --studio-vloer: rgb(255 255 255 / 0.085);
+    --studio-vloer-glans: rgb(255 255 255 / 0.06);
+    --studio-laad: rgb(156 181 115 / 0.46);
+    --studio-glans: rgb(255 255 255 / 0.55);
+    --studio-weg: 0.3;
+    --studio-slaap: 0.72;
+  }
+}
+
+:root[data-thema="donker"]:not(:has([data-thema="licht"])),
+:root:has([data-thema="donker"]) {
+  --studio-spot: rgb(188 205 150 / 0.17);
+  --studio-vloer: rgb(255 255 255 / 0.085);
+  --studio-vloer-glans: rgb(255 255 255 / 0.06);
+  --studio-laad: rgb(156 181 115 / 0.46);
+  --studio-glans: rgb(255 255 255 / 0.55);
+  --studio-weg: 0.3;
+  --studio-slaap: 0.72;
+}
+
+/* De lagen. Een voorouder krijgt data-toestand="thuis|laadt|slaapt|weg|rijdt|los". */
+@layer components {
+  .yoimStudio {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    overflow: hidden;
+    border-radius: inherit;
+    pointer-events: none;
+  }
+
+  /* Inrijden: de auto rolt van rechts het beeld in en remt af; spot en vloer
+     lichten op. `backwards` zonder eind-keyframe, zodat de animatie eindigt op
+     de waarde van de toestand en een gedimde auto niet springt. */
+  .yoimStudioAuto {
+    position: absolute;
+    display: block;
+    margin: 0;
+    transform-origin: 50% 100%;
+    animation: yoimStudioInrij 1.5s cubic-bezier(.16, .84, .3, 1) .1s backwards;
+  }
+
+  .yoimStudioAuto img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  .yoimStudioSpot,
+  .yoimStudioVloer,
+  .yoimStudioVak {
+    position: absolute;
+    pointer-events: none;
+  }
+
+  .yoimStudioSpot {
+    background: radial-gradient(closest-side, var(--studio-spot), rgb(0 0 0 / 0));
+    animation: yoimStudioIn 1.4s var(--ease) backwards;
+  }
+
+  .yoimStudioVloer {
+    background: radial-gradient(closest-side, var(--studio-vloer), rgb(0 0 0 / 0));
+    animation: yoimStudioIn 1.4s var(--ease) backwards;
+  }
+
+  .yoimStudioVloer::after {
+    content: "";
+    position: absolute;
+    inset: 26% 18%;
+    border-radius: 50%;
+    background: radial-gradient(closest-side, var(--studio-vloer-glans), rgb(0 0 0 / 0));
+  }
+
+  /* Het parkeervak: alleen zichtbaar als de auto weg is. */
+  .yoimStudioVak {
+    border: 1.5px dashed color-mix(in oklab, var(--text) 22%, transparent);
+    border-radius: 22px;
+    opacity: 0;
+    transition: opacity var(--dur-glas) var(--ease);
+  }
+
+  /* Licht dat over de lak glijdt: een masker met de render zelf (mask-image
+     zet de app), daarover een bandje. Krijgt ook .yoimStudioAuto voor plaats
+     en inrijden. */
+  .yoimStudioGlans {
+    position: absolute;
+    pointer-events: none;
+    -webkit-mask-size: 100% 100%;
+    mask-size: 100% 100%;
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    background: linear-gradient(104deg, rgb(255 255 255 / 0) 40%, var(--studio-glans) 50%, rgb(255 255 255 / 0) 60%) 130% 0 / 260% 100% no-repeat;
+    mix-blend-mode: soft-light;
+    opacity: 0.55;
+    animation: yoimStudioGlans 11s var(--ease) 2.6s infinite;
+  }
+
+  .yoimStudioGlans.yoimStudioAuto {
+    animation:
+      yoimStudioInrij 1.5s cubic-bezier(.16, .84, .3, 1) .1s backwards,
+      yoimStudioGlans 11s var(--ease) 2.6s infinite;
+  }
+
+  /* Toestanden: licht en helderheid, geen tweede render. */
+  [data-toestand="laadt"] .yoimStudioVloer::before {
+    content: "";
+    position: absolute;
+    inset: 18% 6%;
+    border-radius: 50%;
+    background: radial-gradient(closest-side, var(--studio-laad), rgb(0 0 0 / 0));
+    animation: yoimStudioAdem 3.4s ease-in-out infinite;
+  }
+
+  /* Weg, onderweg of niet gekoppeld: hij rijdt niet in, hij komt alleen aanzetten. */
+  [data-toestand="rijdt"] .yoimStudioAuto,
+  [data-toestand="weg"] .yoimStudioAuto,
+  [data-toestand="los"] .yoimStudioAuto {
+    animation-name: yoimStudioIn;
+  }
+
+  [data-toestand="slaapt"] .yoimStudioAuto {
+    filter: brightness(var(--studio-slaap)) saturate(0.7);
+  }
+
+  [data-toestand="slaapt"] .yoimStudioSpot {
+    opacity: 0.45;
+  }
+
+  [data-toestand="rijdt"] .yoimStudioAuto,
+  [data-toestand="weg"] .yoimStudioAuto {
+    opacity: var(--studio-weg);
+    filter: grayscale(1);
+  }
+
+  [data-toestand="rijdt"] .yoimStudioVloer,
+  [data-toestand="weg"] .yoimStudioVloer,
+  [data-toestand="rijdt"] .yoimStudioSpot,
+  [data-toestand="weg"] .yoimStudioSpot {
+    opacity: 0.35;
+  }
+
+  [data-toestand="rijdt"] .yoimStudioVak,
+  [data-toestand="weg"] .yoimStudioVak {
+    opacity: 1;
+  }
+
+  [data-toestand="rijdt"] .yoimStudioGlans,
+  [data-toestand="weg"] .yoimStudioGlans,
+  [data-toestand="los"] .yoimStudioGlans,
+  [data-toestand="slaapt"] .yoimStudioGlans {
+    display: none;
+  }
+
+  [data-toestand="los"] .yoimStudioAuto {
+    opacity: 0.22;
+    filter: grayscale(1);
+  }
+
+  [data-toestand="los"] .yoimStudioVloer,
+  [data-toestand="los"] .yoimStudioSpot {
+    opacity: 0.3;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .yoimStudio *,
+    .yoimStudio *::before,
+    .yoimStudio *::after {
+      animation: none !important;
+      transition: none !important;
+    }
+  }
+}
+
+@keyframes yoimStudioInrij {
+  from {
+    transform: translateX(26%);
+    opacity: 0;
+  }
+  55% {
+    opacity: 1;
+  }
+}
+
+@keyframes yoimStudioIn {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes yoimStudioGlans {
+  0%,
+  70% {
+    background-position: 130% 0;
+  }
+  100% {
+    background-position: -30% 0;
+  }
+}
+
+@keyframes yoimStudioAdem {
+  0%,
+  100% {
+    opacity: 0.55;
+    transform: scale(0.96);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.03);
+  }
+}

@@ -27,6 +27,8 @@ const nextConfig: NextConfig = { transpilePackages: ['@yoim/ds'] }
 
 @import "@yoim/ds/styles/tokens.css";
 @import "@yoim/ds/styles/glas.css";
+/* Alleen in een app die de auto als studio-render toont (energ): */
+@import "@yoim/ds/styles/studio.css";
 ```
 
 ```bash
@@ -90,6 +92,20 @@ export default async function Login(props: PageProps<'/auth/login'>) {
   maat, zodat de inhoud tijdens het scrollen niet verspringt. Uitzetten:
   `collapseOnScroll={false}`. Voor een kop die op hetzelfde moment wisselt:
   `useScrolled()` uit `components/navigation`, met dezelfde luisteraar.
+- `styles/studio.css` (los te importeren): de auto als studio-render, de
+  hero van energ /baymax, ontworpen in Claude Design. Tokens `--studio-spot`,
+  `--studio-vloer`, `--studio-vloer-glans`, `--studio-laad`, `--studio-glans`
+  (kleuren, licht en donker zoals `tokens.css`: systeem of `data-thema`) en
+  `--studio-weg`, `--studio-slaap` (hoe ver de auto dimt, 0 tot 1). Klassen
+  `.yoimStudio` (de laag, `position: absolute; inset: 0`), daarin
+  `.yoimStudioSpot`, `.yoimStudioVloer`, `.yoimStudioVak` (het parkeervak),
+  `.yoimStudioAuto` (de `<picture>`) en `.yoimStudioGlans.yoimStudioAuto` (met
+  de render als `mask-image`). Een voorouder krijgt `data-toestand`: `thuis`,
+  `laadt` (groene vloer die ademt), `slaapt` (gedimd, geen glans), `weg` en
+  `rijdt` (grijs, parkeervak), `los` (niet gekoppeld, 22%). De auto rijdt in
+  (bij `weg`, `rijdt` en `los` komt hij alleen aanzetten), de glans glijdt om
+  de 11 s; met `prefers-reduced-motion` staat alles stil. Plaats en maat van de
+  lagen zet de app zelf.
 - `auth/`: `proxy`, `createServerSupabase`, `createBrowserSupabase`,
   `cookieOptions`, `inlog-fout`, `moment`.
 - `components/`: `InlogPagina`, `InlogTray`, `GoogleKnop`, `Klok`, `Merk`,
