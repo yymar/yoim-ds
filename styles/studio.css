@@ -8,7 +8,12 @@
    --studio-vloer-glans (de zachte vloer waar de contactschaduw in ligt),
    --studio-laad (het groene licht onder de auto tijdens laden), --studio-glans
    (het lichtbandje dat over de lak glijdt), --studio-weg en --studio-slaap (hoe
-   ver de auto dimt als hij weg is of slaapt: 0 is weg, 1 is ongedimd).
+   ver de auto dimt als hij weg is of slaapt: 0 is weg, 1 is ongedimd; slapen
+   dimt bijna niet, de lak blijft helder en het licht gaat uit).
+
+   Licht en beweging komen uit echte renders: een lichtlaag (dag of vol) op
+   zwart die met `screen` over de auto ligt, en een inrij-video met alpha. Het
+   eindbeeld van de video is de auto met vol licht.
 
    Het donkere thema heeft een olijfkleurige spot en een lichtere vloer: de
    render is diamond black, en op --surface verdwijnen onderkant en wielen
@@ -22,7 +27,7 @@
   --studio-laad: rgb(107 127 75 / 0.5);
   --studio-glans: rgb(255 255 255 / 0.85);
   --studio-weg: 0.34;
-  --studio-slaap: 0.8;
+  --studio-slaap: 0.97;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -33,7 +38,7 @@
     --studio-laad: rgb(156 181 115 / 0.46);
     --studio-glans: rgb(255 255 255 / 0.55);
     --studio-weg: 0.3;
-    --studio-slaap: 0.72;
+    --studio-slaap: 0.95;
   }
 }
 
@@ -45,29 +50,42 @@
   --studio-laad: rgb(156 181 115 / 0.46);
   --studio-glans: rgb(255 255 255 / 0.55);
   --studio-weg: 0.3;
-  --studio-slaap: 0.72;
+  --studio-slaap: 0.95;
 }
 
-/* De lagen. Een voorouder krijgt data-toestand="thuis|laadt|slaapt|weg|rijdt|los". */
+/* Hoe ver vol licht door dag heen staat tijdens het knipperen (0 tot 1). */
+@property --studio-flits {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: 0;
+}
+
+/* De lagen. Een voorouder krijgt data-toestand="thuis|laadt|slaapt|weg|rijdt|los".
+
+   Geen z-index op .yoimStudio: het licht (screen) mengt met alles wat eronder
+   geschilderd is tot de dichtstbijzijnde stacking context. Is die doorzichtig
+   (z-index, isolation, opacity, transform of filter op de studio of een
+   voorouder), dan tekent het zwart van de lichtlaag als rechthoek. De
+   achtergrond van de pagina moet er dus onder liggen, zonder stacking context
+   ertussen. */
 @layer components {
   .yoimStudio {
     position: absolute;
     inset: 0;
-    z-index: 0;
     overflow: hidden;
     border-radius: inherit;
     pointer-events: none;
   }
 
-  /* Inrijden: de auto rolt van rechts het beeld in en remt af; spot en vloer
-     lichten op. `backwards` zonder eind-keyframe, zodat de animatie eindigt op
-     de waarde van de toestand en een gedimde auto niet springt. */
+  /* De auto komt aanzetten. Vanaf 0.01 en niet 0, zodat hij meteen als LCP
+     telt; `backwards` zonder eind-keyframe, zodat de animatie eindigt op de
+     waarde van de toestand en een gedimde auto niet springt. Het inrijden zelf
+     is de video (.yoimStudioRit). */
   .yoimStudioAuto {
     position: absolute;
     display: block;
     margin: 0;
-    transform-origin: 50% 100%;
-    animation: yoimStudioInrij 1.5s cubic-bezier(.16, .84, .3, 1) .1s backwards;
+    animation: yoimStudioIn .4s var(--ease) backwards;
   }
 
   .yoimStudioAuto img {
@@ -111,7 +129,7 @@
 
   /* Licht dat over de lak glijdt: een masker met de render zelf (mask-image
      zet de app), daarover een bandje. Krijgt ook .yoimStudioAuto voor plaats
-     en inrijden. */
+     en maat. */
   .yoimStudioGlans {
     position: absolute;
     pointer-events: none;
@@ -127,8 +145,38 @@
 
   .yoimStudioGlans.yoimStudioAuto {
     animation:
-      yoimStudioInrij 1.5s cubic-bezier(.16, .84, .3, 1) .1s backwards,
+      yoimStudioIn .4s var(--ease) backwards,
       yoimStudioGlans 11s var(--ease) 2.6s infinite;
+  }
+
+  /* Het licht: een <picture> met een render op zwart die met screen over de
+     auto ligt (geen plus-lighter, die geeft een witte halo op een lichte
+     vloer). Krijgt ook .yoimStudioAuto voor plaats en maat. Dag is lichtbalk en
+     achterlichten, vol heeft daarbij de koplampen. Vol bevat dag, dus ze wisselen
+     elkaar af in plaats van te stapelen. Welkom: de auto komt aan met vol licht,
+     dat daarna in 600 ms overgaat in dag. */
+  .yoimStudioLicht {
+    mix-blend-mode: screen;
+  }
+
+  .yoimStudioLichtDag {
+    opacity: calc(1 - var(--studio-flits));
+    animation: yoimStudioWelkomDag 1.2s var(--ease) backwards;
+  }
+
+  .yoimStudioLichtVol {
+    opacity: var(--studio-flits);
+    animation: yoimStudioWelkomVol 1.2s var(--ease) backwards;
+  }
+
+  /* Knipperen zoals bij ontgrendelen: twee keer vol, dan terug naar dag. Zet
+     data-knipper op .yoimStudio of een voorouder en haal hem na afloop weg
+     (animationend, 1 s); opnieuw knipperen is weghalen en weer zetten. Via
+     --studio-flits en niet op de lagen zelf, zodat het welkom niet opnieuw
+     begint als het attribuut weggaat. */
+  [data-knipper] .yoimStudio,
+  .yoimStudio[data-knipper] {
+    animation: yoimStudioKnipper 1s linear;
   }
 
   /* Toestanden: licht en helderheid, geen tweede render. */
@@ -141,15 +189,17 @@
     animation: yoimStudioAdem 3.4s ease-in-out infinite;
   }
 
-  /* Weg, onderweg of niet gekoppeld: hij rijdt niet in, hij komt alleen aanzetten. */
-  [data-toestand="rijdt"] .yoimStudioAuto,
-  [data-toestand="weg"] .yoimStudioAuto,
-  [data-toestand="los"] .yoimStudioAuto {
-    animation-name: yoimStudioIn;
+  /* Lichten uit. Visibility en niet display, zodat het welkom niet opnieuw
+     speelt als hij wakker wordt. */
+  [data-toestand="slaapt"] .yoimStudioLicht,
+  [data-toestand="weg"] .yoimStudioLicht,
+  [data-toestand="rijdt"] .yoimStudioLicht,
+  [data-toestand="los"] .yoimStudioLicht {
+    visibility: hidden;
   }
 
   [data-toestand="slaapt"] .yoimStudioAuto {
-    filter: brightness(var(--studio-slaap)) saturate(0.7);
+    filter: brightness(var(--studio-slaap));
   }
 
   [data-toestand="slaapt"] .yoimStudioSpot {
@@ -191,29 +241,92 @@
     opacity: 0.3;
   }
 
+  /* De inrij-video (<video> met alpha). Na de toestanden, want die zetten
+     opacity op .yoimStudioAuto. Ook met .yoimStudioAuto voor plaats en
+     maat; width en height op het element geven de verhouding voordat er
+     metadata is. Een voorouder krijgt data-rit="speelt" zolang hij speelt: dan
+     staat alleen de video er. Daarna data-rit="klaar" (op `ended`, en laat het
+     zo staan): de video vervaagt boven de stilstaande auto met vol licht, wat
+     hetzelfde beeld is, en vol gaat over in dag. */
+  .yoimStudio .yoimStudioRit {
+    height: auto;
+    opacity: 0;
+    animation: none;
+    transition: opacity .25s var(--ease);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    [data-rit="speelt"] .yoimStudioRit {
+      opacity: 1;
+      transition: none;
+    }
+
+    [data-rit="speelt"] .yoimStudioAuto:not(.yoimStudioRit) {
+      visibility: hidden;
+    }
+  }
+
+  [data-rit="speelt"] .yoimStudioLicht {
+    animation: none;
+  }
+
+  [data-rit="klaar"] .yoimStudioLicht {
+    animation-delay: -.4s;
+  }
+
   @media (prefers-reduced-motion: reduce) {
+    .yoimStudio,
     .yoimStudio *,
     .yoimStudio *::before,
     .yoimStudio *::after {
       animation: none !important;
       transition: none !important;
     }
-  }
-}
 
-@keyframes yoimStudioInrij {
-  from {
-    transform: translateX(26%);
-    opacity: 0;
-  }
-  55% {
-    opacity: 1;
+    .yoimStudio .yoimStudioRit {
+      display: none;
+    }
   }
 }
 
 @keyframes yoimStudioIn {
   from {
+    opacity: 0.01;
+  }
+}
+
+/* 0,4 s aankomen met de auto, 0,2 s vol, 0,6 s naar dag. Na de video begint
+   hij op 0,4 s (animation-delay -.4s). */
+@keyframes yoimStudioWelkomVol {
+  0% {
+    opacity: 0.01;
+  }
+  33%,
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes yoimStudioWelkomDag {
+  0%,
+  50% {
     opacity: 0;
+  }
+}
+
+@keyframes yoimStudioKnipper {
+  0%,
+  32%,
+  44%,
+  76%,
+  100% {
+    --studio-flits: 0;
+  }
+  6%,
+  24%,
+  50%,
+  68% {
+    --studio-flits: 1;
   }
 }
 

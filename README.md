@@ -97,16 +97,37 @@ export default async function Login(props: PageProps<'/auth/login'>) {
   hero van energ /baymax, ontworpen in Claude Design. Tokens `--studio-spot`,
   `--studio-vloer`, `--studio-vloer-glans`, `--studio-laad`, `--studio-glans`
   (kleuren, licht en donker zoals `tokens.css`: systeem of `data-thema`) en
-  `--studio-weg`, `--studio-slaap` (hoe ver de auto dimt, 0 tot 1). Klassen
-  `.yoimStudio` (de laag, `position: absolute; inset: 0`), daarin
-  `.yoimStudioSpot`, `.yoimStudioVloer`, `.yoimStudioVak` (het parkeervak),
-  `.yoimStudioAuto` (de `<picture>`) en `.yoimStudioGlans.yoimStudioAuto` (met
-  de render als `mask-image`). Een voorouder krijgt `data-toestand`: `thuis`,
-  `laadt` (groene vloer die ademt), `slaapt` (gedimd, geen glans), `weg` en
-  `rijdt` (grijs, parkeervak), `los` (niet gekoppeld, 22%). De auto rijdt in
-  (bij `weg`, `rijdt` en `los` komt hij alleen aanzetten), de glans glijdt om
-  de 11 s; met `prefers-reduced-motion` staat alles stil. Plaats en maat van de
-  lagen zet de app zelf.
+  `--studio-weg`, `--studio-slaap` (hoe ver de auto dimt, 0 tot 1; slapen dimt
+  bijna niet). Klassen `.yoimStudio` (de laag, `position: absolute; inset: 0`),
+  daarin `.yoimStudioSpot`, `.yoimStudioVloer`, `.yoimStudioVak` (het
+  parkeervak), `.yoimStudioAuto` (de `<picture>` van de auto zonder licht),
+  `.yoimStudioGlans.yoimStudioAuto` (met de render als `mask-image`), het licht
+  als `<picture>` op zwart met `.yoimStudioAuto yoimStudioLicht` plus
+  `.yoimStudioLichtDag` (lichtbalk en achterlichten) of `.yoimStudioLichtVol`
+  (daarbij de koplampen), en de inrij-video `.yoimStudioRit.yoimStudioAuto`.
+  Alles met `.yoimStudioAuto` krijgt de plaats en maat van de auto.
+  - Het licht ligt met `mix-blend-mode: screen` over de auto. Dat mengt alleen
+    met wat in dezelfde stacking context ligt, dus tussen de studio en de
+    achtergrond van de pagina geen `z-index`, `isolation`, `opacity`,
+    `transform`, `filter` of `will-change`; anders tekent het zwart als
+    rechthoek.
+  - Een voorouder krijgt `data-toestand`: `thuis` (dag-licht), `laadt`
+    (dag-licht en een groene vloer die ademt), `slaapt` (lichten uit, geen
+    glans), `weg` en `rijdt` (grijs, parkeervak), `los` (niet gekoppeld, 22%);
+    buiten thuis en laadt zijn de lichten uit.
+  - Welkom: de auto komt in 0,4 s aanzetten (vanaf opacity 0,01, dus meteen
+    LCP) met vol licht, dat daarna in 600 ms overgaat in dag.
+  - `data-knipper` op `.yoimStudio` of een voorouder: twee flitsen van vol,
+    dan terug naar dag (1 s). Haal hem weg op `animationend`; opnieuw is
+    weghalen en weer zetten.
+  - De video: geef de `<video>` `width` en `height` (de verhouding voordat er
+    metadata is). `data-rit="speelt"` op een voorouder zolang hij speelt (dan
+    staat alleen de video er), op `ended` `data-rit="klaar"` en zo laten: de
+    video vervaagt boven de stilstaande auto met vol licht, wat hetzelfde
+    beeld is, en vol gaat over in dag.
+  - De glans glijdt om de 11 s. Met `prefers-reduced-motion` geen welkom,
+    knipper, video of glans: alles staat stil op dag-licht. Plaats en maat van
+    de lagen zet de app zelf.
 - `styles/skeleton.css`: laden (zie Laden hieronder). Tokens
   `--skeleton-fill`, `--skeleton-fill-canvas`, `--skeleton-fill-glass`,
   `--skeleton-line` (licht, donker en per `data-thema`), `--skeleton-pulse`,

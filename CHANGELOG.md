@@ -1,5 +1,53 @@
 # Changelog
 
+## 0.7.2
+
+- `styles/studio.css`: echt licht en een echte inrij-video in plaats van een
+  render die met CSS naar links schuift.
+  - Nieuw: `.yoimStudioLicht` met `.yoimStudioLichtDag` (lichtbalk en
+    achterlichten) of `.yoimStudioLichtVol` (daarbij de koplampen): een render
+    op zwart als `<picture>`, met `mix-blend-mode: screen` over de auto en met
+    `.yoimStudioAuto` voor plaats en maat. Vol bevat dag, dus ze wisselen elkaar
+    af en stapelen niet.
+  - Welkom: de auto komt aan met vol licht, dat na 0,2 s in 600 ms overgaat in
+    dag.
+  - Knipperen zoals bij ontgrendelen: `data-knipper` op `.yoimStudio` of een
+    voorouder geeft twee flitsen van vol en dan weer dag (1 s). Loopt via
+    `@property --studio-flits`, zodat het welkom niet opnieuw speelt.
+  - Nieuw: `.yoimStudioRit` voor de inrij-video (met `.yoimStudioAuto`). Een
+    voorouder krijgt `data-rit="speelt"` zolang hij speelt (dan staat alleen
+    de video er) en daarna `data-rit="klaar"`: de video vervaagt in 0,25 s
+    boven de stilstaande auto met vol licht, en vol gaat over in dag.
+  - Toestanden: `thuis` en `laadt` hebben dag-licht (laadt houdt zijn groene
+    vloer); `slaapt`, `weg`, `rijdt` en `los` hebben de lichten uit. Slapen
+    dimt de lak niet meer grauw: geen `saturate`, en `--studio-slaap` is 0,97
+    (donker 0,95) in plaats van 0,8 (0,72).
+  - De auto rijdt niet meer met CSS in (`yoimStudioInrij` is weg): hij komt
+    aanzetten in 0,4 s vanaf opacity 0,01, zodat hij meteen als LCP telt.
+  - `.yoimStudio` heeft geen `z-index: 0` meer: het licht moet kunnen mengen
+    met de achtergrond van de pagina.
+  - Met `prefers-reduced-motion` geen welkom, geen knipper en geen video; alles
+    staat stil op dag-licht.
+
+Let op bij het bijwerken (energ.yoim, de enige afnemer van `studio.css`):
+
+- Pin `#v0.7.2`. Zonder verdere wijziging blijft de hero werken, alleen rijdt
+  de auto niet meer in maar komt hij aanzetten.
+- Geen stacking context tussen de studio en de achtergrond van de pagina:
+  `isolation: isolate` van `.autokaart` moet weg bij `.autokaart-studio`, en
+  geen `z-index`, `opacity`, `transform`, `filter` of `will-change` op een
+  voorouder. Anders tekent het zwart van de lichtlaag als rechthoek.
+- `components/car-studio.tsx`: na de `<picture className="yoimStudioAuto">`
+  twee `<picture className="yoimStudioAuto yoimStudioLicht yoimStudioLichtDag">`
+  en `...LichtVol` met de renders uit `public/baymax/2/` (`still-uit` wordt de
+  auto, `licht-dag`, `licht-vol`), en eventueel
+  `<video className="yoimStudioAuto yoimStudioRit">` met `width` en `height`,
+  `muted`, `playsInline`, `preload="none"` tot hij speelt. Zet
+  `data-rit="speelt"` vlak voor `play()` en `data-rit="klaar"` op `ended`, en
+  laat dat staan.
+- Knipperen bij een live overgang: zet `data-knipper` en haal hem weg op
+  `animationend` (of na 1 s).
+
 ## 0.7.1
 
 - Fix: `.skeleton-reveal` vult met `backwards` in plaats van `both`. Met `both`
