@@ -2,6 +2,8 @@
 
 ## 0.7.4
 
+- Bij `weg` en `rijdt` geen spot en geen lichte vloer meer: dan staat de auto
+  niet in de studio, en het studiolicht vocht met het licht van de auto zelf.
 - Studio: rijden is een rijdende auto in plaats van een grijze spookauto, en de
   laadkabel zit in de poort.
   - Nieuw: `.yoimStudioRijdt` (met `.yoimStudioAuto`), een rij-loop als

@@ -213,9 +213,13 @@
     filter: grayscale(1);
   }
 
+  /* Weg of onderweg staat hij niet in de studio: geen spot en geen lichte vloer,
+     die zouden met het licht van de auto zelf vechten. */
   [data-toestand="weg"] .yoimStudioVloer,
-  [data-toestand="weg"] .yoimStudioSpot {
-    opacity: 0.35;
+  [data-toestand="weg"] .yoimStudioSpot,
+  [data-toestand="rijdt"] .yoimStudioVloer,
+  [data-toestand="rijdt"] .yoimStudioSpot {
+    opacity: 0;
   }
 
   [data-toestand="weg"] .yoimStudioVak {
