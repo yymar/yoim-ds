@@ -130,7 +130,9 @@
 }
 
 .skeleton-reveal {
-  animation: skeleton-appear var(--skeleton-reveal) var(--ease) both;
+  /* backwards, niet both: een animatie die blijft staan houdt het element een stacking
+     context, en dan valt een sheet in <main> onder de navigatie. */
+  animation: skeleton-appear var(--skeleton-reveal) var(--ease) backwards;
 }
 
 /* Inhoud die al stond en ververst (een andere periode, een filter): geen skeleton, de oude

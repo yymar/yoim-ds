@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.7.1
+
+- Fix: `.skeleton-reveal` vult met `backwards` in plaats van `both`. Met `both`
+  bleef de echte inhoud na de fade een stacking context, en dan lag de
+  navigatie (z-40) over een sheet binnen `<main>` (z-45). Let op bij het
+  bijwerken: een lokale override (`animation-fill-mode: backwards`) kan weg.
+
 ## 0.7.0
 
 - Nieuw: `styles/skeleton.css`, laden voor alle apps, letterlijk uit Claude
