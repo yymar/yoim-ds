@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.7.3
+
+- Studio: wat energ lokaal had bij de inrij-video staat nu in `studio.css`.
+  `data-rit="wacht"` verbergt de stilstaande auto als voor de eerste paint al
+  vaststaat dat de video komt; een masker dooft de rechterrand van de video uit
+  zolang hij binnenrijdt (met `data-loopt` op de video zodra hij echt speelt);
+  en `max-width: none` op `.yoimStudioRit` tegen de preflight van Tailwind.
+  Let op bij het bijwerken (energ): de regels voor `wacht`, het masker,
+  `autokaartRitRand` en `max-width` onder `.autokaart-studio` kunnen weg.
+
 ## 0.7.2
 
 - `styles/studio.css`: echt licht en een echte inrij-video in plaats van een

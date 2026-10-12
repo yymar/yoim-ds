@@ -250,6 +250,9 @@
      hetzelfde beeld is, en vol gaat over in dag. */
   .yoimStudio .yoimStudioRit {
     height: auto;
+    /* De preflight van Tailwind zet max-width: 100% op een video; is de auto
+       breder dan zijn vak, dan lag het eindbeeld dan niet op de stilstaande auto. */
+    max-width: none;
     opacity: 0;
     animation: none;
     transition: opacity .25s var(--ease);
@@ -261,8 +264,25 @@
       transition: none;
     }
 
-    [data-rit="speelt"] .yoimStudioAuto:not(.yoimStudioRit) {
+    [data-rit="speelt"] .yoimStudioAuto:not(.yoimStudioRit),
+    [data-rit="wacht"] .yoimStudioAuto:not(.yoimStudioRit) {
       visibility: hidden;
+    }
+
+    /* De video komt rechts zijn eigen beeld in; waar de app hem afknipt zou dat
+       een harde rand zijn. Het masker dooft de rechter 30% uit zolang de neus
+       binnenkomt en schuift daarna weg, zodat het eindbeeld ongemaskerd op de
+       stilstaande auto ligt. De app zet data-loopt op de video zodra hij echt
+       speelt, en data-rit="wacht" als voor de eerste paint al vaststaat dat hij komt. */
+    [data-rit="speelt"] .yoimStudioRit {
+      mask-image: linear-gradient(to right, #000 77%, transparent);
+      mask-size: 130% 100%;
+      mask-repeat: no-repeat;
+      mask-position: 100% 0;
+    }
+
+    [data-rit="speelt"] .yoimStudioRit[data-loopt] {
+      animation: yoimStudioRitRand 1.6s ease-in-out forwards;
     }
   }
 
@@ -286,6 +306,17 @@
     .yoimStudio .yoimStudioRit {
       display: none;
     }
+  }
+}
+
+@keyframes yoimStudioRitRand {
+  0%,
+  35% {
+    mask-position: 100% 0;
+  }
+  80%,
+  100% {
+    mask-position: 0 0;
   }
 }
 
