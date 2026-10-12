@@ -104,17 +104,32 @@ export default async function Login(props: PageProps<'/auth/login'>) {
   `.yoimStudioGlans.yoimStudioAuto` (met de render als `mask-image`), het licht
   als `<picture>` op zwart met `.yoimStudioAuto yoimStudioLicht` plus
   `.yoimStudioLichtDag` (lichtbalk en achterlichten) of `.yoimStudioLichtVol`
-  (daarbij de koplampen), en de inrij-video `.yoimStudioRit.yoimStudioAuto`.
-  Alles met `.yoimStudioAuto` krijgt de plaats en maat van de auto.
+  (daarbij de koplampen), de inrij-video `.yoimStudioRit.yoimStudioAuto`, de
+  rij-loop `.yoimStudioRijdt.yoimStudioAuto`, de laadkabel
+  `.yoimStudioKabel.yoimStudioAuto` (met alpha, normaal) en het ledje van de
+  poort `.yoimStudioLed.yoimStudioAuto` (op zwart, screen). Volgorde: auto,
+  licht, kabel, led. Alles met `.yoimStudioAuto` krijgt de plaats en maat van
+  de auto.
   - Het licht ligt met `mix-blend-mode: screen` over de auto. Dat mengt alleen
     met wat in dezelfde stacking context ligt, dus tussen de studio en de
     achtergrond van de pagina geen `z-index`, `isolation`, `opacity`,
     `transform`, `filter` of `will-change`; anders tekent het zwart als
     rechthoek.
   - Een voorouder krijgt `data-toestand`: `thuis` (dag-licht), `laadt`
-    (dag-licht en een groene vloer die ademt), `slaapt` (lichten uit, geen
-    glans), `weg` en `rijdt` (grijs, parkeervak), `los` (niet gekoppeld, 22%);
-    buiten thuis en laadt zijn de lichten uit.
+    (dag-licht, een groene vloer die ademt, de kabel en een ademend ledje),
+    `slaapt` (lichten uit, geen glans), `weg` (grijs, parkeervak), `rijdt` (de
+    rij-loop), `los` (niet gekoppeld, 22%); buiten thuis en laadt zijn de
+    lichten uit.
+  - `data-kabel` op `.yoimStudio`: de kabel zit erin maar hij laadt niet. Dan
+    staat de kabel er bij `thuis` en `slaapt`, en brandt het ledje thuis zacht
+    (35%). Bij `laadt` is hij niet nodig. Geef de kabel en het ledje alleen als
+    ze te zien zijn, dan laden ze ook alleen dan.
+  - De rij-loop: een `<video>` met alpha, `autoplay`, `muted`, `loop`,
+    `playsInline`, `width` en `height`, en een `poster` met het eerste beeld.
+    Alleen zichtbaar bij `rijdt`, en zodra hij er is vervangt hij de
+    stilstaande auto, het licht en de glans. Per thema een eigen video; de app
+    kiest. Met `prefers-reduced-motion` of Save-Data geen `src`, dan staat de
+    poster stil.
   - Welkom: de auto komt in 0,4 s aanzetten (vanaf opacity 0,01, dus meteen
     LCP) met vol licht, dat daarna in 600 ms overgaat in dag.
   - `data-knipper` op `.yoimStudio` of een voorouder: twee flitsen van vol,
@@ -126,7 +141,8 @@ export default async function Login(props: PageProps<'/auth/login'>) {
     video vervaagt boven de stilstaande auto met vol licht, wat hetzelfde
     beeld is, en vol gaat over in dag.
   - De glans glijdt om de 11 s. Met `prefers-reduced-motion` geen welkom,
-    knipper, video of glans: alles staat stil op dag-licht. Plaats en maat van
+    knipper, video of glans: alles staat stil op dag-licht, en het ledje
+    brandt. Plaats en maat van
     de lagen zet de app zelf.
 - `styles/skeleton.css`: laden (zie Laden hieronder). Tokens
   `--skeleton-fill`, `--skeleton-fill-canvas`, `--skeleton-fill-glass`,

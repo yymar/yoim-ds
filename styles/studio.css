@@ -1,8 +1,9 @@
 /* @yoim/ds: de studio. De auto als gefotografeerd product (AutoPodium zonder
    3D-oprit), ontworpen in Claude Design. Een stilstaande render op transparant
    staat op een spot en een zachte vloer; de toestand van de auto (laadt, slaapt,
-   weg, onderweg, niet gekoppeld) wordt alleen met licht en helderheid verteld,
-   nooit met een tweede render.
+   weg, niet gekoppeld) wordt met licht en helderheid verteld, en met de
+   laadkabel als die erin zit. Alleen rijden heeft een eigen render: een
+   rij-loop.
 
    Tokens: --studio-spot (de lichtbundel achter de auto), --studio-vloer en
    --studio-vloer-glans (de zachte vloer waar de contactschaduw in ligt),
@@ -12,8 +13,9 @@
    dimt bijna niet, de lak blijft helder en het licht gaat uit).
 
    Licht en beweging komen uit echte renders: een lichtlaag (dag of vol) op
-   zwart die met `screen` over de auto ligt, en een inrij-video met alpha. Het
-   eindbeeld van de video is de auto met vol licht.
+   zwart die met `screen` over de auto ligt, een inrij-video met alpha (het
+   eindbeeld is de auto met vol licht), een rij-loop met alpha voor als hij
+   rijdt, en de laadkabel (alpha) met het ledje van de poort (screen).
 
    Het donkere thema heeft een olijfkleurige spot en een lichtere vloer: de
    render is diamond black, en op --surface verdwijnen onderkant en wielen
@@ -206,20 +208,16 @@
     opacity: 0.45;
   }
 
-  [data-toestand="rijdt"] .yoimStudioAuto,
   [data-toestand="weg"] .yoimStudioAuto {
     opacity: var(--studio-weg);
     filter: grayscale(1);
   }
 
-  [data-toestand="rijdt"] .yoimStudioVloer,
   [data-toestand="weg"] .yoimStudioVloer,
-  [data-toestand="rijdt"] .yoimStudioSpot,
   [data-toestand="weg"] .yoimStudioSpot {
     opacity: 0.35;
   }
 
-  [data-toestand="rijdt"] .yoimStudioVak,
   [data-toestand="weg"] .yoimStudioVak {
     opacity: 1;
   }
@@ -239,6 +237,58 @@
   [data-toestand="los"] .yoimStudioVloer,
   [data-toestand="los"] .yoimStudioSpot {
     opacity: 0.3;
+  }
+
+  /* De rij-loop: een <video> met alpha die naadloos herhaalt (de auto op zijn
+     plek, koplampen aan, draaiende wielen, wegstrepen), met .yoimStudioAuto
+     voor plaats en maat en een `poster` met het eerste beeld. Alleen bij
+     rijdt, en dan staat alleen hij er: geen stilstaande auto, licht of glans.
+     Zolang de app hem nog niet heeft neergezet, staat de stilstaande auto er
+     met de lichten uit. Met reduced motion speelt de app hem niet af en staat
+     de poster stil. De koplampbundel en de strepen lopen links tot de rand
+     van het beeld; het masker dooft die rand uit tot waar de auto begint. */
+  .yoimStudio .yoimStudioRijdt {
+    display: none;
+    height: auto;
+    max-width: none;
+    mask-image: linear-gradient(to right, transparent, #000 10%);
+  }
+
+  [data-toestand="rijdt"] .yoimStudioRijdt {
+    display: block;
+  }
+
+  [data-toestand="rijdt"] .yoimStudio:has(.yoimStudioRijdt) .yoimStudioAuto:not(.yoimStudioRijdt) {
+    visibility: hidden;
+  }
+
+  /* De laadkabel in de poort (met alpha, normaal over de auto) en het ledje
+     van de poort (op zwart, screen), allebei met .yoimStudioAuto. Bij laden
+     staan ze er allebei en ademt het ledje. Met data-kabel op .yoimStudio
+     (kabel erin, niet aan het laden) staat de kabel er thuis en als hij
+     slaapt, en brandt het ledje thuis zacht. Anders zijn ze weg. Met :where,
+     zodat de inrit en de rij-loop ze nog steeds verbergen. */
+  .yoimStudioKabel,
+  .yoimStudioLed {
+    visibility: hidden;
+  }
+
+  .yoimStudioLed {
+    mix-blend-mode: screen;
+  }
+
+  :where([data-toestand="laadt"]) :is(.yoimStudioKabel, .yoimStudioLed),
+  :where([data-toestand="thuis"] .yoimStudio[data-kabel]) :is(.yoimStudioKabel, .yoimStudioLed),
+  :where([data-toestand="slaapt"] .yoimStudio[data-kabel]) .yoimStudioKabel {
+    visibility: visible;
+  }
+
+  :where([data-toestand="thuis"] .yoimStudio[data-kabel]) .yoimStudioLed {
+    opacity: 0.35;
+  }
+
+  :where([data-toestand="laadt"]) .yoimStudioLed {
+    animation: yoimStudioLed 2.4s ease-in-out infinite;
   }
 
   /* De inrij-video (<video> met alpha). Na de toestanden, want die zetten
@@ -368,6 +418,13 @@
   }
   100% {
     background-position: -30% 0;
+  }
+}
+
+/* Het ledje ademt rustig: alleen opacity, zonder animatie staat hij vol aan. */
+@keyframes yoimStudioLed {
+  50% {
+    opacity: 0.3;
   }
 }
 

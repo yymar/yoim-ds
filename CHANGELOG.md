@@ -1,5 +1,44 @@
 # Changelog
 
+## 0.7.4
+
+- Studio: rijden is een rijdende auto in plaats van een grijze spookauto, en de
+  laadkabel zit in de poort.
+  - Nieuw: `.yoimStudioRijdt` (met `.yoimStudioAuto`), een rij-loop als
+    `<video>` met alpha en een `poster`. Alleen zichtbaar bij
+    `data-toestand="rijdt"`; zodra hij er is, verbergt hij de stilstaande
+    auto, het licht en de glans. `max-width: none` tegen de preflight van
+    Tailwind, en een masker dat de linker 10% uitdooft (de koplampbundel en
+    de strepen lopen tot de rand van het beeld). Met reduced motion speelt de
+    app hem niet af en staat de poster.
+  - Bij `rijdt` is de auto niet meer grijs en doorzichtig (`--studio-weg`,
+    `grayscale`), dimmen spot en vloer niet meer en staat er geen parkeervak.
+    `weg` blijft zoals hij was.
+  - Nieuw: `.yoimStudioKabel` (de kabel, met alpha, normaal over de auto) en
+    `.yoimStudioLed` (het ledje van de poort, op zwart, `screen`), allebei met
+    `.yoimStudioAuto`. Bij `laadt` staan ze er en ademt het ledje (2,4 s,
+    alleen opacity). Met `data-kabel` op `.yoimStudio` (kabel erin, niet aan
+    het laden) staat de kabel er bij `thuis` en `slaapt` en brandt het ledje
+    thuis op 35%. Anders zijn ze verborgen. Met reduced motion brandt het
+    ledje stil.
+  - Het ledje mengt met `screen`, dus dezelfde regel als bij het licht: geen
+    stacking context tussen de studio en de achtergrond van de pagina.
+
+Let op bij het bijwerken (energ.yoim):
+
+- Renders uit `baymax-studio/renders/v3` naar `public/baymax/3/`: `rij-licht`
+  en `rij-donker` (900 en 1600, WebM en MP4, met posters), `kabel` en
+  `laadpoort-led` (600 tot 1600, AVIF en WebP), en de nieuwe `inrij` met
+  draaiende wielen. `still-uit` en het licht zijn niet veranderd.
+- `components/car-studio.tsx`: bij `rijdt` een
+  `<video className="yoimStudioAuto yoimStudioRijdt">` met de video van het
+  thema (WebKit HEVC, de rest VP9, zoals `rideSource`) en de poster; na het
+  licht `<picture className="yoimStudioAuto yoimStudioKabel">` en
+  `...yoimStudioLed` bij laden of kabel erin, en `data-kabel` op `.yoimStudio`
+  als `kabel_erin` en hij niet laadt.
+- Zonder die wijziging staat bij `rijdt` de stilstaande auto ongedimd met de
+  lichten uit, in plaats van grijs.
+
 ## 0.7.3
 
 - Studio: wat energ lokaal had bij de inrij-video staat nu in `studio.css`.
