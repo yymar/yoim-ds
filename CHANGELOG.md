@@ -1,5 +1,19 @@
 # Changelog
 
+## 0.7.5
+
+- Studio: de wegstrepen van de rij-loop lopen links en rechts zacht uit in
+  plaats van hard op te houden aan de rand van het vak van de auto. Het masker
+  op `.yoimStudioRijdt` was alleen links (0 tot 10%) en is nu aan beide kanten:
+  helemaal uit in de buitenste 3%, vol vanaf 10,5% en tot 89%, waar de auto in
+  de render begint en ophoudt. De auto zelf blijft ongemaskerd.
+
+Let op bij het bijwerken (energ.yoim):
+
+- Knip niet meer dan 3% van de video aan elke kant af, anders is de rand van
+  de strepen weer te zien. Op de telefoon kan dat door de studio tot de rand
+  van het scherm te laten lopen (zie `.autokaart-studio` in `app/globals.css`).
+
 ## 0.7.4
 
 - Bij `weg` en `rijdt` geen spot en geen lichte vloer meer: dan staat de auto

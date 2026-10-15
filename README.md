@@ -129,7 +129,9 @@ export default async function Login(props: PageProps<'/auth/login'>) {
     Alleen zichtbaar bij `rijdt`, en zodra hij er is vervangt hij de
     stilstaande auto, het licht en de glans. Per thema een eigen video; de app
     kiest. Met `prefers-reduced-motion` of Save-Data geen `src`, dan staat de
-    poster stil.
+    poster stil. Een masker dooft links en rechts de strepen uit; de buitenste
+    3% van de video is helemaal uit, dus de app mag aan elke kant tot 3% van
+    de video afknippen zonder dat de strepen hard ophouden.
   - Welkom: de auto komt in 0,4 s aanzetten (vanaf opacity 0,01, dus meteen
     LCP) met vol licht, dat daarna in 600 ms overgaat in dag.
   - `data-knipper` op `.yoimStudio` of een voorouder: twee flitsen van vol,

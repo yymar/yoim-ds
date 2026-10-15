@@ -249,13 +249,16 @@
      rijdt, en dan staat alleen hij er: geen stilstaande auto, licht of glans.
      Zolang de app hem nog niet heeft neergezet, staat de stilstaande auto er
      met de lichten uit. Met reduced motion speelt de app hem niet af en staat
-     de poster stil. De koplampbundel en de strepen lopen links tot de rand
-     van het beeld; het masker dooft die rand uit tot waar de auto begint. */
+     de poster stil. De koplampbundel en de strepen lopen links en rechts tot
+     de rand van het beeld, de auto staat van 10,5% tot 89% van de breedte.
+     Het masker dooft beide randen uit tot waar de auto begint, en de buitenste
+     3% is helemaal uit: knipt de app tot zoveel van de video af, dan houden
+     de strepen niet hard op. */
   .yoimStudio .yoimStudioRijdt {
     display: none;
     height: auto;
     max-width: none;
-    mask-image: linear-gradient(to right, transparent, #000 10%);
+    mask-image: linear-gradient(to right, transparent 3%, #000 10.5%, #000 89%, transparent 97%);
   }
 
   [data-toestand="rijdt"] .yoimStudioRijdt {
