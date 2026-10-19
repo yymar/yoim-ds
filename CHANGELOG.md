@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.7.6
+
+- Nieuw: `FoutScherm` (`components/fout-scherm`), het scherm voor `error.tsx` en
+  `global-error.tsx`: `LeegStaat` met de stille knop Opnieuw proberen (`retry`
+  van Next). Elke app had hier een eigen kopie met een eigen knop, en LeegStaat
+  zegt dat zijn actie een stille knop is maar die bestond nergens.
+
+Niet breaking. Een app kan zijn eigen `error.tsx` vervangen door
+`<FoutScherm retry={retry} />`.
+
 ## 0.7.5
 
 - Studio: de wegstrepen van de rij-loop lopen links en rechts zacht uit in

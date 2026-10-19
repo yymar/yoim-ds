@@ -179,7 +179,7 @@ export default async function Login(props: PageProps<'/auth/login'>) {
 - `auth/`: `proxy`, `createServerSupabase`, `createBrowserSupabase`,
   `cookieOptions`, `inlog-fout`, `moment`.
 - `components/`: `InlogPagina`, `InlogTray`, `GoogleKnop`, `Klok`, `Merk`,
-  `LeegStaat` (`leeg-staat`), `Navigation` en `ThemeChoice` (`navigation`), `StatusLine`
+  `LeegStaat` (`leeg-staat`), `FoutScherm` (`fout-scherm`), `Navigation` en `ThemeChoice` (`navigation`), `StatusLine`
   (`status-line`), `Bar` (`bar`), `DonutList` (`donut-list`), `Amount`
   (`amount`), `SegmentedChoice` en het type `SegmentedOption`
   (`segmented-choice`). Iconen zijn lucide: `lucide-react` is een peer
@@ -206,6 +206,17 @@ export default async function Login(props: PageProps<'/auth/login'>) {
     value={kok}
     onChange={setKok}
   />
+  ```
+- `FoutScherm` is de hele `error.tsx` (en de body van `global-error.tsx`): LeegStaat
+  met de stille knop Opnieuw proberen, gecentreerd in een `.schermkolom`. `kop` en
+  `tekst` hebben een standaard voor een haperende database.
+
+  ```tsx
+  'use client'
+  import { FoutScherm } from '@yoim/ds/components/fout-scherm'
+  export default function Fout({ retry }: { retry: () => void }) {
+    return <FoutScherm retry={retry} />
+  }
   ```
 - `money.ts`: `formatAmount` (`−€ 42,18`, `+€ 2.400,00`), `barState` (binnen,
   bijna, over; precies op het budget is binnen) en `heatLevel` (terciles van
