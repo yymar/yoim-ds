@@ -1,5 +1,25 @@
 # Changelog
 
+## 0.8.0
+
+- Nieuw: `npm run e2e` (`e2e/`), een check die in elke lokaal draaiende app
+  hover-, gekozen- en focusvlakken meet: afgeknipt door de ronding van een
+  kaart, buren zonder ruimte ertussen, een hoekige, dubbele of ontbrekende
+  focusring. Zie de README.
+- Nieuw: `@yoim/ds/auth/dev`, de dev-login (`GET`) waarmee de check inlogt,
+  alleen in development en alleen tegen een database op deze machine.
+- Navigation: 2px tussen de items op de telefoon. Een hovertint raakte de
+  lozenge van het gekozen item ernaast en las als één vlak.
+- Een `.rij` in de eerste of laatste `<li>` van een `.kaart` krijgt bij focus
+  de binnenradius van de kaart, net als een rij direct in de kaart. De ring
+  viel daar in de hoeken weg.
+
+Let op bij het bijwerken:
+
+- Een app die nog geen dev-login heeft (yoim, energ.yoim, home.yoim): voeg
+  `app/auth/dev/route.ts` toe met `export { GET } from '@yoim/ds/auth/dev'`.
+- Draai daarna `npm run e2e -- <app>` hier en los op wat hij meldt.
+
 ## 0.7.6
 
 - Nieuw: `FoutScherm` (`components/fout-scherm`), het scherm voor `error.tsx` en

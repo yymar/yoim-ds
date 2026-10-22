@@ -391,13 +391,13 @@
     position: absolute;
     top: 0;
     bottom: 0;
-    left: 0;
-    width: calc(100% / var(--n, 3));
+    left: 1px;
+    width: calc((100% - var(--n, 3) * 2px) / var(--n, 3));
     border: 1px solid var(--glass-border);
     border-radius: var(--radius-capsule);
     background: var(--glass-tint-strong);
     box-shadow: var(--glass-rim);
-    transform: translateX(calc(var(--i, 0) * 100%));
+    transform: translateX(calc(var(--i, 0) * (100% + 2px)));
     transition: transform var(--dur-glas) var(--ease-glas);
   }
 
@@ -408,6 +408,8 @@
     /* Anders wordt een item niet smaller dan zijn label en loopt de lozenge
        weg van zijn icoon. */
     min-width: 0;
+    /* 2px tussen de items: een hovertint raakt anders de lozenge ernaast. */
+    margin: 0 1px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -590,6 +592,7 @@
       flex: none;
       flex-direction: row;
       gap: 0;
+      margin: 0;
       height: 40px;
       padding: 0 10px;
       font-size: var(--text-small);
@@ -1032,13 +1035,16 @@ body {
    kaart knipt. De ring tekent dan een harde rechthoek waarvan de hoeken buiten
    de ronding vallen. Het eerste en laatste kind krijgt daarom de binnenradius
    van de kaart (radius min de rand), en een dichte `<details>` rondt ook zijn
-   onderkant af, want daar is de summary het hele kaartje. */
-.kaart > :first-child:focus-visible {
+   onderkant af, want daar is de summary het hele kaartje. Een `.rij` in een
+   `<li>` ligt net zo tegen de rand. */
+.kaart > :first-child:focus-visible,
+.kaart > li:first-child > .rij:focus-visible {
   border-top-left-radius: calc(var(--radius-lg) - 1px);
   border-top-right-radius: calc(var(--radius-lg) - 1px);
 }
 
 .kaart > :last-child:focus-visible,
+.kaart > li:last-child > .rij:focus-visible,
 details.kaart:not([open]) > summary:focus-visible {
   border-bottom-left-radius: calc(var(--radius-lg) - 1px);
   border-bottom-right-radius: calc(var(--radius-lg) - 1px);

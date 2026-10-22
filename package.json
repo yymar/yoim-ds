@@ -1,6 +1,6 @@
 {
   "name": "@yoim/ds",
-  "version": "0.7.6",
+  "version": "0.8.0",
   "private": true,
   "description": "Het design system en de inloglaag van de yoim-apps: tokens, glas, auth, inlogscherm.",
   "exports": {
@@ -14,7 +14,8 @@
   },
   "scripts": {
     "test": "vitest run",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "e2e": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON e2e/run.ts"
   },
   "peerDependencies": {
     "@supabase/ssr": ">=0.12",
@@ -31,6 +32,7 @@
     "@types/react": "^19.3.0",
     "lucide-react": "^1.57.0",
     "next": "16.4.2",
+    "playwright-core": "^1.64.1",
     "react": "19.3.1",
     "react-dom": "19.3.1",
     "typescript": "^5",

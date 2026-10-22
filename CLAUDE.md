@@ -54,7 +54,8 @@ Harde regels. De rest van dit bestand is voorkeur; dit niet.
   werk leiden.
 - **Pure logica zonder I/O** (`thema.ts`, `week.ts`, `money.ts`, `auth/*.ts` zonder netwerk)
   krijgt unit tests in een `*.test.ts` ernaast (vitest). Componenten en CSS niet; die controleer
-  je in een app, in licht en donker, op telefoon en desktop.
+  je in een app, in licht en donker, op telefoon en desktop. Hover, gekozen en focus meet
+  `npm run e2e` in alle draaiende apps (README, "Hover, gekozen en focus nakijken").
 - **Commit lokaal, push en tag pas als Yoran het zegt.** Hij wil een wijziging eerst zelf in een
   app bekijken. Een tag pushen is uitrollen: elke app die hem pint, krijgt hem bij de volgende
   `npm i`. Na het committen meld je welke commits klaarstaan.
@@ -74,6 +75,7 @@ Harde regels. De rest van dit bestand is voorkeur; dit niet.
 ```bash
 npm test
 npm run typecheck
+npm run e2e   # bij CSS of componenten, met de apps lokaal aan
 ```
 
 # Schrijfstijl

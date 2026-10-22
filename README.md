@@ -295,6 +295,49 @@ De echte inhoud die een skeleton vervangt krijgt `className="skeleton-reveal"`
 en `data-slot` met dezelfde naam als `slot` (of `area`) van het skeleton, voor
 de maatcontrole.
 
+## Hover, gekozen en focus nakijken (e2e)
+
+`npm run e2e` logt in op elke app die lokaal draait, volgt alle interne links
+vanaf `/`, opent per pagina elke soort sheet of dialoog (`aria-haspopup="dialog"`)
+en meet op 390 en 1440 px breed. `npm run e2e -- mone.yoim` doet er een.
+
+```mermaid
+flowchart LR
+  run[e2e/run.ts] -->|/auth/dev| app[app op localhost]
+  app --> pagina[elke pagina en sheet]
+  pagina --> vast[vlakken en buren meten]
+  pagina --> tab[met Tab langs elke focus]
+  vast --> rapport
+  tab --> rapport
+```
+
+Wat hij meldt:
+
+- **vlak half afgeknipt door ronding**: een hover- of gekozen-vlak dat half in
+  de hoek van een `.kaart` valt. Dan blijft er een reep over, zoals een rij
+  boven een `pb-1.5` onderin de kaart.
+- **focusring afgeknipt**: een ring die een knippende voorouder wegsnijdt, in
+  een hoek, buiten een balk of buiten een scroller die niet meescrolt.
+- **afgeronde vlakken raken elkaar**: buren in een lijst zonder 2px ertussen;
+  hover naast gekozen wordt dan één klont.
+- **hoekige focusring om ronde inhoud**, **dubbele focusring** en **geen
+  zichtbare focusring**.
+
+De twee vormen die het altijd goed doen in een `.kaart`: rijen van rand tot
+rand (`.rij`, direct in de kaart of in een `<li>`, zonder padding eromheen), of
+ingesprongen afgeronde rijen in een kaart met padding en `gap-0.5` ertussen.
+
+Nodig: de lokale database (`npm run db:start` in `../yoim`), elke app met
+`npm run dev` op zijn poort (zie `APPS` in `e2e/run.ts`), een
+`.env.development.local` naar die database en `app/auth/dev/route.ts` met
+`export { GET } from '@yoim/ds/auth/dev'`. Zonder dat meldt een app "niet
+ingelogd".
+
+Wat hij niet ziet: de volgorde waarin lagen getekend worden (een WebGL-canvas
+tekent over een outline van zijn kaart heen, kijk zoiets met eigen ogen na),
+pagina's waar geen link heen gaat, en schermen achter een klik die geen
+dialoog opent.
+
 ## Tweaken en uitrollen
 
 Wijzig hier, `npm test`, commit, tag (`git tag v0.5.6 && git push --tags`, pas als Yoran het zegt).
