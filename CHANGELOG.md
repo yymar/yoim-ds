@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.8.1
+
+- Geen focusring meer om een element met `tabindex="-1"`. Zo'n element krijgt
+  focus van script (een detailpaneel dat opengaat), niet van de Tab-toets, en
+  op een render zonder eerdere klik telde de browser dat als `:focus-visible`:
+  dan stond er een accentrand om het hele paneel.
+
 ## 0.8.0
 
 - Nieuw: `npm run e2e` (`e2e/`), een check die in elke lokaal draaiende app

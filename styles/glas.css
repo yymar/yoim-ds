@@ -1015,7 +1015,10 @@ body {
   overscroll-behavior-y: contain;
 }
 
-:focus-visible {
+/* tabindex="-1" is een focusdoel voor script (een paneel dat opengaat), geen
+   stop voor de Tab-toets: daar hoort geen ring om. `:where` houdt de
+   specificiteit op die van `:focus-visible`, zodat tekstvelden hieronder winnen. */
+:where(:not([tabindex="-1"])):focus-visible {
   outline: none;
   box-shadow: var(--ring-focus);
 }
@@ -1025,7 +1028,7 @@ body {
    het wel, naar binnen omdat `.kaart` clipt. Hover en active zijn alleen een
    vulling en overleven het nog steeds niet. */
 @media (forced-colors: active) {
-  :focus-visible {
+  :where(:not([tabindex="-1"])):focus-visible {
     outline: 2px solid;
     outline-offset: -2px;
   }
