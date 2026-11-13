@@ -24,8 +24,16 @@ export function isLocalDatabase(url = process.env.NEXT_PUBLIC_SUPABASE_URL, env 
 }
 
 /**
+ * Of het verzoek aan deze machine zelf gericht is. Houdt DNS-rebinding en een
+ * dev-server die op het netwerk luistert buiten.
+ */
+export function isLocalHost(host: string | null): boolean {
+  return /^(localhost|127\.0\.0\.1)(:\d+)?$/.test(host ?? '')
+}
+
+/**
  * Inloggen als Yoran (of `?as=imke`) met het wachtwoord van de seed, alleen
- * tegen een lokale database; overal anders bestaat deze route niet. Google
+ * tegen een lokale database en alleen op localhost; overal anders bestaat deze route niet. Google
  * heeft een geregistreerde redirect nodig, en die heeft een lokale stack niet.
  * Hier logt ook de e2e-check van dit pakket mee in.
  *
@@ -33,7 +41,7 @@ export function isLocalDatabase(url = process.env.NEXT_PUBLIC_SUPABASE_URL, env 
  *   export { GET } from '@yoim/ds/auth/dev'
  */
 export async function GET(request: Request) {
-  if (!isLocalDatabase()) {
+  if (!isLocalDatabase() || !isLocalHost(request.headers.get('host'))) {
     return new NextResponse('Not found', { status: 404 })
   }
 

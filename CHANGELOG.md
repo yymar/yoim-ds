@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.8.2
+
+- De dev-login (`auth/dev`) antwoordt alleen nog op `localhost` of `127.0.0.1`: een
+  verzoek met een andere `Host` krijgt een 404. Dat houdt DNS-rebinding en een
+  dev-server die op het netwerk luistert buiten. Apps hoeven niets te doen.
+
 ## 0.8.1
 
 - Geen focusring meer om een element met `tabindex="-1"`. Zo'n element krijgt

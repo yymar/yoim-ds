@@ -1,6 +1,21 @@
 import { describe, expect, it } from 'vitest'
 
-import { isLocalDatabase } from './dev'
+import { isLocalDatabase, isLocalHost } from './dev'
+
+describe('isLocalHost', () => {
+  it('laat alleen een verzoek aan deze machine door', () => {
+    expect(isLocalHost('localhost:3003')).toBe(true)
+    expect(isLocalHost('127.0.0.1:3003')).toBe(true)
+    expect(isLocalHost('localhost')).toBe(true)
+  })
+
+  it('niet via het netwerk, een andere naam of zonder Host', () => {
+    expect(isLocalHost('192.168.1.20:3003')).toBe(false)
+    expect(isLocalHost('kwaad.example:3003')).toBe(false)
+    expect(isLocalHost('localhost.kwaad.example')).toBe(false)
+    expect(isLocalHost(null)).toBe(false)
+  })
+})
 
 describe('isLocalDatabase', () => {
   it('staat de dev-login alleen toe tegen een database op deze machine', () => {
