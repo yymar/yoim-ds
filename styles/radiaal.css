@@ -24,6 +24,16 @@
     pointer-events: auto;
   }
 
+  /* Een vinger is breder dan een muis: op een aanraakscherm is het tapvlak 40. */
+  @media (pointer: coarse) {
+    .hotspot {
+      top: -20px;
+      left: -20px;
+      width: 40px;
+      height: 40px;
+    }
+  }
+
   .hotspot::before {
     width: 10px;
     height: 10px;
@@ -411,6 +421,10 @@
     line-height: var(--lh-small);
     white-space: nowrap;
     translate: -50% 0;
+    /* Op een smalle telefoon past een rij met vijf keuzes niet: dan breekt die.
+       De breedte staat erbij omdat het kaartje anders zo smal wordt als kan. */
+    width: max-content;
+    max-width: calc(100vw - 1rem);
   }
 
   .radiaal-naam p {
@@ -522,7 +536,9 @@
   /* Een kleine keuze: een label met knopjes van 28 px. */
   .pilrij {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
+    justify-content: center;
     gap: 4px;
     margin-top: 0.4rem;
   }

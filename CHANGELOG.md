@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.10.1
+
+- Het ronde menu op de telefoon. De stip heeft op een aanraakscherm
+  (`pointer: coarse`) een tapvlak van 40 in plaats van 28; de stip zelf blijft
+  10. Het naamkaartje is hooguit zo breed als het scherm min een halve rem
+  aan elke kant, en een `PillRow` die daar niet in past breekt naar een
+  tweede regel.
+
 ## 0.10.0
 
 - De andere apparaten in het ronde menu, ontworpen in Claude Design
