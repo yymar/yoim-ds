@@ -147,12 +147,32 @@
       0 0 0 4px var(--accent);
   }
 
-  /* "Terug" bij het kleurenwiel: in de opening van de boog, onderaan. */
+  .radiaal-knop b {
+    font-size: var(--text-caption);
+    font-weight: var(--weight-semibold);
+  }
+
+  .radiaal-midden b {
+    font-size: var(--text-body);
+    font-weight: var(--weight-semibold);
+  }
+
+  /* De knoppen van een laag; een tweede laag (kleurenwiel, afstandsbediening)
+     komt in --dur-base binnen. */
+  .radiaal-laag {
+    position: absolute;
+    top: 0;
+    left: 0;
+    animation: radiaal-wissel var(--dur-base) var(--ease-glas);
+  }
+
+  /* "Terug" uit een tweede laag: in de opening van de boog, onderaan. */
   .radiaal-terug {
     --hoek: 90deg;
     --straal: 96px;
     border: 1px solid var(--border);
     background: var(--surface-raised);
+    animation: radiaal-wissel var(--dur-base) var(--ease-glas);
   }
 
   .staal {
@@ -207,6 +227,23 @@
 
   .boog:not([data-aan]) .boog-vulling {
     visibility: hidden;
+  }
+
+  /* Alleen kijken (een batterij): 6 dik, zonder duim. */
+  .boog[data-dun] :is(.boog-spoor, .boog-vulling) {
+    stroke-width: 6px;
+  }
+
+  /* Een streepje op een tweede waarde, zoals de temperatuur nu: 16 lang en
+     2,5 dik, met een rand in de kleur van de duim. */
+  .boog-vlak .boog-streep-rand {
+    stroke: var(--surface-raised);
+    stroke-width: 6px;
+  }
+
+  .boog-vlak .boog-streep {
+    stroke: var(--text);
+    stroke-width: 2.5px;
   }
 
   .boog-vlak .boog-raak {
@@ -316,6 +353,8 @@
     display: none;
     width: 76px;
     height: 76px;
+    align-content: center;
+    gap: 1px;
     place-items: center;
     border: 1px solid var(--border);
     border-radius: var(--radius-full);
@@ -338,6 +377,12 @@
   .radiaal-uitlees b.woord {
     font-size: 15px;
     letter-spacing: 0;
+  }
+
+  .radiaal-uitlees span {
+    color: var(--text-muted);
+    font-size: var(--text-nav);
+    line-height: 1;
   }
 
   .radiaal:has([data-sleep]) .radiaal-knop,
@@ -379,8 +424,11 @@
     font-weight: var(--weight-semibold);
   }
 
-  .radiaal-naam .radiaal-melding {
+  .radiaal-naam .radiaal-melding,
+  .radiaal-melding {
+    display: flex;
     flex-direction: row;
+    align-items: center;
     gap: 6px;
     margin-top: 2px;
     color: var(--text);
@@ -428,6 +476,114 @@
   .radiaal-link {
     color: var(--accent);
   }
+
+  /* Wat er nu speelt: een hoes van 40 px, titel en ondertitel. */
+  .speelt {
+    display: flex;
+    min-width: 190px;
+    max-width: 230px;
+    align-items: center;
+    gap: 10px;
+    margin: 0.45rem 0 0.1rem;
+    text-align: left;
+  }
+
+  .speelt-hoes {
+    display: grid;
+    width: 40px;
+    height: 40px;
+    flex: none;
+    place-items: center;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: var(--surface-sunken);
+    color: var(--text-muted);
+  }
+
+  .speelt-hoes img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .speelt > div {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+  }
+
+  .speelt > div > * {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  /* Een kleine keuze: een label met knopjes van 28 px. */
+  .pilrij {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin-top: 0.4rem;
+  }
+
+  .pilrij > span {
+    min-width: 3.6rem;
+    color: var(--text-muted);
+    font-size: var(--text-caption);
+    text-align: left;
+  }
+
+  /* Een kaartje onder de stip voor wat je alleen bekijkt: minstens 200 breed,
+     22 onder de stip, het getal 28. */
+  .kijkkaart {
+    position: absolute;
+    top: 22px;
+    left: 0;
+    display: flex;
+    min-width: 200px;
+    flex-direction: column;
+    gap: 2px;
+    padding: 14px 16px;
+    border-radius: var(--radius-lg);
+    color: var(--text-muted);
+    font-size: var(--text-small);
+    font-variant-numeric: tabular-nums;
+    line-height: var(--lh-small);
+    white-space: nowrap;
+    pointer-events: auto;
+    translate: -50% 0;
+    animation: radiaal-in var(--dur-base) var(--ease-glas);
+  }
+
+  .kijkkaart > b {
+    color: var(--text);
+    font-weight: var(--weight-semibold);
+  }
+
+  .kijkkaart-groot {
+    color: var(--text);
+    font-size: 28px;
+    font-weight: var(--weight-semibold);
+    letter-spacing: -0.02em;
+    line-height: 1.15;
+  }
+
+  .kijkkaart a {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    margin: 10px -16px -14px;
+    padding: 10px 16px;
+    border-top: 1px solid var(--border);
+    color: var(--accent);
+    font-weight: var(--weight-medium);
+  }
+
+  .kijkkaart[data-weg] > :not(b) {
+    opacity: 0.4;
+  }
 }
 
 @keyframes hotspot-puls {
@@ -441,6 +597,12 @@
   from {
     opacity: 0;
     scale: 0.85;
+  }
+}
+
+@keyframes radiaal-wissel {
+  from {
+    opacity: 0;
   }
 }
 

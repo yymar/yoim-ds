@@ -1,0 +1,427 @@
+<!doctype html><html lang="nl"><head><meta charset="utf-8"><title>Apparaatbediening</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="stylesheet" href="../../styles.css">
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:var(--surface-sunken);color:var(--text);font-family:var(--font-sans)}
+button{font:inherit;color:inherit;border:0;background:none;padding:0}
+.pag{max-width:1900px;margin:0 auto;padding:32px 24px 96px}
+h1{margin:0;font-size:30px;font-weight:600;letter-spacing:-.02em}
+.intro{margin:8px 0 0;max-width:82ch;font-size:14px;line-height:1.55;color:var(--text-muted);text-wrap:pretty}
+.balk-top{position:sticky;top:0;z-index:40;display:flex;flex-wrap:wrap;gap:10px 14px;align-items:center;padding:12px 0;margin:16px 0 0;background:var(--surface-sunken)}
+.balk-top .lbl{font-size:13px;font-weight:600;color:var(--text-muted)}
+.seg{display:flex;gap:1px;padding:3px;border-radius:999px;background:var(--surface-raised);border:1px solid var(--border)}
+.seg button{height:32px;padding:0 14px;border-radius:999px;color:var(--text-muted);font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap}
+.seg button[aria-pressed="true"]{background:var(--accent);color:var(--accent-fg)}
+.richting{margin-top:56px}
+.r-kop{display:flex;align-items:baseline;gap:12px;margin-bottom:6px}
+.r-kop b{display:inline-grid;place-items:center;width:30px;height:30px;border-radius:50%;background:var(--accent);color:var(--accent-fg);font-size:15px;font-weight:600;flex:none}
+.r-kop h2{margin:0;font-size:22px;font-weight:600;letter-spacing:-.02em}
+.r-uitleg{margin:0 0 6px 42px;max-width:92ch;font-size:14px;line-height:1.55;color:var(--text-muted);text-wrap:pretty}
+.r-weetjes{margin:0 0 20px 42px;display:flex;flex-wrap:wrap;gap:6px}
+.r-weetjes span{font-size:12px;padding:3px 10px;border-radius:999px;background:var(--surface-raised);border:1px solid var(--border);color:var(--text-muted)}
+.r-rij{display:flex;flex-wrap:wrap;gap:20px;align-items:flex-start}
+.kaartje{display:flex;flex-direction:column;gap:8px}
+.kaartje>small{font-size:12px;font-weight:600;color:var(--text-muted);padding-left:4px}
+.kaartje>small b{color:var(--text)}
+.paar{display:flex;gap:6px}
+.klein .doek{zoom:.66}
+.live>small{font-size:13px}
+
+/* Het doek: een stukje scene, FSD-stijl */
+.doek{position:relative;width:380px;height:430px;border-radius:22px;overflow:hidden;background:var(--surface);color:var(--text);flex:none;user-select:none;-webkit-user-select:none;touch-action:none}
+.doek svg.kamer{position:absolute;inset:0;width:100%;height:100%}
+.anker{position:absolute;width:0;height:0}
+
+/* Uit @yoim/ds (glas.css) en home.yoim (globals.css), ongewijzigd */
+.glas,.glas-dun,.glas-dik{border:1px solid var(--glass-border);box-shadow:var(--glass-rim)}
+.glas{background:var(--glass-tint);backdrop-filter:var(--glass-blur)}
+.glas-dun{background:var(--glass-thin);backdrop-filter:var(--glass-blur-thin)}
+.glas-dik{background:var(--glass-tint-strong);backdrop-filter:var(--glass-blur-thick)}
+.radiaal{position:absolute;top:0;left:0}
+.radiaal-schijf{position:absolute;border-radius:var(--radius-full)}
+.radiaal-midden{position:absolute;top:-30px;left:-30px;display:grid;width:60px;height:60px;place-items:center;border:1px solid var(--border);border-radius:var(--radius-full);background:var(--surface-raised);color:var(--text-muted);cursor:pointer;z-index:3;transition:background var(--dur-fast) var(--ease),color var(--dur-fast) var(--ease),scale var(--dur-fast) var(--ease),opacity var(--dur-fast) var(--ease)}
+.radiaal-midden:active{scale:var(--press-scale)}
+.radiaal-midden[data-on]{border-color:transparent;background:var(--accent);color:var(--accent-fg)}
+.radiaal-knop{position:absolute;top:-20px;left:-20px;display:grid;width:40px;height:40px;place-items:center;border-radius:var(--radius-full);color:var(--text);font-size:var(--text-small);font-weight:var(--weight-medium);cursor:pointer;transform:rotate(var(--hoek)) translateX(var(--straal,60px)) rotate(calc(var(--hoek) * -1));transition:background var(--dur-fast) var(--ease);z-index:2}
+@media (hover:hover){.radiaal-knop:hover{background:var(--surface-sunken)}.radiaal-lid:hover{background:var(--surface-sunken)}}
+.radiaal-knop[data-active]{background:var(--accent-soft);color:var(--accent)}
+.radiaal :disabled,.radiaal [data-uit]{opacity:.4;cursor:default;pointer-events:none}
+.radiaal-naam{position:absolute;left:0;display:flex;flex-direction:column;align-items:center;padding:.4rem 1rem;border-radius:var(--radius-lg);color:var(--text-muted);font-size:var(--text-small);line-height:var(--lh-small);white-space:nowrap;translate:-50% 0;font-variant-numeric:tabular-nums}
+.radiaal-naam b{color:var(--text);font-weight:var(--weight-semibold)}
+.radiaal-leden{display:flex;gap:4px;margin:.35rem 0 .15rem}
+.radiaal-lid{min-width:1.75rem;height:1.75rem;padding:0 .5rem;border:1px solid var(--border);border-radius:var(--radius-capsule);color:var(--text-muted);font-size:var(--text-caption);font-weight:var(--weight-medium);cursor:pointer}
+.radiaal-lid[data-on]{box-shadow:inset 0 -2px 0 var(--gloed)}
+.radiaal-lid[aria-pressed="true"]{border-color:transparent;background:var(--accent-soft);color:var(--accent)}
+:focus-visible{outline:none;box-shadow:var(--ring-focus)}
+
+/* Nieuw, gedeeld door de richtingen */
+.ico{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.ico.k{width:16px;height:16px}
+.melding{display:flex;align-items:center;gap:6px;margin-top:2px;color:var(--text)}
+.melding i{width:7px;height:7px;border-radius:50%;background:var(--botergoud)}
+.duim{position:absolute;width:24px;height:24px;margin:-12px 0 0 -12px;border-radius:50%;background:var(--surface-raised);border:2px solid var(--text);box-shadow:var(--glass-lift-1);cursor:grab;z-index:4;transition:scale var(--dur-fast) var(--ease)}
+.duim::after{content:"";position:absolute;inset:-12px;border-radius:50%}
+.duim i{position:absolute;inset:3px;border-radius:50%}
+.duim[data-sleep]{scale:1.25;cursor:grabbing}
+.duim.spook{background:none;border:1.5px dashed var(--text-subtle);box-shadow:none;z-index:3}
+.bel{position:absolute;translate:-50% -100%;padding:2px 9px;border-radius:999px;background:var(--text);color:var(--surface);font-size:12px;font-weight:600;white-space:nowrap;font-variant-numeric:tabular-nums;z-index:6;pointer-events:none}
+.radiaal[data-sleep] .dim{opacity:.28}
+.dim{transition:opacity var(--dur-fast) var(--ease)}
+.ring{position:absolute;border-radius:50%;cursor:pointer;clip-path:circle(50%)}
+.staal{width:22px;height:22px;border-radius:50%;border:1px solid var(--border-strong)}
+.radiaal-knop[data-gekozen]{box-shadow:0 0 0 2px var(--surface-raised),0 0 0 4px var(--accent)}
+svg.boog{position:absolute;overflow:visible;pointer-events:none}
+svg.boog path{fill:none;stroke-linecap:round}
+svg.boog .raak{stroke:transparent;pointer-events:stroke;cursor:pointer}
+
+
+.wiel{position:absolute;border-radius:50%;cursor:crosshair;clip-path:circle(50%)}
+.radiaal-midden.verstopt{opacity:0;pointer-events:none}
+.uitlees{position:absolute;display:grid;place-items:center;width:76px;height:76px;margin:-38px 0 0 -38px;border-radius:50%;background:var(--surface-raised);border:1px solid var(--border);pointer-events:none;font-variant-numeric:tabular-nums;z-index:5}
+.uitlees b{font-size:22px;font-weight:600;letter-spacing:-.02em;line-height:1}
+.uitlees b.woord{font-size:15px;letter-spacing:0}
+.terugknop{background:var(--surface-raised);border:1px solid var(--border)}
+
+/* Pagina */
+h2{margin:56px 0 4px;font-size:22px;font-weight:600;letter-spacing:-.02em}
+.sub{margin:0 0 18px;max-width:80ch;font-size:14px;line-height:1.55;color:var(--text-muted)}
+#live{display:flex;flex-wrap:wrap;gap:8px;margin-top:20px}
+#toestanden{display:flex;flex-wrap:wrap;gap:20px}
+#toestanden .doek{zoom:.66}
+.stippen{display:flex;flex-wrap:wrap;gap:6px}
+.stipvlak{display:flex;gap:2px;padding:14px 10px 10px;border-radius:22px;background:var(--surface);color:var(--text)}
+.stipcel{display:flex;flex-direction:column;align-items:center;gap:10px;width:96px;font-size:12px;color:var(--text-muted);text-align:center}
+.stipcel .plek{position:relative;width:48px;height:48px}
+.hotspot{position:absolute;top:10px;left:10px;display:grid;width:28px;height:28px;place-items:center;border-radius:var(--radius-full);cursor:pointer}
+.hotspot::before{width:10px;height:10px;border:1.5px solid var(--border-strong);border-radius:inherit;background:var(--surface-raised);content:'';transition:scale var(--dur-base) var(--ease-glas),background var(--dur-fast) var(--ease)}
+.hotspot[data-on]::before{border-color:var(--surface-raised);background:var(--gloed);box-shadow:0 0 10px 2px var(--gloed)}
+.hotspot:hover::before,.hotspot[data-toon="hover"]::before,.hotspot[data-open]::before{scale:1.5}
+.hotspot[data-toon="focus"]{box-shadow:var(--ring-focus)}
+.hotspot[data-weg]::before{opacity:.35}
+.hotspot[data-pending]::before{animation:puls .8s var(--ease) infinite alternate}
+@keyframes puls{to{scale:1.7;opacity:.55}}
+@media (prefers-reduced-motion:reduce){.hotspot[data-pending]::before{animation:none}}
+.spec{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:16px;align-items:start}
+.blok{padding:18px 20px;border-radius:var(--radius-lg);background:var(--surface-raised);border:1px solid var(--border)}
+.blok h3{margin:0 0 10px;font-size:15px;font-weight:600}
+.blok table{width:100%;border-collapse:collapse;font-size:13px;line-height:1.45}
+.blok td{padding:7px 0;border-top:1px solid var(--border);vertical-align:top;color:var(--text-muted)}
+.blok td:first-child{width:42%;padding-right:12px;color:var(--text);font-weight:500}
+.blok code{white-space:nowrap;font-family:var(--font-mono,ui-monospace,monospace);font-size:12px;color:var(--text)}
+.maat{position:relative;width:260px;height:260px;margin:4px auto 10px}
+.maat svg{width:100%;height:100%;overflow:visible}
+.maat text{font-size:10px;fill:var(--text-muted);font-family:var(--font-sans)}
+
+.doek{height:480px;border:1px solid var(--border)}
+h2{display:flex;align-items:baseline;gap:10px}
+h2 small{font-size:13px;font-weight:500;color:var(--text-muted);letter-spacing:0}
+.live{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px}
+.rijtje{display:flex;flex-wrap:wrap;gap:20px}
+.rijtje .doek{zoom:.62}
+.uitlees{align-content:center;gap:1px}
+.uitlees span{font-size:11px;color:var(--text-muted);line-height:1}
+.radiaal-knop b{font-size:13px;font-weight:600}
+.radiaal-midden b{font-size:15px;font-weight:600}
+svg.boog .tik{stroke:var(--text);stroke-width:2.5}
+svg.boog .tik-rand{stroke:var(--surface-raised);stroke-width:6}
+.pilrij{display:flex;align-items:center;gap:4px;margin-top:.4rem}
+.pilrij>span{min-width:3.6rem;font-size:var(--text-caption);color:var(--text-muted);text-align:left}
+.speelt{display:flex;align-items:center;gap:10px;margin:.45rem 0 .1rem;text-align:left;min-width:190px;max-width:230px}
+.speelt .hoes{display:grid;place-items:center;flex:none;width:40px;height:40px;border-radius:var(--radius-sm);background:var(--surface-sunken);border:1px solid var(--border);color:var(--text-muted)}
+.speelt div{min-width:0;display:flex;flex-direction:column}
+.speelt div>*{overflow:hidden;text-overflow:ellipsis}
+.anker>.hotspot{top:-14px;left:-14px}
+.kijkkaart{position:absolute;left:0;top:22px;translate:-50% 0;display:flex;flex-direction:column;gap:2px;min-width:200px;padding:14px 16px;border-radius:var(--radius-lg);font-size:var(--text-small);line-height:var(--lh-small);color:var(--text-muted);white-space:nowrap;font-variant-numeric:tabular-nums}
+.kijkkaart>b{color:var(--text);font-weight:var(--weight-semibold)}
+.kijkkaart .groot{font-size:28px;font-weight:600;letter-spacing:-.02em;line-height:1.15;color:var(--text)}
+.kijkkaart .balkje{height:6px;margin:8px 0 4px;border-radius:999px;background:var(--surface-sunken);overflow:hidden}
+.kijkkaart .balkje i{display:block;height:100%;border-radius:999px;background:var(--accent)}
+.kijkkaart a{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:10px -16px -14px;padding:10px 16px;border-top:1px solid var(--border);color:var(--accent);font-weight:var(--weight-medium);text-decoration:none;cursor:pointer}
+.kijkkaart[data-weg]>*:not(b){opacity:.4}
+.plan{position:absolute;inset:0}
+.plan-kamer{position:absolute;display:grid;place-items:center;border:1px solid var(--border-strong);border-radius:6px;background:var(--surface-raised);color:var(--text-muted);font-size:var(--text-small);font-weight:var(--weight-medium);cursor:pointer;transition:background var(--dur-fast) var(--ease)}
+@media (hover:hover){.plan-kamer:hover{background:var(--surface-sunken)}}
+.plan-kamer[aria-pressed="true"]{border-color:var(--accent);background:var(--accent-soft);color:var(--accent)}
+.plan-robot{position:absolute;width:18px;height:18px;border-radius:50%;background:var(--surface-raised);border:2px solid var(--text);pointer-events:none}
+.kamerbalk{position:absolute;left:50%;bottom:22px;translate:-50% 0;display:flex;align-items:center;gap:6px;padding:6px;border-radius:999px;white-space:nowrap}
+.kamerbalk button{height:40px;padding:0 16px;border-radius:999px;font-size:var(--text-small);font-weight:var(--weight-semibold);color:var(--text-muted);cursor:pointer}
+.kamerbalk .ja{background:var(--accent);color:var(--accent-fg)}
+.kamerbalk .ja:disabled{background:var(--surface-sunken);color:var(--text-muted);cursor:default}
+</style>
+</head><body>
+<div class="pag">
+  <h1>Apparaatbediening</h1>
+  <p class="intro">Hetzelfde ronde menu als de lamp, voor de andere apparaten in huis. De boog is altijd het ene getal dat je versleept, het midden de hoofdactie, de knoppen de keuzes. Wat je alleen kunt bekijken krijgt geen schijf maar een kaartje. Elk apparaat heeft bovenaan een levend exemplaar in licht en donker.</p>
+  <div class="balk-top"><div class="seg"><button id="faal" aria-pressed="false">Apparaat antwoordt niet</button></div></div>
+  <div id="alles"></div>
+
+  <h2>Voor @yoim/ds</h2>
+  <p class="sub">De schijf, de boog en de knoppen blijven wat ze bij de lamp zijn. Dit komt erbij.</p>
+  <div class="spec">
+    <div class="blok"><h3>Componenten</h3><table>
+      <tr><td><code>ArcSlider</code><br>uitgebreid</td><td><code>min</code>, <code>max</code>, <code>step</code> en <code>format</code> voor graden, volume en minuten. <code>marker</code> voor een tweede streepje. <code>readOnly</code>: dunner (6 px), zonder duim.</td></tr>
+      <tr><td><code>NowPlaying</code><br><code>.speelt</code></td><td>Hoes van 40 px, titel en ondertitel, in het naamkaartje.</td></tr>
+      <tr><td><code>PillRow</code><br><code>.pilrij</code></td><td>Een label met een kleine keuze uit <code>.radiaal-lid</code>, in het naamkaartje. Voor ventilator, zuigen en dweilen.</td></tr>
+      <tr><td><code>PeekCard</code><br><code>.kijkkaart</code></td><td>Kaartje onder de stip voor wat je alleen bekijkt: titel, een groot getal, een regel, eventueel een balk en een link.</td></tr>
+      <tr><td>Geen nieuw component</td><td>De afstandsbediening en de modi zijn gewone <code>.radiaal-knop</code>pen. De kamerkeuze van Scooby hoort bij de scene in home.yoim.</td></tr>
+    </table></div>
+    <div class="blok"><h3>Eén patroon</h3><table>
+      <tr><td>Boog</td><td>Airco: temperatuur. Tv en HomePod: volume. Stekker: uit over. Scooby: batterij, alleen kijken.</td></tr>
+      <tr><td>Midden</td><td>Aan en uit. Bij HomePod en Scooby de hoofdactie: afspelen, starten.</td></tr>
+      <tr><td>Knoppen</td><td>Keuzes die elkaar uitsluiten (modus) of losse acties (vorige, dock). Hooguit 8, 40 px.</td></tr>
+      <tr><td>Naamkaartje</td><td>Naam, staat in één regel, dan wat erbij hoort: nu speelt, een kleine keuze, de leden.</td></tr>
+      <tr><td>Tweede laag</td><td>Een knop wisselt de knoppen voor een andere set, "terug" staat in de opening van de boog. Bij de lamp het kleurenwiel, bij de tv de afstandsbediening.</td></tr>
+    </table></div>
+    <div class="blok"><h3>Maten en beweging</h3><table>
+      <tr><td>Schijf, boog, duim, knoppen</td><td>Zoals de lamp: 224, straal 96, 24 met raakvlak 48, 40 op straal 60.</td></tr>
+      <tr><td>Afstandsbediening</td><td>8 knoppen van 40 px op straal 56, OK in het midden van 60 px.</td></tr>
+      <tr><td>Streepje huidige waarde</td><td>16 px lang over de boog, 2,5 px dik, <code>--text</code> met een rand in <code>--surface-raised</code>.</td></tr>
+      <tr><td>Kleine keuze</td><td>28 px hoog, 4 px ertussen, label 12 px.</td></tr>
+      <tr><td>Kijkkaartje</td><td>minstens 200 px breed, 22 px onder de stip, getal 28 px.</td></tr>
+      <tr><td>Kamers</td><td>Een kamer is één tapvlak. De balk onderaan is <code>.glas-dik</code>, knoppen 40 px hoog.</td></tr>
+      <tr><td>Beweging</td><td>Alles zoals de lamp. Knoppen wisselen in <code>--dur-base</code> <code>--ease-glas</code>.</td></tr>
+    </table></div>
+    <div class="blok"><h3>Gedrag</h3><table>
+      <tr><td>Optimistisch</td><td>Elke tik en elke sleep is meteen te zien. Zonder antwoord in 2 s springt het terug met "Reageerde niet, teruggezet".</td></tr>
+      <tr><td>Alleen wat kan</td><td>Drogen en ventileren hebben geen temperatuur: de boog dimt. Een stekker zonder meter toont geen watt.</td></tr>
+      <tr><td>Standby is niet stuk</td><td>De Frame valt in standby van het netwerk. Dat is "In standby, aan via Apple TV", met een midden dat werkt.</td></tr>
+      <tr><td>Kijken</td><td>Geen schijf, geen midden, niets om te verslepen.</td></tr>
+      <tr><td>Toetsenbord</td><td>Zoals de lamp. Pijlen op de boog: een halve graad, 5 volume, 5 minuten. In de afstandsbediening zijn de pijltoetsen de pijlen en Enter is OK.</td></tr>
+    </table></div>
+  </div>
+</div>
+<script>
+(function(){
+const I={
+ aan:'<path d="M12 3v9"/><path d="M6.3 7.3a8 8 0 1 0 11.4 0"/>',
+ koel:'<path d="M12 2v20M3.3 7l17.4 10M20.7 7 3.3 17"/>',
+ warm:'<path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/>',
+ droog:'<path d="M12 22a7 7 0 0 0 7-7c0-2-1-3.9-3-5.5s-3.5-4-4-6.5c-.5 2.5-2 4.9-4 6.5C6 11.1 5 13 5 15a7 7 0 0 0 7 7z"/>',
+ vent:'<path d="M17.7 7.7a2.5 2.5 0 1 1 1.8 4.3H2"/><path d="M9.6 4.6A2 2 0 1 1 11 8H2"/><path d="M12.6 19.4A2 2 0 1 0 14 16H2"/>',
+ speel:'<path d="M7 4.5v15l12-7.5z"/>',pauze:'<path d="M8 5v14M16 5v14"/>',
+ vorige:'<path d="M19 5v14L9 12z"/><path d="M5 5v14"/>',volgende:'<path d="M5 5v14l10-7z"/><path d="M19 5v14"/>',
+ demp:'<path d="M11 5 6 9H3v6h3l5 4z"/><path d="m16 9 5 6M21 9l-5 6"/>',
+ afst:'<rect x="7" y="2" width="10" height="20" rx="3"/><circle cx="12" cy="8" r="2"/><path d="M12 14v.01M12 18v.01"/>',
+ op:'<path d="m6 15 6-6 6 6"/>',neer:'<path d="m6 9 6 6 6-6"/>',links:'<path d="m15 18-6-6 6-6"/>',rechts:'<path d="m9 18 6-6-6-6"/>',terug:'<path d="m15 18-6-6 6-6"/>',
+ huis:'<path d="M4 11 12 4l8 7v9H4z"/><path d="M10 20v-6h4v6"/>',
+ menu:'<path d="M9 14 4 9l5-5"/><path d="M4 9h10a6 6 0 0 1 0 12h-3"/>',
+ kamers:'<rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 12h18M12 3v9"/>',
+ noot:'<path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/>',
+ tv:'<rect x="2" y="5" width="20" height="13" rx="2"/><path d="M8 21h8"/>',
+ pijl:'<path d="M7 17 17 7M8 7h9v9"/>',
+ weg:'<path d="M12 20h.01"/><path d="M8.5 16.429a5 5 0 0 1 7 0"/><path d="M5 12.859a10 10 0 0 1 5.17-2.69"/><path d="M19 12.859a10 10 0 0 0-2.007-1.523"/><path d="M2 8.82a15 15 0 0 1 4.177-2.643"/><path d="M22 8.82a15 15 0 0 0-11.288-3.764"/><path d="m2 2 20 20"/>'
+};
+const ic=(n,c='')=>`<svg class="ico ${c}" viewBox="0 0 24 24" aria-hidden="true">${I[n]}</svg>`;
+const klem=(v,a,b)=>Math.max(a,Math.min(b,v));
+const rad=a=>a*Math.PI/180;
+const pt=(r,a)=>[r*Math.cos(rad(a)),r*Math.sin(rad(a))];
+const op=(r,a)=>{const[x,y]=pt(r,a);return `left:${x.toFixed(1)}px;top:${y.toFixed(1)}px`};
+function kelvin(k){const t=k/100;let r,g,b;
+  if(t<=66){r=255;g=99.47*Math.log(t)-161.12;b=t<=19?0:138.52*Math.log(t-10)-305.04}else{r=329.7*Math.pow(t-60,-.1332);g=288.12*Math.pow(t-60,-.0755);b=255}
+  return `rgb(${[r,g,b].map(v=>Math.round(klem(v,0,255))).join(' ')})`}
+const tint=(h,s)=>`hsl(${Math.round(h)} ${Math.round(35+s*.6)}% ${Math.round(72-s*.16)}%)`;
+const kleurNaam=h=>['rood','oranje','geel','groen','groen','cyaan','blauw','blauw','paars','paars','roze','roze'][Math.floor(((h+15)%360)/30)];
+const lampKleur=s=>s.mode==='kleur'?tint(s.hue,s.sat):kelvin(s.k);
+const KMIN=s=>s.caps==='wit'?2200:2000,KMAX=6500;
+const HUES='hsl(0 85% 60%),hsl(60 85% 58%),hsl(120 60% 55%),hsl(180 65% 55%),hsl(240 75% 66%),hsl(300 70% 62%),hsl(360 85% 60%)';
+const KSTOPS=[2000,2700,3500,4500,5500,6500].map(kelvin).join(',');
+const arc=(r,a0,a1)=>{const[x0,y0]=pt(r,a0),[x1,y1]=pt(r,a1);return `M${x0.toFixed(2)} ${y0.toFixed(2)}A${r} ${r} 0 ${a1-a0>180?1:0} 1 ${x1.toFixed(2)} ${y1.toFixed(2)}`};
+
+
+const A0=135,A1=405,R=112,RB=96;
+const nl=(n,d=0)=>n.toLocaleString('nl-NL',{minimumFractionDigits:d,maximumFractionDigits:d});
+const rgb=a=>`rgb(${a.join(' ')})`;
+const chip=(a,w,tekst,aan)=>`<button class="radiaal-lid" data-a="${a}" data-w="${w}" aria-pressed="${aan}">${tekst}</button>`;
+const rij=(label,a,opties,nu)=>`<div class="pilrij" role="group" aria-label="${label}"><span>${label}</span>${opties.map(o=>chip(a,o,o,nu===o)).join('')}</div>`;
+const speelt=(icoon,titel,onder)=>`<div class="speelt"><span class="hoes">${ic(icoon)}</span><div><b>${titel}</b><span>${onder}</span></div></div>`;
+const K=(hoek,a,w,inhoud,o={})=>({hoek,a,w,inhoud,...o});
+
+/* ---- Per apparaat: wat de boog is, wat het midden doet, welke knoppen ---- */
+const T={
+ airco:{naam:'Cooly',vorm:'airco',label:'Temperatuur',
+  f:s=>(s.doel-16)/14,zet:(s,f)=>{s.doel=Math.round((16+f*14)*2)/2;s.on=true},stap:(s,d)=>{s.doel=klem(s.doel+d*.5,16,30);s.on=true},
+  lees:s=>`<b>${nl(s.doel,1)}°</b>`,waarde:s=>`${nl(s.doel,1)} graden`,
+  boogUit:s=>s.mode==='droog'||s.mode==='vent',vulUit:s=>!s.on,tik:s=>(s.nu-16)/14,
+  midden:s=>({i:'aan',on:s.on,l:s.on?'Uitzetten':'Aanzetten'}),
+  knoppen:s=>[['koel','Koelen'],['warm','Verwarmen'],['droog','Drogen'],['vent','Ventileren'],['auto','Auto']].map(([m,l],i)=>K(-90+72*i,'mode',m,m==='auto'?'<b>A</b>':ic(m),{actief:s.on&&s.mode===m,l})),
+  tekst:s=>{const nu=`nu ${nl(s.nu,1)}°`;if(!s.on)return `Uit · ${nu}`;return {koel:`Koelt naar ${nl(s.doel,1)}°`,warm:`Verwarmt naar ${nl(s.doel,1)}°`,droog:'Droogt',vent:'Ventileert',auto:`Auto naar ${nl(s.doel,1)}°`}[s.mode]+' · '+nu},
+  pil:s=>rij('Ventilator','fan',['laag','midden','hoog','auto'],s.fan),
+  gloed:s=>!s.on?null:s.mode==='koel'?rgb([150,200,255]):s.mode==='warm'?rgb([255,170,110]):rgb([120,220,150]),
+  doe:(s,a,w)=>{if(a==='toggle')s.on=!s.on;else if(a==='mode'){s.mode=w;s.on=true}else if(a==='fan')s.fan=w}},
+ tv:{naam:'Tv-hoek',vorm:'tv',label:'Volume',
+  f:s=>s.vol/100,zet:(s,f)=>{s.vol=Math.round(f*100)},stap:(s,d)=>{s.vol=klem(s.vol+d*5,0,100)},
+  lees:s=>`<b>${s.vol}</b><span>volume</span>`,waarde:s=>`volume ${s.vol}`,
+  boogUit:s=>!s.on,
+  midden:s=>s.afst?{b:'OK',on:false,l:'OK',a:'toets',w:'select'}:{i:'aan',on:s.on,l:s.on?'Uitzetten':'Aanzetten'},
+  knoppen:s=>s.afst?[K(-90,'toets','up',ic('op'),{l:'Omhoog'}),K(0,'toets','right',ic('rechts'),{l:'Rechts'}),K(90,'toets','down',ic('neer'),{l:'Omlaag'}),K(180,'toets','left',ic('links'),{l:'Links'}),K(135,'toets','menu',ic('menu','k'),{l:'Terug'}),K(45,'toets','home',ic('huis','k'),{l:'Begin'}),K(-45,'speel','',ic(s.speelt?'pauze':'speel','k'),{l:s.speelt?'Pauzeren':'Afspelen'}),K(-135,'demp','',ic('demp','k'),{l:'Dempen',actief:s.demp})]
+   :[...(s.lid!==0?[K(-90,'speel','',ic(s.speelt?'pauze':'speel'),{l:s.speelt?'Pauzeren':'Afspelen',uit:!s.on})]:[]),K(s.lid===0?-90:30,'demp','',ic('demp'),{l:'Dempen',actief:s.on&&s.demp,uit:!s.on}),...(s.lid!==0?[K(150,'afst','',ic('afst'),{l:'Afstandsbediening',uit:!s.on})]:[])],
+  straal:s=>s.afst?56:60,terug:s=>s.afst?'afst':null,
+  titel:s=>s.lid==null?'Tv-hoek':['The Frame','Apple TV'][s.lid],
+  tekst:s=>s.standby?'In standby, aan via Apple TV':!s.on?'Uit':s.demp?'Aan · gedempt':`Aan · volume ${s.vol}`,
+  pil:s=>(s.on&&s.lid!==0?speelt('tv',s.titel,`${s.app} · ${s.speelt?'speelt':'pauze'}`):'')+`<div class="radiaal-leden" role="group" aria-label="Eén apparaat apart">${chip('lid','','alle',s.lid==null)}${chip('lid',0,'Frame',s.lid===0)}${chip('lid',1,'Apple TV',s.lid===1)}</div>`,
+  gloed:s=>s.on?rgb([150,180,255]):null,
+  doe:(s,a,w)=>{if(a==='toggle'){s.on=!s.on;s.standby=false;if(!s.on)s.afst=false}else if(a==='speel')s.speelt=!s.speelt;else if(a==='demp')s.demp=!s.demp;else if(a==='afst'){s.afst=!s.afst;return false}else if(a==='lid'){s.lid=w===''?null:+w;if(s.lid===0)s.afst=false;return false}else if(a==='toets'){s.toets=w}}},
+ homepod:{naam:'HomePod mini',vorm:'homepod',label:'Volume',
+  f:s=>s.vol/100,zet:(s,f)=>{s.vol=Math.round(f*100)},stap:(s,d)=>{s.vol=klem(s.vol+d*5,0,100)},
+  lees:s=>`<b>${s.vol}</b><span>volume</span>`,waarde:s=>`volume ${s.vol}`,
+  midden:s=>({i:s.st==='speelt'?'pauze':'speel',on:s.st==='speelt',l:s.st==='speelt'?'Pauzeren':'Afspelen'}),
+  knoppen:s=>[K(180,'spoor','-1',ic('vorige'),{l:'Vorige',uit:s.st==='leeg'}),K(0,'spoor','1',ic('volgende'),{l:'Volgende',uit:s.st==='leeg'})],
+  tekst:s=>s.st==='leeg'?'Speelt niets':`${s.st==='speelt'?'Speelt':'Pauze'} · volume ${s.vol}`,
+  pil:s=>s.st==='leeg'?'':speelt('noot',LIJST[s.nr][0],LIJST[s.nr][1]),
+  gloed:s=>s.st==='speelt'?rgb([150,180,255]):null,
+  doe:(s,a,w)=>{if(a==='toggle')s.st=s.st==='speelt'?'pauze':'speelt';else if(a==='spoor'){s.nr=(s.nr+ +w+LIJST.length)%LIJST.length;s.st='speelt'}}},
+ scooby:{naam:'Scooby',vorm:'robot',label:'Batterij',ro:true,
+  f:s=>s.bat/100,
+  midden:s=>({i:s.st==='zuigt'?'pauze':'speel',on:s.st==='zuigt',l:s.st==='zuigt'?'Pauzeren':'Starten'}),
+  knoppen:s=>[K(180,'dock','',ic('huis'),{l:'Terug naar het dock',actief:s.st==='terug',uit:s.st==='dock'}),K(0,'kamers','',ic('kamers'),{l:'Kamers kiezen'})],
+  tekst:s=>({dock:s.bat<100?`In het dock · laadt, ${s.bat}%`:'In het dock · vol',zuigt:`Zuigt ${s.waar} · ${s.bat}%`,pauze:`Gepauzeerd · ${s.bat}%`,terug:`Rijdt naar het dock · ${s.bat}%`,vast:`Gestopt · ${s.bat}%`})[s.st],
+  melding:s=>s.st==='vast'?'Zit vast bij de bank':'',
+  pil:s=>rij('Zuigen','zuig',['stil','normaal','sterk'],s.zuig)+rij('Dweilen','dweil',['uit','licht','nat'],s.dweil),
+  gloed:s=>s.st==='zuigt'||s.st==='terug'?rgb([120,220,150]):null,
+  doe:(s,a,w)=>{if(a==='toggle'){if(s.st==='zuigt')s.st='pauze';else{if(s.st==='dock')s.waar='het hele huis';s.st='zuigt'}}else if(a==='dock')s.st='terug';else if(a==='zuig')s.zuig=w;else if(a==='dweil')s.dweil=w;else if(a==='kamers'){s.kamers=true;s.gekozen=[];return false}}},
+ stekker:{naam:'Bureaustekker',vorm:'stekker',label:'Uit over',
+  f:s=>s.timer/120,zet:(s,f)=>{s.timer=Math.round(f*120/5)*5;s.on=true},stap:(s,d)=>{s.timer=klem(s.timer+d*5,0,120);s.on=true},
+  lees:s=>s.timer?`<b>${s.timer}</b><span>min</span>`:`<b class="woord">blijft aan</b>`,waarde:s=>s.timer?`uit over ${s.timer} minuten`:'blijft aan',
+  vulUit:s=>!s.on||!s.timer,
+  midden:s=>({i:'aan',on:s.on,l:s.on?'Uitzetten':'Aanzetten'}),
+  knoppen:s=>[15,30,60].map((m,i)=>K(-90+120*i,'timer',m,`<b>${m}</b>`,{l:`Uit over ${m} minuten`,actief:s.on&&s.timer===m})),
+  tekst:s=>!s.on?'Uit':['Aan',s.watt!=null?`${s.watt} W`:'',s.timer?`uit over ${s.timer} min`:''].filter(Boolean).join(' · '),
+  gloed:s=>s.on?rgb([255,200,140]):null,
+  doe:(s,a,w)=>{if(a==='toggle'){s.on=!s.on;if(!s.on)s.timer=0}else if(a==='timer'){s.timer=s.timer===+w?0:+w;s.on=true}}},
+ droger:{naam:'Droger',vorm:'droger',kijk:true,gloed:s=>s.st==='bezig'?rgb([120,220,150]):null,
+  kaart:s=>s.st==='bezig'?`<span class="groot">${s.rest} min</span><span>Klaar om ${s.om}</span><div class="balkje"><i style="width:${s.prog}%"></i></div>`:s.st==='klaar'?`<span class="groot">Klaar</span><span class="melding"><i></i>sinds ${s.om}</span>`:`<span class="groot">Uit</span>`},
+ p1:{naam:'Stroom nu',vorm:'meter',kijk:true,gloed:s=>rgb([120,220,150]),
+  kaart:s=>`<span class="groot">${nl(Math.abs(s.watt))} W${s.watt<0?' terug':''}</span><span>Vandaag ${nl(s.dag,1)} kWh${s.terug?` · ${nl(s.terug,1)} kWh terug`:''}</span><a data-a="link">Open energ ${ic('pijl','k')}</a>`},
+};
+const LIJST=[['Zomer in Zeeland','Roosbeef'],['Vlieg met me mee','Spinvis'],['Brabant','Guus Meeuwis']];
+
+/* ---- De scene ---- */
+function scene(s,ax,ay){
+  const c=!s.weg&&T[s.t].gloed(s),id='g'+Math.random().toString(36).slice(2,8),v=c||'var(--surface-raised)',l='stroke="var(--border-strong)"';
+  const vorm={
+   airco:`<rect x="${ax-95}" y="${ay-22}" width="190" height="44" rx="8" fill="var(--surface-raised)" ${l}/><rect x="${ax-80}" y="${ay+8}" width="160" height="6" rx="3" fill="${v}" ${l}/>`,
+   tv:`<rect x="${ax-150}" y="${ay-84}" width="300" height="168" rx="4" fill="var(--surface-raised)" ${l}/><rect x="${ax-150}" y="${ay-84}" width="300" height="168" rx="4" fill="${c||'none'}" opacity=".4"/><rect x="${ax-22}" y="${ay+100}" width="44" height="12" rx="3" fill="var(--surface-raised)" ${l}/>`,
+   homepod:`<ellipse cx="${ax}" cy="${ay}" rx="34" ry="38" fill="var(--surface-raised)" ${l}/><ellipse cx="${ax}" cy="${ay-30}" rx="18" ry="5" fill="${v}" ${l}/>`,
+   robot:`<ellipse cx="${ax}" cy="${ay+4}" rx="64" ry="24" fill="var(--surface-raised)" ${l}/><ellipse cx="${ax}" cy="${ay}" rx="20" ry="7" fill="${v}" ${l}/>`,
+   stekker:`<rect x="${ax-24}" y="${ay-24}" width="48" height="48" rx="12" fill="var(--surface-raised)" ${l}/><circle cx="${ax}" cy="${ay}" r="7" fill="${v}" ${l}/>`,
+   droger:`<rect x="${ax-62}" y="${ay-50}" width="124" height="140" rx="8" fill="var(--surface-raised)" ${l}/><circle cx="${ax}" cy="${ay+26}" r="38" fill="${v}" ${l}/>`,
+   meter:`<rect x="${ax-46}" y="${ay-50}" width="92" height="130" rx="6" fill="var(--surface-raised)" ${l}/><rect x="${ax-30}" y="${ay-34}" width="60" height="22" rx="3" fill="${v}" ${l}/>`}[T[s.t].vorm];
+  return `<svg class="kamer" viewBox="0 0 380 480" aria-hidden="true"><defs><radialGradient id="${id}"><stop offset="0" stop-color="${c}" stop-opacity=".9"/><stop offset=".6" stop-color="${c}" stop-opacity=".3"/><stop offset="1" stop-color="${c}" stop-opacity="0"/></radialGradient></defs>
+  <rect width="380" height="340" fill="var(--surface)"/><path d="M0 340H380V480H0Z" fill="var(--surface-sunken)"/><path d="M0 340H380" stroke="var(--border)"/>
+  ${c?`<circle cx="${ax}" cy="${ay}" r="200" fill="url(#${id})" opacity="${T[s.t].kijk?.28:.5}"/>`:''}${vorm}</svg>`;
+}
+
+/* ---- Het menu ---- */
+function menu(s){
+  const d=T[s.t],f=klem(d.f(s),0,1),ab=A0+(A1-A0)*f,sl=!!s.drag,weg=s.weg?'data-uit':'',bu=s.weg||(d.boogUit&&d.boogUit(s))?'data-uit':'',dik=d.ro?6:10;
+  let h=`<div class="radiaal-schijf glas-dik" style="left:${-R}px;top:${-R}px;width:${2*R}px;height:${2*R}px"></div>`;
+  const vul=!(d.vulUit&&d.vulUit(s))&&!(d.boogUit&&d.boogUit(s))&&!s.weg&&f>0;
+  let tik='';if(d.tik&&!s.weg){const a=A0+(A1-A0)*klem(d.tik(s),0,1),[x0,y0]=pt(RB-8,a),[x1,y1]=pt(RB+8,a),p=`d="M${x0.toFixed(1)} ${y0.toFixed(1)}L${x1.toFixed(1)} ${y1.toFixed(1)}"`;tik=`<path class="tik-rand" ${p}/><path class="tik" ${p}/>`}
+  h+=`<svg class="boog" ${bu} style="left:0;top:0" width="1" height="1" ${d.ro?`role="img" aria-label="${d.label} ${Math.round(f*100)}%"`:''}><path d="${arc(RB,A0,A1)}" stroke="var(--surface-sunken)" stroke-width="${dik}"/>${vul?`<path d="${arc(RB,A0,Math.max(A0+.5,ab))}" stroke="var(--accent)" stroke-width="${dik}"/>`:''}${tik}${d.ro?'':`<path class="raak" data-drag="boog" d="${arc(RB,A0,A1)}" stroke-width="34"/>`}</svg>`;
+  if(!d.ro){
+    if(s.fout&&s.fout.wat==='boog')h+=`<span class="duim spook" style="${op(RB,A0+(A1-A0)*s.fout.poging)}"></span>`;
+    h+=`<span class="duim" ${bu} ${sl?'data-sleep':''} data-drag="boog" role="slider" tabindex="0" aria-label="${d.label}" aria-valuetext="${d.waarde(s)}" style="${op(RB,ab)}"></span>`;
+  }
+  const straal=d.straal?d.straal(s):60;
+  h+=d.knoppen(s).map(k=>`<button class="radiaal-knop dim" ${weg} ${k.uit?'data-uit':''} ${k.actief?'data-active':''} style="--hoek:${k.hoek}deg;--straal:${straal}px" data-a="${k.a}" data-w="${k.w}" aria-label="${k.l}" ${k.actief!=null?`aria-pressed="${!!k.actief}"`:''}>${k.inhoud}</button>`).join('');
+  if(d.terug&&d.terug(s))h+=`<button class="radiaal-knop terugknop dim" style="--hoek:90deg;--straal:${RB}px" data-a="${d.terug(s)}" aria-label="Terug">${ic('terug','k')}</button>`;
+  if(sl)h+=`<span class="uitlees" style="left:0;top:0">${d.lees(s)}</span>`;
+  const m=d.midden(s);
+  h+=`<button class="radiaal-midden ${sl?'verstopt':''}" data-a="${m.a||'toggle'}" data-w="${m.w||''}" ${m.on&&!s.weg?'data-on':''} ${s.weg?'disabled':''} aria-label="${m.l}">${s.weg?ic('weg'):m.b?`<b>${m.b}</b>`:ic(m.i)}</button>`;
+  const meld=s.fout?'Reageerde niet, teruggezet':d.melding&&!s.weg?d.melding(s):'';
+  h+=`<div class="radiaal-naam glas-dun" style="top:${R+10}px"><b>${d.titel?d.titel(s):d.naam}</b><span aria-live="polite">${s.weg?'Niet bereikbaar':d.tekst(s)}</span>${meld?`<span class="melding" role="status"><i></i>${meld}</span>`:''}${d.pil&&!s.weg?d.pil(s):''}</div>`;
+  return h;
+}
+const PLAN=[['woonkamer',20,30,210,180],['keuken',234,30,126,110],['hal',234,144,126,66],['slaapkamer',20,214,160,150],['kantoor',184,214,176,90],['badkamer',184,308,176,56]];
+function plan(s){
+  const n=s.gekozen.length;
+  return `<div class="plan">${PLAN.map(([k,x,y,w,h])=>`<button class="plan-kamer" data-a="kamer" data-w="${k}" aria-pressed="${s.gekozen.includes(k)}" style="left:${x}px;top:${y}px;width:${w}px;height:${h}px">${k}</button>`).join('')}<span class="plan-robot" style="left:36px;top:176px"></span>
+  <div class="kamerbalk glas-dik"><button data-a="kamers-weg">Annuleer</button><button class="ja" data-a="kamers-ja" ${n?'':'disabled'}>${n?`Zuig ${n} ${n===1?'kamer':'kamers'}`:'Tik een kamer aan'}</button></div></div>`;
+}
+function doek(s,thema,live){
+  const d=T[s.t],ax=190,ay=d.kijk?120:150;
+  if(s.kamers)return `<div class="doek" data-thema="${thema}" ${live?`data-live="${s.t}"`:'inert'}>${plan(s)}</div>`;
+  const binnen=d.kijk?`<button class="hotspot" data-open ${d.gloed(s)&&!s.weg?`data-on style="--gloed:${d.gloed(s)}"`:''} ${s.weg?'data-weg':''} aria-label="${d.naam}"></button><div class="kijkkaart glas-dik" ${s.weg?'data-weg':''}><b>${d.naam}</b>${s.weg?'<span>Niet bereikbaar</span>':d.kaart(s)}</div>`
+   :`<div class="radiaal" role="group" aria-label="${d.naam}" ${s.drag?'data-sleep':''}>${menu(s)}</div>`;
+  return `<div class="doek" data-thema="${thema}" ${live?`data-live="${s.t}"`:'inert'}>${scene(s,ax,ay)}<div class="anker" style="left:${ax}px;top:${ay}px">${binnen}</div></div>`;
+}
+
+/* ---- Wat er op de pagina staat ---- */
+const B={
+ airco:{t:'airco',on:true,mode:'koel',doel:21.5,nu:23.4,fan:'auto'},
+ tv:{t:'tv',on:true,lid:null,vol:28,speelt:true,demp:false,app:'Netflix',titel:'Slow Horses',afst:false,standby:false},
+ homepod:{t:'homepod',st:'speelt',vol:40,nr:0},
+ scooby:{t:'scooby',st:'dock',bat:84,waar:'de woonkamer',zuig:'normaal',dweil:'uit',kamers:false,gekozen:[]},
+ stekker:{t:'stekker',on:true,watt:46,timer:0},
+ droger:{t:'droger',st:'bezig',rest:42,om:'15:07',prog:62},
+ p1:{t:'p1',watt:1240,dag:6.4},
+};
+const st=(t,o)=>({...JSON.parse(JSON.stringify(B[t])),...o});
+const DELEN=[
+ ['airco','Airco','Cooly, slaapkamer',[
+  ['Uit','de kamertemperatuur blijft staan',{on:false}],['Koelen','het streepje is de kamer nu',{}],['Verwarmen','',{mode:'warm',doel:22,nu:19.8,fan:'laag'}],
+  ['Ventileren','geen temperatuur, de boog dimt',{mode:'vent'}],['Tijdens het slepen','',{drag:true,doel:19.5}],['Teruggesprongen na 2 s','',{fout:{wat:'boog',poging:.18}}],['Niet bereikbaar','',{weg:true}]]],
+ ['tv','Tv-hoek','The Frame en Apple TV samen',[
+  ['Uit','',{on:false}],['Aan','volume gaat via CEC naar de Frame',{}],['Alleen de Frame','',{lid:0}],['Afstandsbediening','OK in het midden, terug in de opening',{afst:true}],
+  ['Tijdens het slepen','',{drag:true,vol:36}],['In standby','niet stuk: het midden zet hem aan',{on:false,standby:true}],['Niet bereikbaar','',{weg:true}]]],
+ ['homepod','HomePod mini','keuken',[
+  ['Speelt','',{}],['Pauze','',{st:'pauze'}],['Speelt niets','',{st:'leeg'}],['Tijdens het slepen','',{drag:true,vol:55}]]],
+ ['scooby','Scooby','de Dreame',[
+  ['In het dock','de boog is de batterij, alleen kijken',{}],['Zuigt','',{st:'zuigt',bat:62}],['Kamers kiezen','in de scene zelf',{kamers:true,gekozen:['keuken','hal']}],
+  ['Terug naar het dock','',{st:'terug',bat:58}],['Zit vast','',{st:'vast',bat:58}],['Niet bereikbaar','',{weg:true}]]],
+ ['stekker','Bureaustekker','kantoor',[
+  ['Uit','',{on:false}],['Aan','',{}],['Uit over 45 minuten','de boog loopt leeg',{timer:45}],['Tijdens het slepen','',{drag:true,timer:70}],['Zonder meter','geen watt',{watt:null}]]],
+ ['droger','Alleen kijken','droger en P1-meter',[
+  ['Droger bezig','',{}],['Droger klaar','',{st:'klaar',om:'14:32'}],['Stroom nu','',{t:'p1'}],['Levert terug','',{t:'p1',watt:-820,dag:3.1,terug:9.1}],['Niet bereikbaar','',{weg:true}]]],
+];
+const live={};let faal=false;
+function teken(v){document.querySelectorAll(`[data-plek="${v}"]`).forEach(el=>{el.innerHTML=doek(live[v],el.dataset.t,true)})}
+function bouw(){
+  document.getElementById('alles').innerHTML=DELEN.map(([t,kop,onder,rijen])=>`<h2>${kop} <small>${onder}</small></h2><div class="live">${t==='droger'?'':`<div data-plek="${t}" data-t="licht"></div><div data-plek="${t}" data-t="donker"></div>`}</div><div class="rijtje">${rijen.map(([n,o,x])=>{const s=st(x.t||t,x);return `<div class="kaartje"><small><b>${n}</b>${o?' · '+o:''}</small><div class="paar">${doek(s,'licht')}${doek(s,'donker')}</div></div>`}).join('')}</div>`).join('');
+  for(const [t] of DELEN)if(t!=='droger'){live[t]=st(t,{});teken(t)}
+}
+
+/* Bevestiging nabootsen: na 2 s terug als het apparaat niet antwoordt. */
+const klok={},oud={},BLIJFT=['afst','lid','kamers','gekozen'];
+function stuur(v,voor,wat,poging){
+  clearTimeout(klok[v]);live[v].fout=null;
+  if(!faal){oud[v]=null;return}
+  voor=oud[v]=oud[v]||voor;
+  klok[v]=setTimeout(()=>{oud[v]=null;const nu=live[v],terug={...voor,drag:false,fout:{wat,poging}};for(const k of BLIJFT)if(k in nu)terug[k]=nu[k];live[v]=terug;teken(v);klok[v]=setTimeout(()=>{live[v].fout=null;teken(v)},3200)},2000);
+}
+const kopie=s=>JSON.parse(JSON.stringify(s));
+let sleep=null;
+function zet(e){
+  const {v,cx,cy}=sleep,s=live[v];let a=Math.atan2(e.clientY-cy,e.clientX-cx)*180/Math.PI;if(a<0)a+=360;
+  let b=a<90?a+360:a;if(a>=45&&a<90)b=405;if(a>=90&&a<135)b=135;
+  T[s.t].zet(s,klem((b-A0)/(A1-A0),0,1));s.drag=true;teken(v);
+}
+document.addEventListener('pointerdown',e=>{
+  const t=e.target.closest('[data-drag]');if(!t)return;const d=t.closest('[data-live]');if(!d)return;
+  const v=d.dataset.live,ar=d.querySelector('.anker').getBoundingClientRect();e.preventDefault();
+  sleep={v,cx:ar.left,cy:ar.top,voor:kopie(live[v])};zet(e);
+});
+addEventListener('pointermove',e=>{if(sleep)zet(e)});
+addEventListener('pointerup',()=>{if(!sleep)return;const{v,voor}=sleep;sleep=null;const s=live[v];s.drag=false;teken(v);stuur(v,voor,'boog',T[s.t].f(s))});
+document.addEventListener('click',e=>{
+  if(e.target.closest('#faal')){faal=!faal;document.getElementById('faal').setAttribute('aria-pressed',faal);return}
+  const t=e.target.closest('[data-a]');if(!t)return;const d=t.closest('[data-live]');if(!d)return;
+  const v=d.dataset.live,s=live[v],voor=kopie(s),a=t.dataset.a,w=t.dataset.w;
+  if(a==='kamer'){s.gekozen=s.gekozen.includes(w)?s.gekozen.filter(k=>k!==w):[...s.gekozen,w];teken(v);return}
+  if(a==='kamers-weg'){s.kamers=false;teken(v);return}
+  if(a==='kamers-ja'){s.kamers=false;s.st='zuigt';const g=s.gekozen;s.waar=g.length>1?`${g.slice(0,-1).join(', ')} en ${g.at(-1)}`:`de ${g[0]}`;teken(v);stuur(v,{...voor,kamers:false},'tik',0);return}
+  if(a==='link')return;
+  const r=T[s.t].doe(s,a,w);teken(v);if(r!==false)stuur(v,voor,'tik',0);
+});
+document.addEventListener('keydown',e=>{
+  const d=e.target.closest&&e.target.closest('[data-live]');if(!d)return;const v=d.dataset.live,s=live[v];
+  if(e.key==='Escape'&&(s.afst||s.kamers)){s.afst=false;s.kamers=false;teken(v);return}
+  const t=e.target.closest('[role="slider"]');if(!t||!e.key.startsWith('Arrow'))return;
+  e.preventDefault();const voor=kopie(s);T[s.t].stap(s,e.key==='ArrowRight'||e.key==='ArrowUp'?1:-1);
+  teken(v);document.querySelector(`[data-live="${v}"] [role="slider"]`)?.focus();stuur(v,voor,'boog',T[s.t].f(s));
+});
+bouw();
+})();
+</script>
+</body></html>

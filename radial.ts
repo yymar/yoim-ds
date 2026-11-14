@@ -16,7 +16,24 @@ export const WHEEL_OUTER = 74
 
 export type WheelColor = { hue: number; saturation: number }
 
+/** Wat de boog meet: helderheid, graden, volume, minuten. */
+export type ArcRange = { min: number; max: number; step: number }
+
+/** Helderheid in procenten, de boog zonder meer. */
+export const PERCENT: ArcRange = { min: 1, max: 100, step: 1 }
+
 const clamp = (v: number, min: number, max: number) => Math.min(max, Math.max(min, v))
+const decimals = (step: number) => (String(step).split('.')[1] ?? '').length
+
+/** Een waarde op de dichtstbijzijnde stap binnen het bereik. */
+export function snap(value: number, { min, max, step }: ArcRange): number {
+  return clamp(Number((min + Math.round((value - min) / step) * step).toFixed(decimals(step))), min, max)
+}
+
+/** Hoe ver een waarde over de boog is, van 0 tot 1. */
+export function arcFraction(value: number, { min, max }: ArcRange = PERCENT): number {
+  return max > min ? clamp((value - min) / (max - min), 0, 1) : 0
+}
 
 /** De hoek van een punt ten opzichte van het midden, van 0 tot 360. */
 export function pointAngle(dx: number, dy: number): number {
@@ -24,21 +41,21 @@ export function pointAngle(dx: number, dy: number): number {
   return a < 0 ? a + 360 : a
 }
 
-/** Waar de duim op de boog staat bij een waarde van 1 tot 100. */
-export function arcAngle(value: number): number {
-  return ARC_START + ((ARC_END - ARC_START) * clamp(value, 1, 100)) / 100
+/** Waar de duim op de boog staat bij een waarde. */
+export function arcAngle(value: number, range: ArcRange = PERCENT): number {
+  return ARC_START + (ARC_END - ARC_START) * arcFraction(value, range)
 }
 
 /**
- * De waarde (1 tot 100) bij een hoek. In de opening onderaan klemt de helft
- * links van het midden naar 1 en de helft rechts naar 100.
+ * De waarde bij een hoek, op een stap. In de opening onderaan klemt de helft
+ * links van het midden naar het minimum en de helft rechts naar het maximum.
  */
-export function arcValue(angle: number): number {
+export function arcValue(angle: number, range: ArcRange = PERCENT): number {
   const a = ((angle % 360) + 360) % 360
-  if (a >= 90 && a < ARC_START) return 1
-  if (a >= ARC_END - 360 && a < 90) return 100
+  if (a >= 90 && a < ARC_START) return range.min
+  if (a >= ARC_END - 360 && a < 90) return range.max
   const b = a < 90 ? a + 360 : a
-  return clamp(Math.round(((b - ARC_START) / (ARC_END - ARC_START)) * 100), 1, 100)
+  return snap(range.min + ((b - ARC_START) / (ARC_END - ARC_START)) * (range.max - range.min), range)
 }
 
 /** Het pad van de hele boog, voor een SVG met het midden van het menu in 0,0. */
@@ -49,10 +66,10 @@ export function arcPath(radius = ARC_RADIUS): string {
   return `M${x0.toFixed(2)} ${y0.toFixed(2)}A${radius} ${radius} 0 1 1 ${x1.toFixed(2)} ${y1.toFixed(2)}`
 }
 
-/** Een pijltoets op de boog: 5% per stap. Null bij een andere toets. */
-export function arcKey(value: number, key: string): number | null {
-  if (key === 'ArrowRight' || key === 'ArrowUp') return clamp(value + 5, 1, 100)
-  if (key === 'ArrowLeft' || key === 'ArrowDown') return clamp(value - 5, 1, 100)
+/** Een pijltoets op de boog, `by` per stap (5% bij helderheid). Null bij een andere toets. */
+export function arcKey(value: number, key: string, range: ArcRange = PERCENT, by = 5): number | null {
+  if (key === 'ArrowRight' || key === 'ArrowUp') return snap(value + by, range)
+  if (key === 'ArrowLeft' || key === 'ArrowDown') return snap(value - by, range)
   return null
 }
 

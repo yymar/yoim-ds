@@ -4,9 +4,11 @@ import {
   ARC_END,
   ARC_START,
   arcAngle,
+  arcFraction,
   arcKey,
   arcPath,
   arcValue,
+  snap,
   hueName,
   pointAngle,
   ringAngle,
@@ -25,24 +27,40 @@ describe('pointAngle', () => {
   })
 })
 
+const GRADEN = { min: 16, max: 30, step: 0.5 }
+const MINUTEN = { min: 0, max: 120, step: 5 }
+
 describe('de boog', () => {
   it('loopt van linksonder over boven naar rechtsonder', () => {
+    expect(arcAngle(1)).toBe(ARC_START)
     expect(arcAngle(100)).toBe(ARC_END)
-    expect(arcAngle(50)).toBe(270)
-    expect(arcValue(270)).toBe(50)
+    expect(arcAngle(23, GRADEN)).toBe(270)
+    expect(arcValue(270, GRADEN)).toBe(23)
     expect(arcValue(ARC_START)).toBe(1)
     expect(arcValue(ARC_END - 360)).toBe(100)
+    expect(arcFraction(60, MINUTEN)).toBe(0.5)
   })
 
   it('geeft de waarde terug waar de duim staat', () => {
     for (const v of [1, 5, 33, 64, 99, 100]) expect(arcValue(arcAngle(v))).toBe(v)
+    for (const v of [16, 18.5, 21.5, 29.5, 30]) expect(arcValue(arcAngle(v, GRADEN), GRADEN)).toBe(v)
+    for (const v of [0, 5, 45, 120]) expect(arcValue(arcAngle(v, MINUTEN), MINUTEN)).toBe(v)
   })
 
-  it('klemt in de opening onderaan: links van het midden naar 1, rechts naar 100', () => {
+  it('legt een waarde op de stap', () => {
+    expect(snap(21.3, GRADEN)).toBe(21.5)
+    expect(snap(21.2, GRADEN)).toBe(21)
+    expect(snap(43, MINUTEN)).toBe(45)
+    expect(snap(140, MINUTEN)).toBe(120)
+  })
+
+  it('klemt in de opening onderaan: links van het midden naar het minimum, rechts naar het maximum', () => {
     expect(arcValue(91)).toBe(1)
     expect(arcValue(130)).toBe(1)
     expect(arcValue(89)).toBe(100)
     expect(arcValue(50)).toBe(100)
+    expect(arcValue(100, MINUTEN)).toBe(0)
+    expect(arcValue(80, GRADEN)).toBe(30)
   })
 
   it('neemt hoeken buiten 0 tot 360', () => {
@@ -54,11 +72,14 @@ describe('de boog', () => {
     expect(arcPath(96)).toMatch(/^M-67\.88 67\.88A96 96 0 1 1 67\.88 67\.88$/)
   })
 
-  it('stapt met de pijlen 5% binnen 1 tot 100', () => {
+  it('stapt met de pijlen binnen het bereik', () => {
     expect(arcKey(50, 'ArrowRight')).toBe(55)
     expect(arcKey(50, 'ArrowDown')).toBe(45)
     expect(arcKey(98, 'ArrowUp')).toBe(100)
     expect(arcKey(3, 'ArrowLeft')).toBe(1)
+    expect(arcKey(21.5, 'ArrowUp', GRADEN, 0.5)).toBe(22)
+    expect(arcKey(16, 'ArrowDown', GRADEN, 0.5)).toBe(16)
+    expect(arcKey(5, 'ArrowLeft', MINUTEN, 5)).toBe(0)
     expect(arcKey(50, 'Enter')).toBeNull()
   })
 })

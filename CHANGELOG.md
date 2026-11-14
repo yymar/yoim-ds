@@ -1,5 +1,34 @@
 # Changelog
 
+## 0.10.0
+
+- De andere apparaten in het ronde menu, ontworpen in Claude Design
+  (`design/home.yoim/Apparaten.html`).
+- `ArcSlider` meet nu elk getal: `min`, `max`, `step`, `keyStep` (wat een
+  pijltoets verzet), `format` (de waarde als tekst, ook voor `aria-valuetext`)
+  en `readout` (wat er tijdens het slepen in het midden staat, met een woordje
+  eronder). Verder `marker` (een streepje op een tweede waarde), `readOnly`
+  (6 dik, zonder duim, `role="img"`) en `fill` (zonder vulling).
+- Nieuw: `NowPlaying` (`.speelt`), `PillRow` (`.pilrij`) en `PeekCard`
+  (`.kijkkaart`).
+- `RadialMenu` krijgt een tweede laag (`layer`): andere knoppen op de ring,
+  eventueel een ander midden en een eigen straal, met "terug" in de opening
+  van de boog. Escape gaat eerst terug uit de laag. Het kleurenwiel van een
+  lamp en de afstandsbediening van een tv zijn allebei zo'n laag. Daarnaast
+  `buttons` (de knoppen op de ring), `details` (in het naamkaartje onder de
+  staat) en `membersLabel`.
+- `radial.ts` rekent met een bereik (`ArcRange`) en heeft `snap` en
+  `arcFraction`. Zonder bereik is het helderheid, 1 tot 100.
+
+Let op bij het bijwerken: 0.9.0 heeft nog geen afnemer. Een app die naar
+0.10.0 gaat, doet ook de punten van 0.9.0 hieronder, met dit verschil:
+
+- Op `ArcSlider` heet `on` nu `fill`.
+- De knoppen of stalen gaan in `buttons`, niet meer in `children`; `children`
+  is wat op elke laag staat, zoals de boog.
+- Een open kleurenwiel is een `layer` met het wiel als `buttons`. De app hoeft
+  Escape niet meer zelf af te vangen.
+
 ## 0.9.0
 
 - Nieuw: het ronde menu en de stip van een scene, ontworpen in Claude Design

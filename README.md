@@ -260,10 +260,13 @@ export default async function Login(props: PageProps<'/auth/login'>) {
 
   | Component | Props | Wat |
   | --- | --- | --- |
-  | `RadialMenu` (`radial-menu`) | `label`, `name`, `status`, `notice`, `link`, `center` (`on`, `icon`, `label`, `disabled`, `onToggle`), `members`, `member`, `onMember`, `onClose`, `children` | schijf van 224 px (`.glas-dik`), midden aan/uit, naamkaartje (`.glas-dun`) met staat, melding en leden; `children` is wat er op de schijf staat. Escape sluit, tenzij iets erin de toets al afhandelde (`preventDefault`) |
-  | `ArcSlider` (`arc-slider`) | `value` (1 tot 100), `onChange`, `onCommit`, `ghost`, `disabled`, `on`, `label` | de helderheidsboog, `role="slider"`, pijlen 5% per stap |
+  | `RadialMenu` (`radial-menu`) | `label`, `name`, `status`, `notice`, `link`, `center` (`on`, `icon`, `label`, `disabled`, `onToggle`), `buttons`, `layer` (`buttons`, `center`, `radius`, `onBack`), `details`, `members`, `membersLabel`, `member`, `onMember`, `onClose`, `children` | schijf van 224 px (`.glas-dik`), midden, knoppen op de ring, naamkaartje (`.glas-dun`) met staat, melding, `details` en leden. `children` staat op elke laag (de boog), `buttons` op de ring. `layer` is een tweede laag (kleurenwiel, afstandsbediening) met "terug" in de opening van de boog. Escape gaat eerst terug uit de laag en sluit daarna, tenzij iets de toets al afhandelde (`preventDefault`) |
+  | `ArcSlider` (`arc-slider`) | `value`, `onChange`, `onCommit`, `min` (1), `max` (100), `step` (1), `keyStep` (5), `format`, `readout`, `ghost`, `marker`, `readOnly`, `fill`, `disabled`, `label` | de boog, `role="slider"` met `format` als `aria-valuetext`. `marker` is een streepje op een tweede waarde, `readOnly` een dunne boog zonder duim (`role="img"`), `fill={false}` het spoor zonder vulling |
   | `ColorWheel` (`color-wheel`) | `hue` (0 tot 360), `saturation` (0 tot 100), `onChange`, `onCommit`, `ghost`, `disabled`, `label` | tint rond, verzadiging van midden naar rand; pijlen links en rechts tint (10°), omhoog en omlaag verzadiging (5%) |
   | `Swatch` (`swatch`) | `color`, `selected`, `label`, `onSelect`, `angle`, `disabled` | een kleurvlak in een `.radiaal-knop` op de ring |
+  | `NowPlaying` (`now-playing`) | `title`, `subtitle`, `cover`, `icon` | wat er speelt, in `details`: hoes van 40 px, titel en ondertitel met een ellips |
+  | `PillRow` (`pill-row`) | `label`, `options`, `value`, `onChange`, `disabled` | een kleine keuze in `details`: een label met knopjes van 28 px (`.radiaal-lid`) |
+  | `PeekCard` (`peek-card`) | `title`, `value`, `line`, `alert`, `unavailable`, `onClose`, `children` | een kaartje (`.glas-dik`) 22 px onder de stip voor wat je alleen bekijkt; als kinderen een `Bar` en een link |
   | `Hotspot` (`hotspot`) | `on`, `glow`, `pending`, `unavailable`, `open`, `dim` en alles van een `<button>` | de stip op een apparaat |
 
   Slepen rendert niet per frame: boog en wiel zetten hun stand als
@@ -271,8 +274,9 @@ export default async function Login(props: PageProps<'/auth/login'>) {
   `onCommit` komt bij loslaten met de laatste waarde. Tijdens het slepen staat
   `data-sleep` op de boog of het wiel en dimt de rest via `:has()` naar .28.
   Duim en wiel bewegen met `transform`; de vulling van de boog met
-  `stroke-dasharray`, het enige wat per frame verft. Een knop "terug" in de
-  opening van de boog is een `.radiaal-knop.radiaal-terug`.
+  `stroke-dasharray`, het enige wat per frame verft. De meetkunde gaat uit van
+  een bereik (`ArcRange`: `min`, `max`, `step`); `snap` legt een waarde op de
+  stap.
 
 ## Laden
 
