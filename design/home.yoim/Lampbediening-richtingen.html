@@ -1,0 +1,378 @@
+<!doctype html><html lang="nl"><head><meta charset="utf-8"><title>Lampbediening · richtingen</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="stylesheet" href="../../styles.css">
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:var(--surface-sunken);color:var(--text);font-family:var(--font-sans)}
+button{font:inherit;color:inherit;border:0;background:none;padding:0}
+.pag{max-width:1900px;margin:0 auto;padding:32px 24px 96px}
+h1{margin:0;font-size:30px;font-weight:600;letter-spacing:-.02em}
+.intro{margin:8px 0 0;max-width:82ch;font-size:14px;line-height:1.55;color:var(--text-muted);text-wrap:pretty}
+.balk-top{position:sticky;top:0;z-index:40;display:flex;flex-wrap:wrap;gap:10px 14px;align-items:center;padding:12px 0;margin:16px 0 0;background:var(--surface-sunken)}
+.balk-top .lbl{font-size:13px;font-weight:600;color:var(--text-muted)}
+.seg{display:flex;gap:1px;padding:3px;border-radius:999px;background:var(--surface-raised);border:1px solid var(--border)}
+.seg button{height:32px;padding:0 14px;border-radius:999px;color:var(--text-muted);font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap}
+.seg button[aria-pressed="true"]{background:var(--accent);color:var(--accent-fg)}
+.richting{margin-top:56px}
+.r-kop{display:flex;align-items:baseline;gap:12px;margin-bottom:6px}
+.r-kop b{display:inline-grid;place-items:center;width:30px;height:30px;border-radius:50%;background:var(--accent);color:var(--accent-fg);font-size:15px;font-weight:600;flex:none}
+.r-kop h2{margin:0;font-size:22px;font-weight:600;letter-spacing:-.02em}
+.r-uitleg{margin:0 0 6px 42px;max-width:92ch;font-size:14px;line-height:1.55;color:var(--text-muted);text-wrap:pretty}
+.r-weetjes{margin:0 0 20px 42px;display:flex;flex-wrap:wrap;gap:6px}
+.r-weetjes span{font-size:12px;padding:3px 10px;border-radius:999px;background:var(--surface-raised);border:1px solid var(--border);color:var(--text-muted)}
+.r-rij{display:flex;flex-wrap:wrap;gap:20px;align-items:flex-start}
+.kaartje{display:flex;flex-direction:column;gap:8px}
+.kaartje>small{font-size:12px;font-weight:600;color:var(--text-muted);padding-left:4px}
+.kaartje>small b{color:var(--text)}
+.paar{display:flex;gap:6px}
+.klein .doek{zoom:.66}
+.live>small{font-size:13px}
+
+/* Het doek: een stukje scene, FSD-stijl */
+.doek{position:relative;width:380px;height:430px;border-radius:22px;overflow:hidden;background:var(--surface);color:var(--text);flex:none;user-select:none;-webkit-user-select:none;touch-action:none}
+.doek svg.kamer{position:absolute;inset:0;width:100%;height:100%}
+.anker{position:absolute;width:0;height:0}
+
+/* Uit @yoim/ds (glas.css) en home.yoim (globals.css), ongewijzigd */
+.glas,.glas-dun,.glas-dik{border:1px solid var(--glass-border);box-shadow:var(--glass-rim)}
+.glas{background:var(--glass-tint);backdrop-filter:var(--glass-blur)}
+.glas-dun{background:var(--glass-thin);backdrop-filter:var(--glass-blur-thin)}
+.glas-dik{background:var(--glass-tint-strong);backdrop-filter:var(--glass-blur-thick)}
+.radiaal{position:absolute;top:0;left:0}
+.radiaal-schijf{position:absolute;border-radius:var(--radius-full)}
+.radiaal-midden{position:absolute;top:-30px;left:-30px;display:grid;width:60px;height:60px;place-items:center;border:1px solid var(--border);border-radius:var(--radius-full);background:var(--surface-raised);color:var(--text-muted);cursor:pointer;z-index:3;transition:background var(--dur-fast) var(--ease),color var(--dur-fast) var(--ease),scale var(--dur-fast) var(--ease),opacity var(--dur-fast) var(--ease)}
+.radiaal-midden:active{scale:var(--press-scale)}
+.radiaal-midden[data-on]{border-color:transparent;background:var(--accent);color:var(--accent-fg)}
+.radiaal-knop{position:absolute;top:-20px;left:-20px;display:grid;width:40px;height:40px;place-items:center;border-radius:var(--radius-full);color:var(--text);font-size:var(--text-small);font-weight:var(--weight-medium);cursor:pointer;transform:rotate(var(--hoek)) translateX(var(--straal,60px)) rotate(calc(var(--hoek) * -1));transition:background var(--dur-fast) var(--ease);z-index:2}
+@media (hover:hover){.radiaal-knop:hover{background:var(--surface-sunken)}.radiaal-lid:hover{background:var(--surface-sunken)}}
+.radiaal-knop[data-active]{background:var(--accent-soft);color:var(--accent)}
+.radiaal :disabled,.radiaal [data-uit]{opacity:.4;cursor:default;pointer-events:none}
+.radiaal-naam{position:absolute;left:0;display:flex;flex-direction:column;align-items:center;padding:.4rem 1rem;border-radius:var(--radius-lg);color:var(--text-muted);font-size:var(--text-small);line-height:var(--lh-small);white-space:nowrap;translate:-50% 0;font-variant-numeric:tabular-nums}
+.radiaal-naam b{color:var(--text);font-weight:var(--weight-semibold)}
+.radiaal-leden{display:flex;gap:4px;margin:.35rem 0 .15rem}
+.radiaal-lid{min-width:1.75rem;height:1.75rem;padding:0 .5rem;border:1px solid var(--border);border-radius:var(--radius-capsule);color:var(--text-muted);font-size:var(--text-caption);font-weight:var(--weight-medium);cursor:pointer}
+.radiaal-lid[data-on]{box-shadow:inset 0 -2px 0 var(--gloed)}
+.radiaal-lid[aria-pressed="true"]{border-color:transparent;background:var(--accent-soft);color:var(--accent)}
+:focus-visible{outline:none;box-shadow:var(--ring-focus)}
+
+/* Nieuw, gedeeld door de richtingen */
+.ico{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.ico.k{width:16px;height:16px}
+.melding{display:flex;align-items:center;gap:6px;margin-top:2px;color:var(--text)}
+.melding i{width:7px;height:7px;border-radius:50%;background:var(--botergoud)}
+.duim{position:absolute;width:24px;height:24px;margin:-12px 0 0 -12px;border-radius:50%;background:var(--surface-raised);border:2px solid var(--text);box-shadow:var(--glass-lift-1);cursor:grab;z-index:4;transition:scale var(--dur-fast) var(--ease)}
+.duim::after{content:"";position:absolute;inset:-12px;border-radius:50%}
+.duim i{position:absolute;inset:3px;border-radius:50%}
+.duim[data-sleep]{scale:1.25;cursor:grabbing}
+.duim.spook{background:none;border:1.5px dashed var(--text-subtle);box-shadow:none;z-index:3}
+.bel{position:absolute;translate:-50% -100%;padding:2px 9px;border-radius:999px;background:var(--text);color:var(--surface);font-size:12px;font-weight:600;white-space:nowrap;font-variant-numeric:tabular-nums;z-index:6;pointer-events:none}
+.radiaal[data-sleep] .dim{opacity:.28}
+.dim{transition:opacity var(--dur-fast) var(--ease)}
+.ring{position:absolute;border-radius:50%;cursor:pointer;clip-path:circle(50%)}
+.staal{width:22px;height:22px;border-radius:50%;border:1px solid var(--border-strong)}
+.radiaal-knop[data-gekozen]{box-shadow:0 0 0 2px var(--surface-raised),0 0 0 4px var(--accent)}
+svg.boog{position:absolute;overflow:visible;pointer-events:none}
+svg.boog path{fill:none;stroke-linecap:round}
+svg.boog .raak{stroke:transparent;pointer-events:stroke;cursor:pointer}
+
+/* B · paneel */
+.paneel{position:absolute;display:flex;flex-direction:column;gap:6px;padding:10px;border-radius:var(--radius-lg);animation:schuif var(--dur-glas) var(--ease-glas)}
+@keyframes schuif{from{opacity:0;transform:translateX(-14px)}}
+.p-rij{display:flex;flex-direction:column;gap:4px}
+.p-kop{display:flex;justify-content:space-between;font-size:12px;color:var(--text-muted);padding:0 4px;font-variant-numeric:tabular-nums}
+.p-kop b{font-weight:600;color:var(--text)}
+.spoor{position:relative;height:30px;border-radius:15px;background:var(--surface-sunken);box-shadow:inset 0 0 0 1px var(--border);cursor:pointer;overflow:visible}
+.spoor .vul{position:absolute;inset:0 auto 0 0;border-radius:15px;background:var(--accent);min-width:30px}
+.spoor .greep{position:absolute;top:3px;bottom:3px;width:6px;margin-left:-3px;border-radius:3px;background:var(--surface-raised);box-shadow:0 0 0 1.5px var(--text);z-index:2}
+.spoor .greep.hol{background:none;box-shadow:0 0 0 1.5px var(--surface-raised)}
+.spoor .greep.spook{background:none;box-shadow:none;border:1.5px dashed var(--text)}
+.spoor .ico{position:absolute;left:8px;top:7px;color:var(--accent-fg);z-index:1;pointer-events:none}
+.p-rij[data-stil] .spoor{opacity:.6}
+
+/* C · stalen en schuif */
+.zuil{position:absolute;width:40px;border-radius:20px;overflow:hidden;cursor:pointer}
+.zuil .vul{position:absolute;left:0;right:0;bottom:0;background:var(--accent);min-height:40px}
+.zuil .ico{position:absolute;left:10px;bottom:10px;color:var(--accent-fg)}
+.zuil .streep{position:absolute;left:8px;right:8px;height:0;border-top:1.5px dashed var(--text)}
+.wiel{position:absolute;border-radius:50%;cursor:crosshair}
+
+/* D · één gebaar */
+.pad{position:absolute;border-radius:50%;cursor:grab;z-index:2}
+.pad-hint{position:absolute;color:var(--text-subtle);pointer-events:none;display:grid;place-items:center}
+.pad-hint i{width:10px;height:10px;border-radius:50%;border:1px solid var(--border-strong)}
+.kruis{position:absolute;background:var(--text-subtle);opacity:.5;pointer-events:none}
+.radiaal-midden.verstopt{opacity:0;pointer-events:none}
+.uitlees{position:absolute;translate:-50% -50%;text-align:center;pointer-events:none;font-variant-numeric:tabular-nums;z-index:5}
+.uitlees b{display:block;font-size:26px;font-weight:600;letter-spacing:-.02em;line-height:1}
+.uitlees span{font-size:12px;color:var(--text-muted)}
+</style>
+</head><body>
+<div class="pag">
+  <h1>Lampbediening · vier richtingen</h1>
+  <p class="intro">Helderheid, wit en kleur in het ronde menu, alleen voor wat een lamp kan. Elke richting heeft bovenaan een levend exemplaar in licht en donker: sleep en tik, de lamp in de scene gloeit meteen mee. Kies hieronder wat voor lamp het is, en laat hem een keer niet antwoorden om het terugspringen te zien. Daaronder staan dezelfde zeven toestanden per richting.</p>
+  <div class="balk-top">
+    <span class="lbl">Lamp</span>
+    <div class="seg" id="soort">
+      <button data-s="bri">Alleen helderheid</button><button data-s="wit">Helderheid en wit</button><button data-s="kleur" aria-pressed="true">Helderheid, wit en kleur</button><button data-s="groep">Groep</button>
+    </div>
+    <div class="seg"><button id="faal" aria-pressed="false">Lamp antwoordt niet</button></div>
+  </div>
+  <div id="richtingen"></div>
+</div>
+<script>
+(function(){
+const I={
+ lamp:'<path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/>',
+ zon:'<circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/>',
+ palet:'<circle cx="13.5" cy="6.5" r=".5" fill="currentColor"/><circle cx="17.5" cy="10.5" r=".5" fill="currentColor"/><circle cx="8.5" cy="7.5" r=".5" fill="currentColor"/><circle cx="6.5" cy="12.5" r=".5" fill="currentColor"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/>',
+ wit:'<circle cx="12" cy="12" r="10"/><path d="M12 18a6 6 0 0 0 0-12v12z"/>',
+ terug:'<path d="m15 18-6-6 6-6"/>',
+ weg:'<path d="M12 20h.01"/><path d="M8.5 16.429a5 5 0 0 1 7 0"/><path d="M5 12.859a10 10 0 0 1 5.17-2.69"/><path d="M19 12.859a10 10 0 0 0-2.007-1.523"/><path d="M2 8.82a15 15 0 0 1 4.177-2.643"/><path d="M22 8.82a15 15 0 0 0-11.288-3.764"/><path d="m2 2 20 20"/>'
+};
+const ic=(n,c='')=>`<svg class="ico ${c}" viewBox="0 0 24 24" aria-hidden="true">${I[n]}</svg>`;
+const klem=(v,a,b)=>Math.max(a,Math.min(b,v));
+const rad=a=>a*Math.PI/180;
+const pt=(r,a)=>[r*Math.cos(rad(a)),r*Math.sin(rad(a))];
+const op=(r,a)=>{const[x,y]=pt(r,a);return `left:${x.toFixed(1)}px;top:${y.toFixed(1)}px`};
+function kelvin(k){const t=k/100;let r,g,b;
+  if(t<=66){r=255;g=99.47*Math.log(t)-161.12;b=t<=19?0:138.52*Math.log(t-10)-305.04}else{r=329.7*Math.pow(t-60,-.1332);g=288.12*Math.pow(t-60,-.0755);b=255}
+  return `rgb(${[r,g,b].map(v=>Math.round(klem(v,0,255))).join(' ')})`}
+const tint=(h,s)=>`hsl(${Math.round(h)} ${Math.round(35+s*.6)}% ${Math.round(72-s*.16)}%)`;
+const kleurNaam=h=>['rood','oranje','geel','groen','groen','cyaan','blauw','blauw','paars','paars','roze','roze'][Math.floor(((h+15)%360)/30)];
+const lampKleur=s=>s.mode==='kleur'?tint(s.hue,s.sat):kelvin(s.k);
+const KMIN=s=>s.caps==='wit'?2200:2000,KMAX=6500;
+const HUES='hsl(0 85% 60%),hsl(60 85% 58%),hsl(120 60% 55%),hsl(180 65% 55%),hsl(240 75% 66%),hsl(300 70% 62%),hsl(360 85% 60%)';
+const KSTOPS=[2000,2700,3500,4500,5500,6500].map(kelvin).join(',');
+const arc=(r,a0,a1)=>{const[x0,y0]=pt(r,a0),[x1,y1]=pt(r,a1);return `M${x0.toFixed(2)} ${y0.toFixed(2)}A${r} ${r} 0 ${a1-a0>180?1:0} 1 ${x1.toFixed(2)} ${y1.toFixed(2)}`};
+
+/* ---- De scene achter het menu ---- */
+function kamer(s,ax,ay){
+  const aan=s.on&&!s.weg,c=aan?lampKleur(s):'none',o=aan?(.18+.5*s.bri/100):0;
+  const id='g'+Math.random().toString(36).slice(2,8);
+  return `<svg class="kamer" viewBox="0 0 380 430" aria-hidden="true"><defs><radialGradient id="${id}"><stop offset="0" stop-color="${c}" stop-opacity="1"/><stop offset=".55" stop-color="${c}" stop-opacity=".35"/><stop offset="1" stop-color="${c}" stop-opacity="0"/></radialGradient></defs>
+  <rect width="380" height="300" fill="var(--surface)"/><path d="M0 300H380V430H0Z" fill="var(--surface-sunken)"/><path d="M0 300H380" stroke="var(--border)"/>
+  <path d="M40 250h300v62H40z" fill="var(--surface-raised)" stroke="var(--border)"/><path d="M140 250v62M240 250v62" stroke="var(--border)"/>
+  ${aan?`<circle cx="${ax}" cy="${ay}" r="${150+60*s.bri/100}" fill="url(#${id})" opacity="${o.toFixed(2)}"/><ellipse cx="${ax}" cy="330" rx="150" ry="34" fill="${c}" opacity="${(o*.5).toFixed(2)}"/>`:''}
+  <path d="M${ax-26} ${ay+65}h52l-8 -34h-36z" fill="${aan?c:'var(--surface-sunken)'}" stroke="var(--border-strong)"/></svg>`;
+}
+
+/* ---- Gedeeld: midden, naam ---- */
+const NAAM={bri:'Filament eettafel',wit:'Spots keuken',kleur:'Hue Go',groep:'Centris'};
+function midden(s,extra=''){return `<button class="radiaal-midden ${extra}" data-a="toggle" ${s.on&&!s.weg?'data-on':''} ${s.weg?'disabled':''} aria-pressed="${s.on}" aria-label="${s.on?'Uitzetten':'Aanzetten'}">${ic(s.weg?'weg':'lamp')}</button>`}
+function samenvatting(s){
+  if(s.weg)return 'Niet bereikbaar';if(!s.on)return 'Uit';
+  const rest=s.caps==='bri'?'':s.mode==='kleur'?' · '+kleurNaam(s.hue):` · ${Math.round(s.k/50)*50} K`;
+  return `${Math.round(s.bri)}%${rest}`}
+function naam(s,top){
+  const leden=s.groep?`<div class="radiaal-leden" role="group" aria-label="Eén lamp apart"><button class="radiaal-lid" data-a="alle" aria-pressed="${s.groep.only==null}">alle</button>${s.groep.leden.map((l,i)=>`<button class="radiaal-lid" data-a="lid" data-w="${i}" ${l?`data-on style="--gloed:${l}"`:''} aria-pressed="${s.groep.only===i}" aria-label="Alleen lamp ${i+1}">${i+1}</button>`).join('')}</div>`:'';
+  const titel=s.groep&&s.groep.only!=null?`${s.naam||NAAM.groep} ${s.groep.only+1}`:(s.naam||NAAM[s.groep?'groep':s.caps]);
+  return `<div class="radiaal-naam glas-dun" style="top:${top}px"><b>${titel}</b><span aria-live="polite">${samenvatting(s)}</span>${s.fout?`<span class="melding" role="status"><i></i>Reageerde niet, teruggezet</span>`:''}${leden}</div>`}
+const uit=s=>s.weg?'data-uit':'';
+const bel=(s,soort,x,y,tekst)=>s.drag===soort?`<span class="bel" style="left:${x}px;top:${y}px">${tekst}</span>`:'';
+const kTekst=s=>`${Math.round(s.k/50)*50} K`;
+
+/* ---- A · Bogen ---- */
+const A0=135,A1=405;
+function richtingA(s){
+  const R=118,rb=100,ri=70,f=s.bri/100,ab=A0+(A1-A0)*f,aan=s.on&&!s.weg;
+  let h=`<div class="radiaal-schijf glas-dik" style="left:${-R}px;top:${-R}px;width:${2*R}px;height:${2*R}px"></div>`;
+  h+=`<svg class="boog ${s.drag&&s.drag!=='bri'?'dim':''}" ${uit(s)} style="left:0;top:0" width="1" height="1"><path d="${arc(rb,A0,A1)}" stroke="var(--surface-sunken)" stroke-width="10"/>${aan?`<path d="${arc(rb,A0,Math.max(A0+.5,ab))}" stroke="var(--accent)" stroke-width="10"/>`:''}<path class="raak" data-drag="bri" data-vorm="boog" d="${arc(rb,A0,A1)}" stroke-width="34"/></svg>`;
+  if(s.fout&&s.fout.wat==='bri')h+=`<span class="duim spook" style="${op(rb,A0+(A1-A0)*s.fout.poging/100)}"></span>`;
+  h+=`<span class="duim ${s.drag&&s.drag!=='bri'?'dim':''}" ${uit(s)} ${s.drag==='bri'?'data-sleep':''} data-drag="bri" data-vorm="boog" role="slider" tabindex="0" aria-label="Helderheid" aria-valuenow="${Math.round(s.bri)}" style="${op(rb,ab)}"></span>`;
+  {const[x,y]=pt(rb,ab);h+=bel(s,'bri',x,y-20,Math.round(s.bri)+'%')}
+  if(s.caps!=='bri'){
+    const d=s.drag&&s.drag==='bri'?'dim':'';
+    if(s.mode==='kleur'){
+      h+=`<div class="ring ${d}" ${uit(s)} data-drag="hue" data-vorm="ring" style="left:${-ri-7}px;top:${-ri-7}px;width:${2*ri+14}px;height:${2*ri+14}px;background:conic-gradient(from 90deg,${HUES});-webkit-mask:radial-gradient(closest-side,transparent calc(100% - 14px),#000 calc(100% - 13px));mask:radial-gradient(closest-side,transparent calc(100% - 14px),#000 calc(100% - 13px))"></div>`;
+      if(s.fout&&s.fout.wat==='hue')h+=`<span class="duim spook" style="${op(ri,s.fout.poging)}"></span>`;
+      h+=`<span class="duim ${d}" ${uit(s)} ${s.drag==='hue'?'data-sleep':''} data-drag="hue" data-vorm="ring" role="slider" tabindex="0" aria-label="Kleur" style="${op(ri,s.hue)}"><i style="background:${tint(s.hue,s.sat)}"></i></span>`;
+      {const[x,y]=pt(ri,s.hue);h+=bel(s,'hue',x,y-20,kleurNaam(s.hue))}
+    }else{
+      const ak=180+180*(s.k-KMIN(s))/(KMAX-KMIN(s));
+      h+=`<svg class="boog ${d}" style="left:0;top:0" width="1" height="1"><path d="${arc(ri,180,360)}" stroke="var(--border)" stroke-width="16"/></svg>`;
+      h+=`<div class="ring ${d}" ${uit(s)} data-drag="k" data-vorm="halfboog" style="left:${-ri-7}px;top:${-ri-7}px;width:${2*ri+14}px;height:${2*ri+14}px;background:conic-gradient(from 270deg,${KSTOPS} 180deg,transparent 180deg);-webkit-mask:radial-gradient(closest-side,transparent calc(100% - 14px),#000 calc(100% - 13px));mask:radial-gradient(closest-side,transparent calc(100% - 14px),#000 calc(100% - 13px))"></div>`;
+      if(s.fout&&s.fout.wat==='k')h+=`<span class="duim spook" style="${op(ri,180+180*(s.fout.poging-KMIN(s))/(KMAX-KMIN(s)))}"></span>`;
+      h+=`<span class="duim ${d}" ${uit(s)} ${s.drag==='k'?'data-sleep':''} data-drag="k" data-vorm="halfboog" role="slider" tabindex="0" aria-label="Kleurtemperatuur" style="${op(ri,ak)}"><i style="background:${kelvin(s.k)}"></i></span>`;
+      {const[x,y]=pt(ri,ak);h+=bel(s,'k',x,y-20,kTekst(s))}
+    }
+    if(s.caps==='kleur')h+=`<button class="radiaal-knop dim" ${uit(s)} style="--hoek:112deg;--straal:${rb}px" data-a="mode" data-w="wit" ${s.mode==='wit'?'data-active':''} aria-label="Wit">${ic('wit')}</button><button class="radiaal-knop dim" ${uit(s)} style="--hoek:68deg;--straal:${rb}px" data-a="mode" data-w="kleur" ${s.mode==='kleur'?'data-active':''} aria-label="Kleur">${ic('palet')}</button>`;
+  }
+  return h+midden(s)+naam(s,R+10);
+}
+
+/* ---- B · Paneel ---- */
+function spoor(s,soort,min,max,val,bg,vul,label,tekst,actief){
+  const f=klem((val-min)/(max-min),0,1),aan=s.on&&!s.weg;
+  const spook=s.fout&&s.fout.wat===soort?`<span class="greep spook" style="left:${klem((s.fout.poging-min)/(max-min),.04,.96)*100}%"></span>`:'';
+  return `<div class="p-rij ${s.drag&&s.drag!==soort?'dim':''}" ${uit(s)} ${actief?'':'data-stil'}><div class="p-kop"><span>${label}</span><b>${aan&&actief?tekst:''}</b></div>
+   <div class="spoor" data-drag="${soort}" data-vorm="h" data-min="${min}" data-max="${max}" role="slider" tabindex="0" aria-label="${label}" style="${bg?`background:${bg}`:''}">${vul&&aan?`<span class="vul" style="width:${f*100}%"></span>${ic('zon','k')}`:''}${spook}${vul?'':`<span class="greep ${actief?'':'hol'}" style="left:${klem(f,.04,.96)*100}%"></span>`}</div></div>`}
+function richtingB(s){
+  const R=88;
+  let h=`<div class="radiaal-schijf glas-dik" style="left:${-R}px;top:${-R}px;width:${2*R}px;height:${2*R}px"></div>`;
+  h+=[25,50,100].map((p,i)=>`<button class="radiaal-knop dim" ${uit(s)} style="--hoek:${-90+120*i}deg" data-a="pct" data-w="${p}" ${s.on&&Math.round(s.bri)===p?'data-active':''} aria-label="${p}%">${p}</button>`).join('');
+  let rijen=spoor(s,'bri',1,100,s.bri,'',true,'Helderheid',Math.round(s.bri)+'%',true);
+  if(s.caps!=='bri')rijen+=spoor(s,'k',KMIN(s),KMAX,s.k,`linear-gradient(90deg,${KSTOPS})`,false,'Wit',kTekst(s),s.mode==='wit');
+  if(s.caps==='kleur')rijen+=spoor(s,'hue',0,360,s.hue,`linear-gradient(90deg,${HUES})`,false,'Kleur',kleurNaam(s.hue),s.mode==='kleur');
+  h+=`<div class="paneel glas-dik" style="left:${R+12}px;top:${-R}px;width:156px">${rijen}</div>`;
+  return h+midden(s)+naam(s,R+10);
+}
+
+/* ---- C · Stalen ---- */
+const WIT5=[2200,2700,3500,4500,6500],WIT4=[2200,2700,4000,6500],KLEUR3=[[20,90],[330,80],[265,80]];
+function richtingC(s){
+  const R=88,aan=s.on&&!s.weg,zh=2*R;
+  let h='';
+  if(s.meer&&s.caps==='kleur'){
+    h+=`<div class="wiel ${s.drag==='bri'?'dim':''}" ${uit(s)} data-drag="wiel" data-vorm="wiel" style="left:${-R}px;top:${-R}px;width:${2*R}px;height:${2*R}px;background:radial-gradient(closest-side,#fff 34%,transparent 96%),conic-gradient(from 90deg,${HUES});border:1px solid var(--glass-border)"></div>`;
+    const rs=34+(R-40)*s.sat/100;
+    if(s.fout&&s.fout.wat==='wiel')h+=`<span class="duim spook" style="${op(34+(R-40)*s.fout.poging[1]/100,s.fout.poging[0])}"></span>`;
+    h+=`<span class="duim" ${uit(s)} ${s.drag==='wiel'?'data-sleep':''} data-drag="wiel" data-vorm="wiel" role="slider" tabindex="0" aria-label="Kleur" style="${op(rs,s.hue)}"><i style="background:${tint(s.hue,s.sat)}"></i></span>`;
+    {const[x,y]=pt(rs,s.hue);h+=bel(s,'wiel',x,y-20,kleurNaam(s.hue))}
+    h+=`<button class="radiaal-knop glas-dik dim" style="--hoek:-45deg;--straal:${R+30}px" data-a="meer" aria-label="Terug naar stalen">${ic('terug')}</button>`;
+  }else{
+    h+=`<div class="radiaal-schijf glas-dik" style="left:${-R}px;top:${-R}px;width:${2*R}px;height:${2*R}px"></div>`;
+    let knoppen=[];
+    if(s.caps==='bri')knoppen=[25,50,100].map(p=>`data-a="pct" data-w="${p}" ${s.on&&Math.round(s.bri)===p?'data-active':''} aria-label="${p}%">${p}`);
+    else{
+      const wit=s.caps==='wit'?WIT5:WIT4;
+      knoppen=wit.map(k=>`data-a="staal-k" data-w="${k}" ${aan&&s.mode==='wit'&&Math.abs(s.k-k)<60?'data-gekozen':''} aria-label="${k} K"><span class="staal" style="background:${kelvin(k)}"></span>`);
+      if(s.caps==='kleur'){knoppen.push(...KLEUR3.map(([hu,sa])=>`data-a="staal-h" data-w="${hu},${sa}" ${aan&&s.mode==='kleur'&&Math.abs(s.hue-hu)<8?'data-gekozen':''} aria-label="${kleurNaam(hu)}"><span class="staal" style="background:${tint(hu,sa)}"></span>`));
+        knoppen.push(`data-a="meer" aria-label="Meer kleuren" ${aan&&s.mode==='kleur'&&!KLEUR3.some(([hu])=>Math.abs(s.hue-hu)<8)?'data-active':''}>${ic('palet')}`)}
+    }
+    const n=knoppen.length;
+    h+=knoppen.map((k,i)=>`<button class="radiaal-knop dim" ${uit(s)} style="--hoek:${n===3?-90+120*i:-90+360/n*i}deg" ${k}</button>`).join('');
+  }
+  const f=s.bri/100;
+  h+=`<div class="zuil glas-dik ${s.drag&&s.drag!=='bri'?'dim':''}" ${uit(s)} data-drag="bri" data-vorm="v" role="slider" tabindex="0" aria-label="Helderheid" style="left:${-R-52}px;top:${-R}px;height:${zh}px">${aan?`<span class="vul" style="height:${f*100}%"></span>`:''}${ic('zon','k')}${s.fout&&s.fout.wat==='bri'?`<span class="streep" style="bottom:${s.fout.poging}%"></span>`:''}</div>`;
+  h+=bel(s,'bri',-R-32,-R+zh*(1-f)-6,Math.round(s.bri)+'%');
+  return h+midden(s)+naam(s,R+10);
+}
+
+/* ---- D · Eén gebaar ---- */
+function richtingD(s){
+  const R=100,rp=78,aan=s.on&&!s.weg,sl=s.drag==='pad';
+  const fx=s.caps==='bri'?.5:s.mode==='kleur'?s.sat/100:(s.k-KMIN(s))/(KMAX-KMIN(s));
+  const px=(fx*2-1)*rp*.72,py=(1-s.bri/100*2)*rp*.72+ (0);
+  let h=`<div class="radiaal-schijf glas-dik" style="left:${-R}px;top:${-R}px;width:${2*R}px;height:${2*R}px"></div>`;
+  if(aan)h+=`<div class="radiaal-schijf" style="left:${-rp-8}px;top:${-rp-8}px;width:${2*rp+16}px;height:${2*rp+16}px;background:${lampKleur(s)};opacity:${(.12+.3*s.bri/100).toFixed(2)};pointer-events:none"></div>`;
+  h+=`<div class="pad" ${uit(s)} data-drag="pad" data-vorm="pad" role="slider" tabindex="0" aria-label="Helderheid${s.caps==='bri'?'':s.mode==='kleur'?' en verzadiging':' en warmte'}" style="left:${-rp-8}px;top:${-rp-8}px;width:${2*rp+16}px;height:${2*rp+16}px"></div>`;
+  h+=`<span class="pad-hint dim" style="left:-10px;top:${-rp-4}px">${ic('zon','k')}</span><span class="pad-hint dim" style="left:-6px;top:${rp-10}px"><svg class="ico" style="width:12px;height:12px" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/></svg></span>`;
+  if(s.caps!=='bri'){const l=s.mode==='kleur'?'var(--surface-sunken)':kelvin(KMIN(s)),r=s.mode==='kleur'?tint(s.hue,100):kelvin(6500);
+    h+=`<span class="pad-hint dim" style="left:${-rp-2}px;top:-5px"><i style="background:${l}"></i></span><span class="pad-hint dim" style="left:${rp-8}px;top:-5px"><i style="background:${r}"></i></span>`}
+  if(s.caps==='kleur'){
+    h+=`<div class="ring ${sl?'dim':''}" ${uit(s)} data-drag="hue" data-vorm="ring" style="left:${-R}px;top:${-R}px;width:${2*R}px;height:${2*R}px;background:conic-gradient(from 90deg,${HUES});-webkit-mask:radial-gradient(closest-side,transparent calc(100% - 11px),#000 calc(100% - 10px));mask:radial-gradient(closest-side,transparent calc(100% - 11px),#000 calc(100% - 10px));opacity:${s.mode==='kleur'||s.drag==='hue'?1:.45}"></div>`;
+    if(s.mode==='kleur'||s.drag==='hue'){h+=`<span class="duim ${sl?'dim':''}" ${uit(s)} ${s.drag==='hue'?'data-sleep':''} data-drag="hue" data-vorm="ring" role="slider" tabindex="0" aria-label="Kleur" style="${op(R-5,s.hue)};width:20px;height:20px;margin:-10px 0 0 -10px"><i style="background:${tint(s.hue,100)}"></i></span>`;
+      {const[x,y]=pt(R-5,s.hue);h+=bel(s,'hue',x,y-18,kleurNaam(s.hue))}}
+    else h+=`<button class="radiaal-knop glas-dik dim" ${uit(s)} style="--hoek:-45deg;--straal:${R+26}px" data-a="mode" data-w="kleur" aria-label="Kleur">${ic('palet')}</button>`;
+    if(s.mode==='kleur')h+=`<button class="radiaal-knop glas-dik dim" ${uit(s)} style="--hoek:-45deg;--straal:${R+26}px" data-a="mode" data-w="wit" aria-label="Wit">${ic('wit')}</button>`;
+  }
+  if(sl){h+=`<span class="kruis" style="left:${-rp}px;width:${2*rp}px;top:${py}px;height:1px"></span><span class="kruis" style="top:${-rp}px;height:${2*rp}px;left:${px}px;width:1px"></span>`;
+    h+=`<span class="uitlees" style="left:0;top:${py>0?-34:34}px"><b>${Math.round(s.bri)}%</b><span>${s.caps==='bri'?'':s.mode==='kleur'?kleurNaam(s.hue):kTekst(s)}</span></span>`}
+  if(s.fout&&s.fout.wat==='pad')h+=`<span class="duim spook" style="left:${s.fout.poging[0]}px;top:${s.fout.poging[1]}px"></span>`;
+  if(aan&&(sl||true))h+=`<span class="duim" ${sl?'data-sleep':''} style="left:${px.toFixed(1)}px;top:${py.toFixed(1)}px;pointer-events:none;${sl?'':'width:14px;height:14px;margin:-7px 0 0 -7px;border-width:1.5px;opacity:.85'}"></span>`;
+  return h+midden(s,sl?'verstopt':'')+naam(s,R+10);
+}
+const RICHT={A:richtingA,B:richtingB,C:richtingC,D:richtingD};
+const AX={A:190,B:116,C:226,D:190},AY=176;
+
+function doek(v,s,thema,live){
+  const ax=AX[v];
+  return `<div class="doek" data-thema="${thema}" ${live?`data-live="${v}"`:'inert'}>${kamer(s,ax,AY)}<div class="anker" style="left:${ax}px;top:${AY}px"><div class="radiaal" role="group" ${s.drag?'data-sleep':''}>${RICHT[v](s)}</div></div></div>`}
+
+/* ---- Toestanden ---- */
+const basis=o=>({caps:'kleur',on:true,bri:64,mode:'wit',k:2700,hue:285,sat:80,groep:null,weg:false,drag:null,fout:null,meer:false,...o});
+const sleepSoort={A:'bri',B:'k',C:'bri',D:'pad'};
+const TOESTANDEN=v=>[
+  ['Uit','Filament eettafel · alleen helderheid',basis({caps:'bri',on:false})],
+  ['Aan in wit','Spots keuken · helderheid en wit',basis({caps:'wit',k:3000,bri:72})],
+  ['Aan in kleur','Hue Go · alles',basis({mode:'kleur',bri:80,meer:true})],
+  ['Groep, lamp 3 apart','Centris · vijf lichtpunten',basis({mode:'kleur',hue:28,sat:85,bri:55,groep:{only:2,leden:[kelvin(2700),kelvin(2700),tint(28,85),null,kelvin(2700)]}})],
+  ['Niet bereikbaar','Iris',basis({weg:true,on:false,naam:'Iris'})],
+  ['Tijdens het slepen','de rest dimt, de lamp gloeit mee',v==='B'?basis({drag:'k',k:4600,bri:64}):basis({drag:sleepSoort[v],bri:86,k:3400})],
+  ['Teruggesprongen na 2 s','rustige melding, stippellijn waar je was',basis({fout:v==='B'?{wat:'k',poging:5200}:v==='D'?{wat:'pad',poging:[30,-44]}:{wat:'bri',poging:92}})],
+];
+const RICHTINGEN=[
+ {v:'A',t:'Bogen om het midden',u:'Alles is een boog. Buitenom helderheid, driekwart rond met de opening bij de naam. Daarbinnen de warmte als halve boog, of de kleur als hele ring. Onderin wissel je tussen wit en kleur. Een lamp die minder kan, verliest een ring en ziet er dus vanzelf eenvoudiger uit.',w:['schijf 236 px','duim 24 px, tapvlak 48','geen verzadiging','scènes: derde knop onderin']},
+ {v:'B',t:'Glazen paneel ernaast',u:'Het menu blijft zoals het is, met 25, 50 en 100 als snelle tik. Rechts schuift een paneel uit met dikke schuiven zoals in het bedieningspaneel van iOS: helderheid, wit, kleur. Je wisselt niet van stand, je pakt gewoon de schuif die je wilt. Wat de lamp niet kan, staat er niet.',w:['schuif 30 px hoog, tapvlak 44','paneel 156 px','meeste ruimte op de telefoon nodig','scènes: extra rij onderaan']},
+ {v:'C',t:'Stalen eerst, wiel achter "meer"',u:'Tikken in plaats van slepen. Rond het midden staan stalen: vier soorten wit, drie kleuren en een palet. Het palet maakt van de schijf een kleurenwiel, met verzadiging naar het midden toe. Helderheid is een staande schuif links, die blijft staan als het wiel open is.',w:['staal 40 px tapvlak','schuif 40 × 176','snelst voor dagelijks gebruik','scènes: stalen worden scènes']},
+ {v:'D',t:'Eén gebaar vanaf het midden',u:'De schijf zelf is het stuurvlak. Tik op het midden voor aan en uit, of sleep: omhoog is feller, opzij is warmer of koeler (bij kleur: fletser of voller). De rand is de kleurring. Tijdens het slepen staat de waarde groot in beeld en kleurt de schijf mee. Het minste chroom, maar je moet het één keer ontdekken.',w:['schijf 200 px','geen vaste knoppen','pijltjestoetsen sturen beide assen','scènes: lang drukken']},
+];
+
+/* ---- Levend ---- */
+const live={};let soort='kleur',faal=false;
+function beginStaat(){const s=basis({});
+  if(soort==='bri')return{...s,caps:'bri'};if(soort==='wit')return{...s,caps:'wit',k:3000};
+  if(soort==='groep')return{...s,groep:{only:null,leden:Array(5).fill(kelvin(2700))}};return s}
+function teken(v){document.querySelectorAll(`[data-plek="${v}"]`).forEach(el=>{el.innerHTML=doek(v,live[v],el.dataset.t,true)})}
+function bouw(){
+  document.getElementById('richtingen').innerHTML=RICHTINGEN.map(r=>`<section class="richting"><div class="r-kop"><b>${r.v}</b><h2>${r.t}</h2></div><p class="r-uitleg">${r.u}</p><div class="r-weetjes">${r.w.map(x=>`<span>${x}</span>`).join('')}</div>
+   <div class="r-rij"><div class="kaartje live"><small><b>Probeer het</b> · licht en donker delen dezelfde lamp</small><div class="paar"><div data-plek="${r.v}" data-t="licht"></div><div data-plek="${r.v}" data-t="donker"></div></div></div></div>
+   <div class="r-rij klein" style="margin-top:20px">${TOESTANDEN(r.v).map(([t,o,s])=>`<div class="kaartje"><small><b>${t}</b> · ${o}</small><div class="paar">${doek(r.v,s,'licht')}${doek(r.v,s,'donker')}</div></div>`).join('')}</div></section>`).join('');
+  for(const r of RICHTINGEN){live[r.v]=beginStaat();teken(r.v)}
+}
+
+/* Bevestiging nabootsen: na 2 s terug als de lamp niet antwoordt. */
+const klok={};
+function stuur(v,voor,wat,poging){
+  clearTimeout(klok[v]);live[v].fout=null;
+  if(!faal)return;
+  klok[v]=setTimeout(()=>{const g=live[v].groep,meer=live[v].meer;live[v]={...voor,groep:g,meer,drag:null,fout:{wat,poging}};teken(v);klok[v]=setTimeout(()=>{live[v].fout=null;teken(v)},3200)},2000);
+}
+function pasGroep(s){if(s.groep){const c=s.on?lampKleur(s):null;s.groep.leden=s.groep.leden.map((l,i)=>s.groep.only==null||s.groep.only===i?c:l)}}
+
+let sleep=null;
+function zet(e){
+  const {v,vorm,soortD,cx,cy,rect}=sleep,s=live[v],dx=e.clientX-cx,dy=e.clientY-cy;
+  let a=Math.atan2(dy,dx)*180/Math.PI;if(a<0)a+=360;
+  s.on=true;s.drag=soortD;
+  if(vorm==='boog'){let b=a<90?a+360:a;if(a>=45&&a<90)b=405;if(a>=90&&a<135)b=135;s.bri=klem((b-A0)/(A1-A0)*100,1,100)}
+  else if(vorm==='halfboog'){let b=a;if(a<90)b=360;else if(a<180)b=180;s.k=KMIN(s)+(b-180)/180*(KMAX-KMIN(s));s.mode='wit'}
+  else if(vorm==='ring'){s.hue=a;s.mode='kleur'}
+  else if(vorm==='wiel'){s.hue=a;s.sat=klem((Math.hypot(dx,dy)-34)/(88-40)*100,0,100);s.mode='kleur'}
+  else if(vorm==='h'){const f=klem((e.clientX-rect.left)/rect.width,0,1),min=sleep.min,max=sleep.max,val=min+f*(max-min);
+    if(soortD==='bri')s.bri=Math.max(1,val);else if(soortD==='k'){s.k=val;s.mode='wit'}else{s.hue=val;s.mode='kleur'}}
+  else if(vorm==='v'){s.bri=klem((rect.bottom-e.clientY)/rect.height*100,1,100)}
+  else if(vorm==='pad'){const m=78*.72,fx=klem(dx/m,-1,1),fy=klem(dy/m,-1,1);s.bri=klem((1-fy)/2*100,1,100);
+    if(s.caps!=='bri'){if(s.mode==='kleur')s.sat=(fx+1)/2*100;else s.k=KMIN(s)+(fx+1)/2*(KMAX-KMIN(s))}}
+  pasGroep(s);teken(v);
+}
+document.addEventListener('pointerdown',e=>{
+  const t=e.target.closest('[data-drag]');if(!t)return;const d=t.closest('[data-live]');if(!d)return;
+  const v=d.dataset.live,z=+getComputedStyle(d).zoom||1,ar=d.querySelector('.anker').getBoundingClientRect();
+  e.preventDefault();
+  sleep={v,vorm:t.dataset.vorm,soortD:t.dataset.drag,cx:ar.left,cy:ar.top,rect:t.getBoundingClientRect(),min:+t.dataset.min,max:+t.dataset.max,voor:JSON.parse(JSON.stringify(live[v])),x0:e.clientX,y0:e.clientY,bewogen:t.dataset.vorm!=='pad'};
+  if(sleep.bewogen)zet(e);
+});
+addEventListener('pointermove',e=>{if(!sleep)return;if(!sleep.bewogen){if(Math.hypot(e.clientX-sleep.x0,e.clientY-sleep.y0)<4)return;sleep.bewogen=true}zet(e)});
+addEventListener('pointerup',()=>{if(!sleep)return;const{v,voor,soortD,bewogen}=sleep;sleep=null;if(!bewogen)return;const s=live[v];
+  const poging=soortD==='bri'?s.bri:soortD==='k'?s.k:soortD==='hue'?s.hue:soortD==='wiel'?[s.hue,s.sat]:[...document.querySelector(`[data-live="${v}"] .duim[data-sleep]`)?.style.cssText.match(/-?[\d.]+(?=px)/g)?.slice(0,2).map(Number)||[0,0]];
+  s.drag=null;teken(v);stuur(v,voor,soortD,poging)});
+document.addEventListener('click',e=>{
+  const sg=e.target.closest('#soort button');if(sg){soort=sg.dataset.s;document.querySelectorAll('#soort button').forEach(b=>b.setAttribute('aria-pressed',b===sg));for(const r of RICHTINGEN){clearTimeout(klok[r.v]);live[r.v]=beginStaat();teken(r.v)}return}
+  if(e.target.closest('#faal')){faal=!faal;document.getElementById('faal').setAttribute('aria-pressed',faal);return}
+  const t=e.target.closest('[data-a]');if(!t)return;const d=t.closest('[data-live]');if(!d)return;
+  const v=d.dataset.live,s=live[v],voor=JSON.parse(JSON.stringify(s)),a=t.dataset.a,w=t.dataset.w;let wat='bri',poging=s.bri;
+  if(a==='toggle'){s.on=!s.on}
+  else if(a==='mode'){s.mode=w;s.on=true}
+  else if(a==='pct'){s.bri=+w;s.on=true;poging=+w}
+  else if(a==='staal-k'){s.k=+w;s.mode='wit';s.on=true}
+  else if(a==='staal-h'){[s.hue,s.sat]=w.split(',').map(Number);s.mode='kleur';s.on=true}
+  else if(a==='meer'){s.meer=!s.meer;teken(v);return}
+  else if(a==='lid'){s.groep.only=+w;teken(v);return}
+  else if(a==='alle'){s.groep.only=null;teken(v);return}
+  pasGroep(s);teken(v);stuur(v,voor,wat,poging);
+});
+document.addEventListener('keydown',e=>{
+  const t=e.target.closest('[role="slider"]');if(!t||!e.key.startsWith('Arrow'))return;const d=t.closest('[data-live]');if(!d)return;
+  e.preventDefault();const v=d.dataset.live,s=live[v],voor=JSON.parse(JSON.stringify(s)),soortD=t.dataset.drag,hor=e.key==='ArrowLeft'||e.key==='ArrowRight',plus=e.key==='ArrowRight'||e.key==='ArrowUp'?1:-1;
+  s.on=true;
+  if(soortD==='bri'||(soortD==='pad'&&!hor))s.bri=klem(s.bri+plus*5,1,100);
+  else if(soortD==='k'||(soortD==='pad'&&s.mode==='wit')){s.k=klem(s.k+plus*100,KMIN(s),KMAX);s.mode='wit'}
+  else if(soortD==='pad')s.sat=klem(s.sat+plus*5,0,100);
+  else{s.hue=(s.hue+plus*10+360)%360;s.mode='kleur'}
+  pasGroep(s);teken(v);d.ownerDocument.querySelector(`[data-live="${v}"] [data-drag="${soortD}"][role="slider"]`)?.focus();stuur(v,voor,soortD==='pad'?'bri':soortD,soortD==='hue'?s.hue:soortD==='k'?s.k:s.bri);
+});
+bouw();
+})();
+</script>
+</body></html>

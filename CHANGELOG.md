@@ -1,5 +1,29 @@
 # Changelog
 
+## 0.9.0
+
+- Nieuw: het ronde menu en de stip van een scene, ontworpen in Claude Design
+  (`design/home.yoim/Lampbediening.html`). `RadialMenu` en `Hotspot` verhuizen
+  uit home.yoim; `ArcSlider` (de helderheidsboog), `Swatch` (een kleurvlak op de
+  ring) en `ColorWheel` (het kleurenwiel) zijn nieuw. De CSS staat in
+  `styles/radiaal.css`, de meetkunde met tests in `@yoim/ds/radial`.
+- De schijf groeit van 176 naar 224 px, het naamkaartje schuift mee naar
+  122 px onder het midden, en het naamkaartje kan een melding tonen
+  ("Reageerde niet, teruggezet") met een stip in `--botergoud`.
+- De stip leest `data-open` en `data-dim` nu van zichzelf, niet meer van het
+  anker eromheen.
+
+Let op bij het bijwerken (home.yoim):
+
+- Haal `.hotspot*`, `.radiaal*` en de keyframes `hotspot-puls` en `radiaal-in`
+  uit `app/globals.css` en importeer `@yoim/ds/styles/radiaal.css`. Het anker
+  (`.hotspot-anker`, de plaatsing in de scene) blijft in de app.
+- Gebruik `Hotspot` met `open` en `dim` in plaats van `data-open` en `data-dim`
+  op het anker; het anker houdt `data-open` voor zijn `z-index`.
+- `components/scene/radial-menu.tsx` wordt de laag die een apparaat vertaalt
+  naar `RadialMenu` en wat erop staat. Een open kleurenwiel vangt Escape met
+  `preventDefault`, zodat het menu niet ook dichtgaat.
+
 ## 0.8.2
 
 - De dev-login (`auth/dev`) antwoordt alleen nog op `localhost` of `127.0.0.1`: een

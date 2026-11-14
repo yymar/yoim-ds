@@ -1,0 +1,392 @@
+<!doctype html><html lang="nl"><head><meta charset="utf-8"><title>Lampbediening</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="stylesheet" href="../../styles.css">
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:var(--surface-sunken);color:var(--text);font-family:var(--font-sans)}
+button{font:inherit;color:inherit;border:0;background:none;padding:0}
+.pag{max-width:1900px;margin:0 auto;padding:32px 24px 96px}
+h1{margin:0;font-size:30px;font-weight:600;letter-spacing:-.02em}
+.intro{margin:8px 0 0;max-width:82ch;font-size:14px;line-height:1.55;color:var(--text-muted);text-wrap:pretty}
+.balk-top{position:sticky;top:0;z-index:40;display:flex;flex-wrap:wrap;gap:10px 14px;align-items:center;padding:12px 0;margin:16px 0 0;background:var(--surface-sunken)}
+.balk-top .lbl{font-size:13px;font-weight:600;color:var(--text-muted)}
+.seg{display:flex;gap:1px;padding:3px;border-radius:999px;background:var(--surface-raised);border:1px solid var(--border)}
+.seg button{height:32px;padding:0 14px;border-radius:999px;color:var(--text-muted);font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap}
+.seg button[aria-pressed="true"]{background:var(--accent);color:var(--accent-fg)}
+.richting{margin-top:56px}
+.r-kop{display:flex;align-items:baseline;gap:12px;margin-bottom:6px}
+.r-kop b{display:inline-grid;place-items:center;width:30px;height:30px;border-radius:50%;background:var(--accent);color:var(--accent-fg);font-size:15px;font-weight:600;flex:none}
+.r-kop h2{margin:0;font-size:22px;font-weight:600;letter-spacing:-.02em}
+.r-uitleg{margin:0 0 6px 42px;max-width:92ch;font-size:14px;line-height:1.55;color:var(--text-muted);text-wrap:pretty}
+.r-weetjes{margin:0 0 20px 42px;display:flex;flex-wrap:wrap;gap:6px}
+.r-weetjes span{font-size:12px;padding:3px 10px;border-radius:999px;background:var(--surface-raised);border:1px solid var(--border);color:var(--text-muted)}
+.r-rij{display:flex;flex-wrap:wrap;gap:20px;align-items:flex-start}
+.kaartje{display:flex;flex-direction:column;gap:8px}
+.kaartje>small{font-size:12px;font-weight:600;color:var(--text-muted);padding-left:4px}
+.kaartje>small b{color:var(--text)}
+.paar{display:flex;gap:6px}
+.klein .doek{zoom:.66}
+.live>small{font-size:13px}
+
+/* Het doek: een stukje scene, FSD-stijl */
+.doek{position:relative;width:380px;height:430px;border-radius:22px;overflow:hidden;background:var(--surface);color:var(--text);flex:none;user-select:none;-webkit-user-select:none;touch-action:none}
+.doek svg.kamer{position:absolute;inset:0;width:100%;height:100%}
+.anker{position:absolute;width:0;height:0}
+
+/* Uit @yoim/ds (glas.css) en home.yoim (globals.css), ongewijzigd */
+.glas,.glas-dun,.glas-dik{border:1px solid var(--glass-border);box-shadow:var(--glass-rim)}
+.glas{background:var(--glass-tint);backdrop-filter:var(--glass-blur)}
+.glas-dun{background:var(--glass-thin);backdrop-filter:var(--glass-blur-thin)}
+.glas-dik{background:var(--glass-tint-strong);backdrop-filter:var(--glass-blur-thick)}
+.radiaal{position:absolute;top:0;left:0}
+.radiaal-schijf{position:absolute;border-radius:var(--radius-full)}
+.radiaal-midden{position:absolute;top:-30px;left:-30px;display:grid;width:60px;height:60px;place-items:center;border:1px solid var(--border);border-radius:var(--radius-full);background:var(--surface-raised);color:var(--text-muted);cursor:pointer;z-index:3;transition:background var(--dur-fast) var(--ease),color var(--dur-fast) var(--ease),scale var(--dur-fast) var(--ease),opacity var(--dur-fast) var(--ease)}
+.radiaal-midden:active{scale:var(--press-scale)}
+.radiaal-midden[data-on]{border-color:transparent;background:var(--accent);color:var(--accent-fg)}
+.radiaal-knop{position:absolute;top:-20px;left:-20px;display:grid;width:40px;height:40px;place-items:center;border-radius:var(--radius-full);color:var(--text);font-size:var(--text-small);font-weight:var(--weight-medium);cursor:pointer;transform:rotate(var(--hoek)) translateX(var(--straal,60px)) rotate(calc(var(--hoek) * -1));transition:background var(--dur-fast) var(--ease);z-index:2}
+@media (hover:hover){.radiaal-knop:hover{background:var(--surface-sunken)}.radiaal-lid:hover{background:var(--surface-sunken)}}
+.radiaal-knop[data-active]{background:var(--accent-soft);color:var(--accent)}
+.radiaal :disabled,.radiaal [data-uit]{opacity:.4;cursor:default;pointer-events:none}
+.radiaal-naam{position:absolute;left:0;display:flex;flex-direction:column;align-items:center;padding:.4rem 1rem;border-radius:var(--radius-lg);color:var(--text-muted);font-size:var(--text-small);line-height:var(--lh-small);white-space:nowrap;translate:-50% 0;font-variant-numeric:tabular-nums}
+.radiaal-naam b{color:var(--text);font-weight:var(--weight-semibold)}
+.radiaal-leden{display:flex;gap:4px;margin:.35rem 0 .15rem}
+.radiaal-lid{min-width:1.75rem;height:1.75rem;padding:0 .5rem;border:1px solid var(--border);border-radius:var(--radius-capsule);color:var(--text-muted);font-size:var(--text-caption);font-weight:var(--weight-medium);cursor:pointer}
+.radiaal-lid[data-on]{box-shadow:inset 0 -2px 0 var(--gloed)}
+.radiaal-lid[aria-pressed="true"]{border-color:transparent;background:var(--accent-soft);color:var(--accent)}
+:focus-visible{outline:none;box-shadow:var(--ring-focus)}
+
+/* Nieuw, gedeeld door de richtingen */
+.ico{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.ico.k{width:16px;height:16px}
+.melding{display:flex;align-items:center;gap:6px;margin-top:2px;color:var(--text)}
+.melding i{width:7px;height:7px;border-radius:50%;background:var(--botergoud)}
+.duim{position:absolute;width:24px;height:24px;margin:-12px 0 0 -12px;border-radius:50%;background:var(--surface-raised);border:2px solid var(--text);box-shadow:var(--glass-lift-1);cursor:grab;z-index:4;transition:scale var(--dur-fast) var(--ease)}
+.duim::after{content:"";position:absolute;inset:-12px;border-radius:50%}
+.duim i{position:absolute;inset:3px;border-radius:50%}
+.duim[data-sleep]{scale:1.25;cursor:grabbing}
+.duim.spook{background:none;border:1.5px dashed var(--text-subtle);box-shadow:none;z-index:3}
+.bel{position:absolute;translate:-50% -100%;padding:2px 9px;border-radius:999px;background:var(--text);color:var(--surface);font-size:12px;font-weight:600;white-space:nowrap;font-variant-numeric:tabular-nums;z-index:6;pointer-events:none}
+.radiaal[data-sleep] .dim{opacity:.28}
+.dim{transition:opacity var(--dur-fast) var(--ease)}
+.ring{position:absolute;border-radius:50%;cursor:pointer;clip-path:circle(50%)}
+.staal{width:22px;height:22px;border-radius:50%;border:1px solid var(--border-strong)}
+.radiaal-knop[data-gekozen]{box-shadow:0 0 0 2px var(--surface-raised),0 0 0 4px var(--accent)}
+svg.boog{position:absolute;overflow:visible;pointer-events:none}
+svg.boog path{fill:none;stroke-linecap:round}
+svg.boog .raak{stroke:transparent;pointer-events:stroke;cursor:pointer}
+
+
+.wiel{position:absolute;border-radius:50%;cursor:crosshair;clip-path:circle(50%)}
+.radiaal-midden.verstopt{opacity:0;pointer-events:none}
+.uitlees{position:absolute;display:grid;place-items:center;width:76px;height:76px;margin:-38px 0 0 -38px;border-radius:50%;background:var(--surface-raised);border:1px solid var(--border);pointer-events:none;font-variant-numeric:tabular-nums;z-index:5}
+.uitlees b{font-size:22px;font-weight:600;letter-spacing:-.02em;line-height:1}
+.uitlees b.woord{font-size:15px;letter-spacing:0}
+.terugknop{background:var(--surface-raised);border:1px solid var(--border)}
+
+/* Pagina */
+h2{margin:56px 0 4px;font-size:22px;font-weight:600;letter-spacing:-.02em}
+.sub{margin:0 0 18px;max-width:80ch;font-size:14px;line-height:1.55;color:var(--text-muted)}
+#live{display:flex;flex-wrap:wrap;gap:8px;margin-top:20px}
+#toestanden{display:flex;flex-wrap:wrap;gap:20px}
+#toestanden .doek{zoom:.66}
+.stippen{display:flex;flex-wrap:wrap;gap:6px}
+.stipvlak{display:flex;gap:2px;padding:14px 10px 10px;border-radius:22px;background:var(--surface);color:var(--text)}
+.stipcel{display:flex;flex-direction:column;align-items:center;gap:10px;width:96px;font-size:12px;color:var(--text-muted);text-align:center}
+.stipcel .plek{position:relative;width:48px;height:48px}
+.hotspot{position:absolute;top:10px;left:10px;display:grid;width:28px;height:28px;place-items:center;border-radius:var(--radius-full);cursor:pointer}
+.hotspot::before{width:10px;height:10px;border:1.5px solid var(--border-strong);border-radius:inherit;background:var(--surface-raised);content:'';transition:scale var(--dur-base) var(--ease-glas),background var(--dur-fast) var(--ease)}
+.hotspot[data-on]::before{border-color:var(--surface-raised);background:var(--gloed);box-shadow:0 0 10px 2px var(--gloed)}
+.hotspot:hover::before,.hotspot[data-toon="hover"]::before,.hotspot[data-open]::before{scale:1.5}
+.hotspot[data-toon="focus"]{box-shadow:var(--ring-focus)}
+.hotspot[data-weg]::before{opacity:.35}
+.hotspot[data-pending]::before{animation:puls .8s var(--ease) infinite alternate}
+@keyframes puls{to{scale:1.7;opacity:.55}}
+@media (prefers-reduced-motion:reduce){.hotspot[data-pending]::before{animation:none}}
+.spec{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:16px;align-items:start}
+.blok{padding:18px 20px;border-radius:var(--radius-lg);background:var(--surface-raised);border:1px solid var(--border)}
+.blok h3{margin:0 0 10px;font-size:15px;font-weight:600}
+.blok table{width:100%;border-collapse:collapse;font-size:13px;line-height:1.45}
+.blok td{padding:7px 0;border-top:1px solid var(--border);vertical-align:top;color:var(--text-muted)}
+.blok td:first-child{width:42%;padding-right:12px;color:var(--text);font-weight:500}
+.blok code{white-space:nowrap;font-family:var(--font-mono,ui-monospace,monospace);font-size:12px;color:var(--text)}
+.maat{position:relative;width:260px;height:260px;margin:4px auto 10px}
+.maat svg{width:100%;height:100%;overflow:visible}
+.maat text{font-size:10px;fill:var(--text-muted);font-family:var(--font-sans)}
+</style>
+</head><body>
+<div class="pag">
+  <h1>Lampbediening</h1>
+  <p class="intro">Het ronde menu voor een lamp in home.yoim.nl. De boog is helderheid, de stalen zijn wit en kleur, het palet opent het kleurenwiel. Sleep en tik in het levende exemplaar: de lamp gloeit meteen mee. Zet "Lamp antwoordt niet" aan om het terugspringen na 2 seconden te zien.</p>
+  <div class="balk-top">
+    <span class="lbl">Lamp</span>
+    <div class="seg" id="soort">
+      <button data-s="bri">Alleen helderheid</button><button data-s="wit">Helderheid en wit</button><button data-s="kleur" aria-pressed="true">Helderheid, wit en kleur</button><button data-s="groep">Groep</button><button data-s="gemengd">Gemengde groep</button>
+    </div>
+    <div class="seg"><button id="faal" aria-pressed="false">Lamp antwoordt niet</button></div>
+  </div>
+  <div id="live"></div>
+
+  <h2>Toestanden</h2>
+  <p class="sub">Elke toestand in licht en donker.</p>
+  <div id="toestanden"></div>
+
+  <h2>De stip</h2>
+  <p class="sub">Het tapvlak is 28 px, de stip zelf 10 px. Kleur komt alleen van de lamp.</p>
+  <div class="stippen" id="stippen"></div>
+
+  <h2>Voor @yoim/ds</h2>
+  <p class="sub">Vijf componenten. Het menu en de stip verhuizen uit home.yoim, de boog, de staal en het kleurenwiel zijn nieuw.</p>
+  <div class="spec">
+    <div class="blok"><h3>Componenten</h3><table>
+      <tr><td><code>RadialMenu</code><br><code>.radiaal</code></td><td>Schijf <code>.glas-dik</code>, midden aan/uit, naamkaartje <code>.glas-dun</code> met staat, melding en leden. Bestaat al in home.yoim, de schijf groeit van 176 naar 224 px.</td></tr>
+      <tr><td><code>ArcSlider</code><br><code>.boog</code></td><td>Boog van 270° met de opening onderaan. Spoor <code>--surface-sunken</code>, vulling <code>--accent</code>, duim <code>.duim</code>.</td></tr>
+      <tr><td><code>Swatch</code><br><code>.staal</code></td><td>Kleurvlak van 22 px in een <code>.radiaal-knop</code>. Gekozen: ring in <code>--accent</code>.</td></tr>
+      <tr><td><code>ColorWheel</code><br><code>.kleurwiel</code></td><td>Tint rond, verzadiging van midden naar rand. Neemt de plek van de stalen in, de boog blijft.</td></tr>
+      <tr><td><code>Hotspot</code><br><code>.hotspot</code></td><td>De stip op een apparaat. Bestaat al in home.yoim, verhuist ongewijzigd.</td></tr>
+    </table></div>
+    <div class="blok"><h3>Maten</h3>
+      <div class="maat"><svg viewBox="-130 -130 260 260" aria-hidden="true">
+        <circle r="112" fill="none" stroke="var(--border-strong)"/><path d="M-67.88 67.88A96 96 0 1 1 67.88 67.88" fill="none" stroke="var(--accent)" stroke-width="10" stroke-linecap="round"/>
+        <circle r="60" fill="none" stroke="var(--border)" stroke-dasharray="3 3"/><circle r="30" fill="var(--surface-sunken)" stroke="var(--border)"/>
+        <circle cx="0" cy="-60" r="20" fill="none" stroke="var(--border-strong)"/><circle cx="60" cy="0" r="20" fill="none" stroke="var(--border-strong)"/><circle cx="-60" cy="0" r="20" fill="none" stroke="var(--border-strong)"/>
+        <circle cx="67.88" cy="-67.88" r="12" fill="var(--surface-raised)" stroke="var(--text)" stroke-width="2"/><circle cx="67.88" cy="-67.88" r="24" fill="none" stroke="var(--text-subtle)" stroke-dasharray="2 3"/>
+        <text x="0" y="4" text-anchor="middle">60</text><text x="0" y="-56" text-anchor="middle">40</text><text x="0" y="-100" text-anchor="middle" dy="-16">schijf 224</text><text x="20" y="-116">duim 24, raakvlak 48</text><text x="0" y="96" text-anchor="middle">opening 90°</text>
+      </svg></div>
+      <table>
+      <tr><td>Schijf</td><td>224 px</td></tr>
+      <tr><td>Boog</td><td>straal 96, dikte 10, raakvlak 34 breed</td></tr>
+      <tr><td>Duim</td><td>24 px, raakvlak 48 px</td></tr>
+      <tr><td>Stalen en knoppen</td><td>40 px op straal 60, hooguit 8</td></tr>
+      <tr><td>Midden</td><td>60 px</td></tr>
+      <tr><td>Kleurenwiel</td><td>164 px, verzadiging van straal 34 tot 74</td></tr>
+      <tr><td>Waarde bij slepen</td><td>76 px, cijfers 22 px</td></tr>
+      <tr><td>Leden</td><td>28 px hoog, 4 px ertussen</td></tr>
+    </table></div>
+    <div class="blok"><h3>Tokens</h3><table>
+      <tr><td>Glas</td><td><code>.glas-dik</code> schijf, <code>.glas-dun</code> naam. Geen buitenschaduw op glas.</td></tr>
+      <tr><td>Vulling, gekozen, aan</td><td><code>--accent</code>, <code>--accent-fg</code>, <code>--accent-soft</code></td></tr>
+      <tr><td>Spoor, hover</td><td><code>--surface-sunken</code></td></tr>
+      <tr><td>Duim, midden, waarde</td><td><code>--surface-raised</code>, <code>--text</code>, <code>--border</code></td></tr>
+      <tr><td>Spook na een fout</td><td><code>--text-subtle</code>, gestippeld</td></tr>
+      <tr><td>Melding</td><td>stip in <code>--botergoud</code>, tekst <code>--text</code></td></tr>
+      <tr><td>Focus</td><td><code>--ring-focus</code></td></tr>
+      <tr><td>Kleur van de lamp</td><td>alleen in staal, wiel, leden en stip, nooit uit een token</td></tr>
+    </table></div>
+    <div class="blok"><h3>Beweging</h3><table>
+      <tr><td>Slepen</td><td>Geen transitie op de duim of de vulling: ze volgen de vinger per frame. Alleen <code>transform</code> en <code>opacity</code> veranderen, de blur staat stil.</td></tr>
+      <tr><td>Duim pakken</td><td>schaal 1,25 in <code>--dur-fast</code> <code>--ease</code></td></tr>
+      <tr><td>Rest dimt</td><td>opacity .28 in <code>--dur-fast</code> <code>--ease</code></td></tr>
+      <tr><td>Stalen naar wiel</td><td>kruisvervaging in <code>--dur-base</code> <code>--ease-glas</code></td></tr>
+      <tr><td>Terugspringen</td><td>duim en vulling in <code>--dur-glas</code> <code>--ease-glas</code>, melding blijft 3 s</td></tr>
+      <tr><td>Indrukken</td><td><code>--press-scale</code></td></tr>
+      <tr><td>Minder beweging</td><td>alles direct, via de tokens</td></tr>
+    </table></div>
+    <div class="blok"><h3>Gedrag</h3><table>
+      <tr><td>Optimistisch</td><td>De lamp in de scene en de stip volgen elke stap. Naar Home Assistant gaat hooguit elke 100 ms een waarde, en altijd de laatste bij loslaten.</td></tr>
+      <tr><td>Geen antwoord in 2 s</td><td>Waarde springt terug, spook blijft staan waar je was, "Reageerde niet, teruggezet". Nooit een spinner.</td></tr>
+      <tr><td>Wat een lamp kan</td><td>Alleen helderheid: 25, 50 en 100. Wit: vijf witten. Kleur: vier witten, drie kleuren en het palet.</td></tr>
+      <tr><td>Groep</td><td>"alle" toont wat alle lampen kunnen. Kies je één lamp, dan toont het menu wat die lamp kan.</td></tr>
+      <tr><td>Uit</td><td>Slepen of een staal kiezen zet de lamp aan.</td></tr>
+      <tr><td>Niet bereikbaar</td><td>Alles op 40%, niets is te bedienen, het midden toont geen verbinding.</td></tr>
+      <tr><td>Scènes, later</td><td>De opening van de boog onderaan blijft vrij, behalve voor "terug" bij het wiel.</td></tr>
+    </table></div>
+    <div class="blok"><h3>Toetsenbord</h3><table>
+      <tr><td>Tab</td><td>midden, boog, stalen, leden</td></tr>
+      <tr><td>Pijlen op de boog</td><td>5% per stap, <code>role="slider"</code> met de waarde als tekst</td></tr>
+      <tr><td>Pijlen op het wiel</td><td>links en rechts tint, 10° per stap. Omhoog en omlaag verzadiging, 5% per stap.</td></tr>
+      <tr><td>Enter of spatie</td><td>staal kiezen, aan en uit</td></tr>
+      <tr><td>Escape</td><td>wiel terug naar stalen, daarna het menu dicht</td></tr>
+    </table></div>
+  </div>
+</div>
+<script>
+(function(){
+const I={
+ lamp:'<path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/>',
+ zon:'<circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/>',
+ palet:'<circle cx="13.5" cy="6.5" r=".5" fill="currentColor"/><circle cx="17.5" cy="10.5" r=".5" fill="currentColor"/><circle cx="8.5" cy="7.5" r=".5" fill="currentColor"/><circle cx="6.5" cy="12.5" r=".5" fill="currentColor"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/>',
+ wit:'<circle cx="12" cy="12" r="10"/><path d="M12 18a6 6 0 0 0 0-12v12z"/>',
+ terug:'<path d="m15 18-6-6 6-6"/>',
+ weg:'<path d="M12 20h.01"/><path d="M8.5 16.429a5 5 0 0 1 7 0"/><path d="M5 12.859a10 10 0 0 1 5.17-2.69"/><path d="M19 12.859a10 10 0 0 0-2.007-1.523"/><path d="M2 8.82a15 15 0 0 1 4.177-2.643"/><path d="M22 8.82a15 15 0 0 0-11.288-3.764"/><path d="m2 2 20 20"/>'
+};
+const ic=(n,c='')=>`<svg class="ico ${c}" viewBox="0 0 24 24" aria-hidden="true">${I[n]}</svg>`;
+const klem=(v,a,b)=>Math.max(a,Math.min(b,v));
+const rad=a=>a*Math.PI/180;
+const pt=(r,a)=>[r*Math.cos(rad(a)),r*Math.sin(rad(a))];
+const op=(r,a)=>{const[x,y]=pt(r,a);return `left:${x.toFixed(1)}px;top:${y.toFixed(1)}px`};
+function kelvin(k){const t=k/100;let r,g,b;
+  if(t<=66){r=255;g=99.47*Math.log(t)-161.12;b=t<=19?0:138.52*Math.log(t-10)-305.04}else{r=329.7*Math.pow(t-60,-.1332);g=288.12*Math.pow(t-60,-.0755);b=255}
+  return `rgb(${[r,g,b].map(v=>Math.round(klem(v,0,255))).join(' ')})`}
+const tint=(h,s)=>`hsl(${Math.round(h)} ${Math.round(35+s*.6)}% ${Math.round(72-s*.16)}%)`;
+const kleurNaam=h=>['rood','oranje','geel','groen','groen','cyaan','blauw','blauw','paars','paars','roze','roze'][Math.floor(((h+15)%360)/30)];
+const lampKleur=s=>s.mode==='kleur'?tint(s.hue,s.sat):kelvin(s.k);
+const KMIN=s=>s.caps==='wit'?2200:2000,KMAX=6500;
+const HUES='hsl(0 85% 60%),hsl(60 85% 58%),hsl(120 60% 55%),hsl(180 65% 55%),hsl(240 75% 66%),hsl(300 70% 62%),hsl(360 85% 60%)';
+const KSTOPS=[2000,2700,3500,4500,5500,6500].map(kelvin).join(',');
+const arc=(r,a0,a1)=>{const[x0,y0]=pt(r,a0),[x1,y1]=pt(r,a1);return `M${x0.toFixed(2)} ${y0.toFixed(2)}A${r} ${r} 0 ${a1-a0>180?1:0} 1 ${x1.toFixed(2)} ${y1.toFixed(2)}`};
+
+/* ---- De scene achter het menu ---- */
+function kamer(s,ax,ay){
+  const aan=s.on&&!s.weg,c=aan?lampKleur(s):'none',o=aan?(.18+.5*s.bri/100):0;
+  const id='g'+Math.random().toString(36).slice(2,8);
+  return `<svg class="kamer" viewBox="0 0 380 430" aria-hidden="true"><defs><radialGradient id="${id}"><stop offset="0" stop-color="${c}" stop-opacity="1"/><stop offset=".55" stop-color="${c}" stop-opacity=".35"/><stop offset="1" stop-color="${c}" stop-opacity="0"/></radialGradient></defs>
+  <rect width="380" height="300" fill="var(--surface)"/><path d="M0 300H380V430H0Z" fill="var(--surface-sunken)"/><path d="M0 300H380" stroke="var(--border)"/>
+  <path d="M40 250h300v62H40z" fill="var(--surface-raised)" stroke="var(--border)"/><path d="M140 250v62M240 250v62" stroke="var(--border)"/>
+  ${aan?`<circle cx="${ax}" cy="${ay}" r="${150+60*s.bri/100}" fill="url(#${id})" opacity="${o.toFixed(2)}"/><ellipse cx="${ax}" cy="330" rx="150" ry="34" fill="${c}" opacity="${(o*.5).toFixed(2)}"/>`:''}
+  <path d="M${ax-26} ${ay+65}h52l-8 -34h-36z" fill="${aan?c:'var(--surface-sunken)'}" stroke="var(--border-strong)"/></svg>`;
+}
+
+/* ---- Gedeeld: midden, naam ---- */
+const NAAM={bri:'Filament eettafel',wit:'Spots keuken',kleur:'Hue Go',groep:'Centris'};
+function midden(s,extra=''){return `<button class="radiaal-midden ${extra}" data-a="toggle" ${s.on&&!s.weg?'data-on':''} ${s.weg?'disabled':''} aria-pressed="${s.on}" aria-label="${s.on?'Uitzetten':'Aanzetten'}">${ic(s.weg?'weg':'lamp')}</button>`}
+function samenvatting(s){
+  if(s.weg)return 'Niet bereikbaar';if(!s.on)return 'Uit';
+  const rest=s.caps==='bri'?'':s.mode==='kleur'?' · '+kleurNaam(s.hue):` · ${Math.round(s.k/50)*50} K`;
+  return `${Math.round(s.bri)}%${rest}`}
+function naam(s,top){
+  const leden=s.groep?`<div class="radiaal-leden" role="group" aria-label="Eén lamp apart"><button class="radiaal-lid" data-a="alle" aria-pressed="${s.groep.only==null}">alle</button>${s.groep.leden.map((l,i)=>`<button class="radiaal-lid" data-a="lid" data-w="${i}" ${l?`data-on style="--gloed:${l}"`:''} aria-pressed="${s.groep.only===i}" aria-label="Alleen lamp ${i+1}">${i+1}</button>`).join('')}</div>`:'';
+  const titel=s.groep&&s.groep.only!=null?`${s.naam||NAAM.groep} ${s.groep.only+1}`:(s.naam||NAAM[s.groep?'groep':s.caps]);
+  return `<div class="radiaal-naam glas-dun" style="top:${top}px"><b>${titel}</b><span aria-live="polite">${samenvatting(s)}</span>${s.fout?`<span class="melding" role="status"><i></i>Reageerde niet, teruggezet</span>`:''}${leden}</div>`}
+const uit=s=>s.weg?'data-uit':'';
+const bel=(s,soort,x,y,tekst)=>s.drag===soort?`<span class="bel" style="left:${x}px;top:${y}px">${tekst}</span>`:'';
+const kTekst=s=>`${Math.round(s.k/50)*50} K`;
+
+/* ---- Het menu ---- */
+const A0=135,A1=405,WIT5=[2200,2700,3500,4500,6500],WIT4=[2200,2700,4000,6500],KLEUR3=[[330,80],[265,80],[200,75]];
+const RW=82,RS0=34;
+function menu(s){
+  const R=112,rb=96,f=s.bri/100,ab=A0+(A1-A0)*f,aan=s.on&&!s.weg,sl=!!s.drag;
+  let h=`<div class="radiaal-schijf glas-dik" style="left:${-R}px;top:${-R}px;width:${2*R}px;height:${2*R}px"></div>`;
+  h+=`<svg class="boog ${sl&&s.drag!=='bri'?'dim':''}" ${uit(s)} style="left:0;top:0" width="1" height="1"><path d="${arc(rb,A0,A1)}" stroke="var(--surface-sunken)" stroke-width="10"/>${aan?`<path d="${arc(rb,A0,Math.max(A0+.5,ab))}" stroke="var(--accent)" stroke-width="10"/>`:''}<path class="raak" data-drag="bri" data-vorm="boog" d="${arc(rb,A0,A1)}" stroke-width="34"/></svg>`;
+  if(s.fout&&s.fout.wat==='bri')h+=`<span class="duim spook" style="${op(rb,A0+(A1-A0)*s.fout.poging/100)}"></span>`;
+  h+=`<span class="duim ${sl&&s.drag!=='bri'?'dim':''}" ${uit(s)} ${s.drag==='bri'?'data-sleep':''} data-drag="bri" data-vorm="boog" role="slider" tabindex="0" aria-label="Helderheid" aria-valuemin="1" aria-valuemax="100" aria-valuenow="${Math.round(s.bri)}" aria-valuetext="${Math.round(s.bri)}%" style="${op(rb,ab)}"></span>`;
+  if(s.meer&&s.caps==='kleur'){
+    h+=`<div class="wiel ${s.drag==='bri'?'dim':''}" ${uit(s)} data-drag="wiel" data-vorm="wiel" style="left:${-RW}px;top:${-RW}px;width:${2*RW}px;height:${2*RW}px;background:radial-gradient(closest-side,#fff 36%,transparent 96%),conic-gradient(from 90deg,${HUES});border:1px solid var(--glass-border)"></div>`;
+    const rs=RS0+(RW-RS0-8)*s.sat/100;
+    if(s.fout&&s.fout.wat==='wiel')h+=`<span class="duim spook" style="${op(RS0+(RW-RS0-8)*s.fout.poging[1]/100,s.fout.poging[0])}"></span>`;
+    h+=`<span class="duim ${s.drag==='bri'?'dim':''}" ${uit(s)} ${s.drag==='wiel'?'data-sleep':''} data-drag="wiel" data-vorm="wiel" role="slider" tabindex="0" aria-label="Kleur" aria-valuetext="${kleurNaam(s.hue)}" style="${op(rs,s.hue)}"><i style="background:${tint(s.hue,s.sat)}"></i></span>`;
+    h+=`<button class="radiaal-knop terugknop dim" style="--hoek:90deg;--straal:${rb}px" data-a="meer" aria-label="Terug naar stalen">${ic('terug','k')}</button>`;
+  }else{
+    let knoppen=[];
+    if(s.caps==='bri')knoppen=[25,50,100].map(p=>`data-a="pct" data-w="${p}" ${s.on&&Math.round(s.bri)===p?'data-active':''} aria-label="${p}%">${p}`);
+    else{
+      knoppen=(s.caps==='wit'?WIT5:WIT4).map(k=>`data-a="staal-k" data-w="${k}" ${aan&&s.mode==='wit'&&Math.abs(s.k-k)<60?'data-gekozen':''} aria-label="${k} K"><span class="staal" style="background:${kelvin(k)}"></span>`);
+      if(s.caps==='kleur'){knoppen.push(...KLEUR3.map(([hu,sa])=>`data-a="staal-h" data-w="${hu},${sa}" ${aan&&s.mode==='kleur'&&Math.abs(s.hue-hu)<8?'data-gekozen':''} aria-label="${kleurNaam(hu)}"><span class="staal" style="background:${tint(hu,sa)}"></span>`));
+        const eigen=aan&&s.mode==='kleur'&&!KLEUR3.some(([hu])=>Math.abs(s.hue-hu)<8);
+        knoppen.push(`data-a="meer" aria-label="Meer kleuren" ${eigen?'data-gekozen':''}>${eigen?`<span class="staal" style="background:${tint(s.hue,s.sat)}"></span>`:ic('palet')}`)}
+    }
+    const n=knoppen.length;
+    h+=knoppen.map((k,i)=>`<button class="radiaal-knop dim" ${uit(s)} style="--hoek:${n===3?-90+120*i:-90+360/n*i}deg" ${k}</button>`).join('');
+  }
+  if(sl)h+=`<span class="uitlees" style="left:0;top:0">${s.drag==='wiel'?`<b class="woord">${kleurNaam(s.hue)}</b>`:`<b>${Math.round(s.bri)}%</b>`}</span>`;
+  return h+midden(s,sl?'verstopt':'')+naam(s,R+10);
+}
+const RICHT={F:menu};
+const AX={F:190},AY=170;
+
+function doek(v,s,thema,live){
+  const ax=AX[v];
+  return `<div class="doek" data-thema="${thema}" ${live?`data-live="${v}"`:'inert'}>${kamer(s,ax,AY)}<div class="anker" style="left:${ax}px;top:${AY}px"><div class="radiaal" role="group" ${s.drag?'data-sleep':''}>${RICHT[v](s)}</div></div></div>`}
+
+/* ---- Toestanden ---- */
+const basis=o=>({caps:'kleur',on:true,bri:64,mode:'wit',k:2700,hue:285,sat:80,groep:null,weg:false,drag:null,fout:null,meer:false,...o});
+const TOESTANDEN=()=>[
+  ['Uit','Filament eettafel · alleen helderheid',basis({caps:'bri',on:false})],
+  ['Aan in wit','Spots keuken · helderheid en wit',basis({caps:'wit',k:3500,bri:72})],
+  ['Aan in kleur, een staal','Hue Go',basis({mode:'kleur',hue:330,sat:80,bri:80})],
+  ['Aan in kleur, het wiel','Hue Go · palet open',basis({mode:'kleur',bri:80,meer:true})],
+  ['Groep, lamp 3 apart','Centris · vijf lichtpunten',basis({mode:"kleur",hue:200,sat:75,bri:55,groep:{only:2,leden:[kelvin(2700),kelvin(2700),tint(200,75),null,kelvin(2700)]}})],
+  ['Gemengde groep','filament en spots samen: alleen helderheid',basis({caps:'bri',bri:50,k:2200,naam:'Eettafel',groep:{only:null,leden:Array(6).fill(kelvin(2400))}})],
+  ['Niet bereikbaar','Iris',basis({weg:true,on:false,naam:'Iris'})],
+  ['Tijdens het slepen','de rest dimt, de waarde staat groot',basis({drag:'bri',bri:86})],
+  ['Teruggesprongen na 2 s','stippellijn waar je was, rustige melding',basis({fout:{wat:'bri',poging:92}})],
+];
+const RICHTINGEN=[{v:'F'}];
+const RANG=['bri','wit','kleur'];
+
+/* ---- Levend ---- */
+const live={};let soort='kleur',faal=false;
+function beginStaat(){const s=basis({});
+  if(soort==='bri')return{...s,caps:'bri'};if(soort==='wit')return{...s,caps:'wit',k:3000};
+  if(soort==='groep')return{...s,groep:{only:null,leden:Array(5).fill(kelvin(2700))}};
+  if(soort==='gemengd')return{...s,caps:'bri',k:2400,naam:'Eettafel',groep:{only:null,caps:['bri','bri','bri','bri','wit','wit'],leden:Array(6).fill(kelvin(2400))}};return s}
+function teken(v){document.querySelectorAll(`[data-plek="${v}"]`).forEach(el=>{el.innerHTML=doek(v,live[v],el.dataset.t,true)})}
+function bouw(){
+  document.getElementById('live').innerHTML=`<div data-plek="F" data-t="licht"></div><div data-plek="F" data-t="donker"></div>`;
+  document.getElementById('toestanden').innerHTML=TOESTANDEN().map(([t,o,s])=>`<div class="kaartje"><small><b>${t}</b> · ${o}</small><div class="paar">${doek('F',s,'licht')}${doek('F',s,'donker')}</div></div>`).join('');
+  live.F=beginStaat();teken('F');
+}
+
+
+function stippen(){
+  const rij=[['Uit',''],['Aan in wit',`data-on style="--gloed:${kelvin(2700)}"`],['Aan in kleur',`data-on style="--gloed:${tint(330,80)}"`],['Hover','data-toon="hover"'],['Focus','data-toon="focus"'],['Menu open',`data-open data-on style="--gloed:${kelvin(2700)}"`],['Wacht op antwoord',`data-pending data-on style="--gloed:${kelvin(2700)}"`],['Niet bereikbaar','data-weg']];
+  document.getElementById('stippen').innerHTML=['licht','donker'].map(t=>`<div class="stipvlak" data-thema="${t}">${rij.map(([n,a])=>`<div class="stipcel"><div class="plek"><button class="hotspot" ${a} aria-label="${n}"></button></div>${n}</div>`).join('')}</div>`).join('');
+}
+/* Bevestiging nabootsen: na 2 s terug als de lamp niet antwoordt. */
+const klok={},oud={};
+function stuur(v,voor,wat,poging){
+  clearTimeout(klok[v]);live[v].fout=null;
+  if(!faal){oud[v]=null;return}
+  voor=oud[v]=oud[v]||voor;
+  klok[v]=setTimeout(()=>{oud[v]=null;const g=live[v].groep,meer=live[v].meer;live[v]={...voor,groep:g,meer,drag:null,fout:{wat,poging}};teken(v);klok[v]=setTimeout(()=>{live[v].fout=null;teken(v)},3200)},2000);
+}
+function pasGroep(s){if(s.groep){const c=s.on?lampKleur(s):null;s.groep.leden=s.groep.leden.map((l,i)=>s.groep.only==null||s.groep.only===i?c:l)}}
+
+let sleep=null;
+function zet(e){
+  const {v,vorm,soortD,cx,cy,rect}=sleep,s=live[v],dx=e.clientX-cx,dy=e.clientY-cy;
+  let a=Math.atan2(dy,dx)*180/Math.PI;if(a<0)a+=360;
+  s.on=true;s.drag=soortD;
+  if(vorm==='boog'){let b=a<90?a+360:a;if(a>=45&&a<90)b=405;if(a>=90&&a<135)b=135;s.bri=klem((b-A0)/(A1-A0)*100,1,100)}
+  else if(vorm==='halfboog'){let b=a;if(a<90)b=360;else if(a<180)b=180;s.k=KMIN(s)+(b-180)/180*(KMAX-KMIN(s));s.mode='wit'}
+  else if(vorm==='ring'){s.hue=a;s.mode='kleur'}
+  else if(vorm==='wiel'){s.hue=a;s.sat=klem((Math.hypot(dx,dy)-RS0)/(RW-RS0-8)*100,0,100);s.mode='kleur'}
+  else if(vorm==='h'){const f=klem((e.clientX-rect.left)/rect.width,0,1),min=sleep.min,max=sleep.max,val=min+f*(max-min);
+    if(soortD==='bri')s.bri=Math.max(1,val);else if(soortD==='k'){s.k=val;s.mode='wit'}else{s.hue=val;s.mode='kleur'}}
+  else if(vorm==='v'){s.bri=klem((rect.bottom-e.clientY)/rect.height*100,1,100)}
+  else if(vorm==='pad'){const m=78*.72,fx=klem(dx/m,-1,1),fy=klem(dy/m,-1,1);s.bri=klem((1-fy)/2*100,1,100);
+    if(s.caps!=='bri'){if(s.mode==='kleur')s.sat=(fx+1)/2*100;else s.k=KMIN(s)+(fx+1)/2*(KMAX-KMIN(s))}}
+  pasGroep(s);teken(v);
+}
+document.addEventListener('pointerdown',e=>{
+  const t=e.target.closest('[data-drag]');if(!t)return;const d=t.closest('[data-live]');if(!d)return;
+  const v=d.dataset.live,z=+getComputedStyle(d).zoom||1,ar=d.querySelector('.anker').getBoundingClientRect();
+  e.preventDefault();
+  sleep={v,vorm:t.dataset.vorm,soortD:t.dataset.drag,cx:ar.left,cy:ar.top,rect:t.getBoundingClientRect(),min:+t.dataset.min,max:+t.dataset.max,voor:JSON.parse(JSON.stringify(live[v])),x0:e.clientX,y0:e.clientY,bewogen:t.dataset.vorm!=='pad'};
+  if(sleep.bewogen)zet(e);
+});
+addEventListener('pointermove',e=>{if(!sleep)return;if(!sleep.bewogen){if(Math.hypot(e.clientX-sleep.x0,e.clientY-sleep.y0)<4)return;sleep.bewogen=true}zet(e)});
+addEventListener('pointerup',()=>{if(!sleep)return;const{v,voor,soortD,bewogen}=sleep;sleep=null;if(!bewogen)return;const s=live[v];
+  const poging=soortD==='bri'?s.bri:soortD==='k'?s.k:soortD==='hue'?s.hue:soortD==='wiel'?[s.hue,s.sat]:[...document.querySelector(`[data-live="${v}"] .duim[data-sleep]`)?.style.cssText.match(/-?[\d.]+(?=px)/g)?.slice(0,2).map(Number)||[0,0]];
+  s.drag=null;teken(v);stuur(v,voor,soortD,poging)});
+document.addEventListener('click',e=>{
+  const sg=e.target.closest('#soort button');if(sg){soort=sg.dataset.s;document.querySelectorAll('#soort button').forEach(b=>b.setAttribute('aria-pressed',b===sg));for(const r of RICHTINGEN){clearTimeout(klok[r.v]);live[r.v]=beginStaat();teken(r.v)}return}
+  if(e.target.closest('#faal')){faal=!faal;document.getElementById('faal').setAttribute('aria-pressed',faal);return}
+  const t=e.target.closest('[data-a]');if(!t)return;const d=t.closest('[data-live]');if(!d)return;
+  const v=d.dataset.live,s=live[v],voor=JSON.parse(JSON.stringify(s)),a=t.dataset.a,w=t.dataset.w;let wat='tik',poging=0;
+  if(a==='toggle'){s.on=!s.on}
+  else if(a==='mode'){s.mode=w;s.on=true}
+  else if(a==='pct'){s.bri=+w;s.on=true}
+  else if(a==='staal-k'){s.k=+w;s.mode='wit';s.on=true}
+  else if(a==='staal-h'){[s.hue,s.sat]=w.split(',').map(Number);s.mode='kleur';s.on=true}
+  else if(a==='meer'){s.meer=!s.meer;teken(v);return}
+  else if(a==='lid'){s.groep.only=+w;if(s.groep.caps){s.caps=s.groep.caps[+w];s.mode='wit'}teken(v);return}
+  else if(a==='alle'){s.groep.only=null;if(s.groep.caps)s.caps=RANG[Math.min(...s.groep.caps.map(c=>RANG.indexOf(c)))];teken(v);return}
+  pasGroep(s);teken(v);stuur(v,voor,wat,poging);
+});
+document.addEventListener('keydown',e=>{
+  const t=e.target.closest('[role="slider"]');if(!t||!e.key.startsWith('Arrow'))return;const d=t.closest('[data-live]');if(!d)return;
+  e.preventDefault();const v=d.dataset.live,s=live[v],voor=JSON.parse(JSON.stringify(s)),soortD=t.dataset.drag,hor=e.key==='ArrowLeft'||e.key==='ArrowRight',plus=e.key==='ArrowRight'||e.key==='ArrowUp'?1:-1;
+  s.on=true;
+  if(soortD==='bri'||(soortD==='pad'&&!hor))s.bri=klem(s.bri+plus*5,1,100);
+  else if(soortD==='k'||(soortD==='pad'&&s.mode==='wit')){s.k=klem(s.k+plus*100,KMIN(s),KMAX);s.mode='wit'}
+  else if(soortD==='pad')s.sat=klem(s.sat+plus*5,0,100);
+  else if(soortD==='wiel'){if(hor)s.hue=(s.hue+plus*10+360)%360;else s.sat=klem(s.sat+plus*5,0,100);s.mode='kleur'}
+  else{s.hue=(s.hue+plus*10+360)%360;s.mode='kleur'}
+  pasGroep(s);teken(v);d.ownerDocument.querySelector(`[data-live="${v}"] [data-drag="${soortD}"][role="slider"]`)?.focus();stuur(v,voor,soortD==='pad'?'bri':soortD,soortD==='wiel'?[s.hue,s.sat]:s.bri);
+});
+stippen();bouw();
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&live.F.meer){live.F.meer=false;teken('F')}});
+})();
+</script>
+</body></html>

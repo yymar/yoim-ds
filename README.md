@@ -30,6 +30,8 @@ const nextConfig: NextConfig = { transpilePackages: ['@yoim/ds'] }
 @import "@yoim/ds/styles/skeleton.css";
 /* Alleen in een app die de auto als studio-render toont (energ): */
 @import "@yoim/ds/styles/studio.css";
+/* Alleen in een app met een scene en het ronde menu (home): */
+@import "@yoim/ds/styles/radiaal.css";
 ```
 
 ```bash
@@ -247,6 +249,30 @@ export default async function Login(props: PageProps<'/auth/login'>) {
 - `week.ts`: de week van dit huishouden, zaterdag tot en met vrijdag. Zit hier
   en niet in een app omdat weekl.yoim.nl en de hub op yoim.nl allebei dezelfde
   week moeten tonen; twee kopieen lopen uit elkaar.
+- Het ronde menu en de stip van een scene (home.yoim), ontworpen in Claude
+  Design (`design/home.yoim/`). De CSS staat in `styles/radiaal.css` (los te
+  importeren), de meetkunde in `radial.ts`: `arcValue` en `arcAngle` (de boog,
+  met de opening onderaan: links van het midden klemt naar 1, rechts naar
+  100), `wheelColor` en `wheelPoint` (het wiel), `arcKey` en `wheelKey` (de
+  pijltoetsen), `ringAngle` (waar knop i van n staat), `tint` en `hueName`.
+  Alles staat rond 0,0: de app zet het menu in een anker zonder maat op de plek
+  van het apparaat.
+
+  | Component | Props | Wat |
+  | --- | --- | --- |
+  | `RadialMenu` (`radial-menu`) | `label`, `name`, `status`, `notice`, `link`, `center` (`on`, `icon`, `label`, `disabled`, `onToggle`), `members`, `member`, `onMember`, `onClose`, `children` | schijf van 224 px (`.glas-dik`), midden aan/uit, naamkaartje (`.glas-dun`) met staat, melding en leden; `children` is wat er op de schijf staat. Escape sluit, tenzij iets erin de toets al afhandelde (`preventDefault`) |
+  | `ArcSlider` (`arc-slider`) | `value` (1 tot 100), `onChange`, `onCommit`, `ghost`, `disabled`, `on`, `label` | de helderheidsboog, `role="slider"`, pijlen 5% per stap |
+  | `ColorWheel` (`color-wheel`) | `hue` (0 tot 360), `saturation` (0 tot 100), `onChange`, `onCommit`, `ghost`, `disabled`, `label` | tint rond, verzadiging van midden naar rand; pijlen links en rechts tint (10°), omhoog en omlaag verzadiging (5%) |
+  | `Swatch` (`swatch`) | `color`, `selected`, `label`, `onSelect`, `angle`, `disabled` | een kleurvlak in een `.radiaal-knop` op de ring |
+  | `Hotspot` (`hotspot`) | `on`, `glow`, `pending`, `unavailable`, `open`, `dim` en alles van een `<button>` | de stip op een apparaat |
+
+  Slepen rendert niet per frame: boog en wiel zetten hun stand als
+  CSS-variabele in een `requestAnimationFrame` en roepen daar ook `onChange`;
+  `onCommit` komt bij loslaten met de laatste waarde. Tijdens het slepen staat
+  `data-sleep` op de boog of het wiel en dimt de rest via `:has()` naar .28.
+  Duim en wiel bewegen met `transform`; de vulling van de boog met
+  `stroke-dasharray`, het enige wat per frame verft. Een knop "terug" in de
+  opening van de boog is een `.radiaal-knop.radiaal-terug`.
 
 ## Laden
 

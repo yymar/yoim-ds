@@ -1,0 +1,453 @@
+/*
+ * Het ronde menu en de stip van een scene (home.yoim), ontworpen in Claude
+ * Design (design/home.yoim/Lampbediening.html). Alleen plaatsing, vorm en
+ * beweging: kleur, glas en maten komen uit de tokens. De enige losse kleuren
+ * zijn die van een lamp zelf, in een staal, het wiel, een lid en de stip.
+ *
+ * Alles staat rond 0,0: de app zet het menu in een anker zonder maat op de
+ * plek van het apparaat. Tijdens het slepen zet een boog of wiel `data-sleep`
+ * op zichzelf; via :has() dimt de rest en verdwijnt het midden, zonder render.
+ */
+@layer components {
+  /* Het tapvlak is groter dan de stip: een spotje van zes centimeter is anders
+     niet te raken. */
+  .hotspot {
+    position: absolute;
+    top: -14px;
+    left: -14px;
+    display: grid;
+    width: 28px;
+    height: 28px;
+    place-items: center;
+    border-radius: var(--radius-full);
+    cursor: pointer;
+    pointer-events: auto;
+  }
+
+  .hotspot::before {
+    width: 10px;
+    height: 10px;
+    border: 1.5px solid var(--border-strong);
+    border-radius: inherit;
+    background: var(--surface-raised);
+    content: '';
+    transition:
+      scale var(--dur-fast) var(--ease),
+      opacity var(--dur-fast) var(--ease);
+  }
+
+  .hotspot[data-on]::before {
+    border-color: var(--surface-raised);
+    background: var(--gloed);
+    box-shadow: 0 0 10px 2px var(--gloed);
+  }
+
+  .hotspot:hover::before,
+  .hotspot:focus-visible::before,
+  .hotspot[data-open]::before {
+    scale: 1.5;
+  }
+
+  .hotspot[data-dim]::before,
+  .hotspot[data-weg]::before {
+    opacity: 0.35;
+  }
+
+  .hotspot[data-pending]::before {
+    animation: hotspot-puls 0.8s var(--ease) infinite alternate;
+  }
+
+  .radiaal {
+    position: absolute;
+    top: 0;
+    left: 0;
+    pointer-events: auto;
+    animation: radiaal-in var(--dur-base) var(--ease-glas);
+  }
+
+  .radiaal-schijf {
+    position: absolute;
+    top: -112px;
+    left: -112px;
+    width: 224px;
+    height: 224px;
+    border-radius: var(--radius-full);
+  }
+
+  .radiaal-midden {
+    position: absolute;
+    z-index: 3;
+    top: -30px;
+    left: -30px;
+    display: grid;
+    width: 60px;
+    height: 60px;
+    place-items: center;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-full);
+    background: var(--surface-raised);
+    color: var(--text-muted);
+    transition:
+      background var(--dur-fast) var(--ease),
+      color var(--dur-fast) var(--ease),
+      scale var(--dur-fast) var(--ease),
+      opacity var(--dur-fast) var(--ease);
+  }
+
+  button.radiaal-midden {
+    cursor: pointer;
+  }
+
+  button.radiaal-midden:active {
+    scale: var(--press-scale);
+  }
+
+  .radiaal-midden[data-on] {
+    border-color: transparent;
+    background: var(--accent);
+    color: var(--accent-fg);
+  }
+
+  /* Een knop of staal op de ring: 40 px op straal 60, hooguit acht. */
+  .radiaal-knop {
+    position: absolute;
+    z-index: 2;
+    top: -20px;
+    left: -20px;
+    display: grid;
+    width: 40px;
+    height: 40px;
+    place-items: center;
+    border-radius: var(--radius-full);
+    color: var(--text);
+    font-size: var(--text-small);
+    font-weight: var(--weight-medium);
+    cursor: pointer;
+    transform: rotate(var(--hoek)) translateX(var(--straal, 60px)) rotate(calc(var(--hoek) * -1));
+    transition:
+      background var(--dur-fast) var(--ease),
+      opacity var(--dur-fast) var(--ease);
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .radiaal-knop:hover,
+    .radiaal-lid:hover {
+      background: var(--surface-sunken);
+    }
+  }
+
+  .radiaal-knop[data-active] {
+    background: var(--accent-soft);
+    color: var(--accent);
+  }
+
+  .radiaal-knop[data-gekozen] {
+    box-shadow:
+      0 0 0 2px var(--surface-raised),
+      0 0 0 4px var(--accent);
+  }
+
+  /* "Terug" bij het kleurenwiel: in de opening van de boog, onderaan. */
+  .radiaal-terug {
+    --hoek: 90deg;
+    --straal: 96px;
+    border: 1px solid var(--border);
+    background: var(--surface-raised);
+  }
+
+  .staal {
+    width: 22px;
+    height: 22px;
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-full);
+  }
+
+  .radiaal :disabled,
+  .radiaal [data-uit] {
+    opacity: 0.4;
+    cursor: default;
+    pointer-events: none;
+  }
+
+  /* De helderheidsboog: straal 96, dikte 10, van 135° tot 405°. Het raakvlak
+     is 34 breed, de duim 24 met een raakvlak van 48. */
+  .boog,
+  .kleurwiel {
+    position: absolute;
+    top: 0;
+    left: 0;
+    touch-action: none;
+    transition: opacity var(--dur-fast) var(--ease);
+  }
+
+  .boog-vlak {
+    position: absolute;
+    top: -112px;
+    left: -112px;
+    width: 224px;
+    height: 224px;
+    overflow: visible;
+    pointer-events: none;
+  }
+
+  .boog-vlak path {
+    fill: none;
+    stroke-linecap: round;
+    stroke-width: 10px;
+  }
+
+  .boog-spoor {
+    stroke: var(--surface-sunken);
+  }
+
+  .boog-vulling {
+    stroke: var(--accent);
+    stroke-dasharray: 0 100;
+  }
+
+  .boog:not([data-aan]) .boog-vulling {
+    visibility: hidden;
+  }
+
+  .boog-vlak .boog-raak {
+    stroke: transparent;
+    stroke-width: 34px;
+    pointer-events: stroke;
+    cursor: pointer;
+  }
+
+  .radiaal-duim {
+    position: absolute;
+    z-index: 4;
+    top: -12px;
+    left: -12px;
+    width: 24px;
+    height: 24px;
+    border: 2px solid var(--text);
+    border-radius: var(--radius-full);
+    background: var(--surface-raised);
+    box-shadow: var(--glass-lift-1);
+    cursor: grab;
+    transition: scale var(--dur-fast) var(--ease);
+  }
+
+  .radiaal-duim::after {
+    position: absolute;
+    inset: -12px;
+    border-radius: var(--radius-full);
+    content: '';
+  }
+
+  .radiaal-duim i {
+    position: absolute;
+    inset: 3px;
+    border-radius: var(--radius-full);
+  }
+
+  .radiaal-duim[data-spook] {
+    z-index: 3;
+    border: 1.5px dashed var(--text-subtle);
+    background: none;
+    box-shadow: none;
+    pointer-events: none;
+  }
+
+  .boog .radiaal-duim {
+    transform: rotate(var(--hoek)) translateX(96px) rotate(calc(var(--hoek) * -1));
+  }
+
+  /* Na loslaten of terugspringen schuiven duim en vulling; tijdens het slepen
+     volgen ze de vinger per frame, zonder transitie. */
+  .boog:not([data-sleep]) .radiaal-duim {
+    transition:
+      transform var(--dur-glas) var(--ease-glas),
+      scale var(--dur-fast) var(--ease);
+  }
+
+  .boog:not([data-sleep]) .boog-vulling {
+    transition: stroke-dasharray var(--dur-glas) var(--ease-glas);
+  }
+
+  .kleurwiel:not([data-sleep]) .radiaal-duim {
+    transition:
+      translate var(--dur-glas) var(--ease-glas),
+      scale var(--dur-fast) var(--ease);
+  }
+
+  .boog[data-sleep] .radiaal-duim:not([data-spook]),
+  .kleurwiel[data-sleep] .radiaal-duim:not([data-spook]) {
+    scale: 1.25;
+    cursor: grabbing;
+  }
+
+  /* Het kleurenwiel: 164 px, op de plek van de stalen. */
+  .kleurwiel-vlak {
+    position: absolute;
+    top: -82px;
+    left: -82px;
+    width: 164px;
+    height: 164px;
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-full);
+    background:
+      radial-gradient(closest-side, #fff 36%, transparent 96%),
+      conic-gradient(
+        from 90deg,
+        hsl(0 85% 60%),
+        hsl(60 85% 58%),
+        hsl(120 60% 55%),
+        hsl(180 65% 55%),
+        hsl(240 75% 66%),
+        hsl(300 70% 62%),
+        hsl(360 85% 60%)
+      );
+    cursor: crosshair;
+    clip-path: circle(50%);
+    animation: radiaal-in var(--dur-base) var(--ease-glas);
+  }
+
+  /* De waarde tijdens het slepen, groot in het midden: 76 px, cijfers 22 px,
+     een woord 15 px. */
+  .radiaal-uitlees {
+    position: absolute;
+    z-index: 5;
+    top: -38px;
+    left: -38px;
+    display: none;
+    width: 76px;
+    height: 76px;
+    place-items: center;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-full);
+    background: var(--surface-raised);
+    font-variant-numeric: tabular-nums;
+    pointer-events: none;
+  }
+
+  [data-sleep] > .radiaal-uitlees {
+    display: grid;
+  }
+
+  .radiaal-uitlees b {
+    font-size: 22px;
+    font-weight: var(--weight-semibold);
+    letter-spacing: -0.02em;
+    line-height: 1;
+  }
+
+  .radiaal-uitlees b.woord {
+    font-size: 15px;
+    letter-spacing: 0;
+  }
+
+  .radiaal:has([data-sleep]) .radiaal-knop,
+  .radiaal:has(.boog[data-sleep]) .kleurwiel,
+  .radiaal:has(.kleurwiel[data-sleep]) .boog {
+    opacity: 0.28;
+  }
+
+  .radiaal:has([data-sleep]) .radiaal-midden {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .radiaal-naam {
+    position: absolute;
+    top: 122px;
+    left: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0.4rem 1rem;
+    border-radius: var(--radius-lg);
+    color: var(--text-muted);
+    font-size: var(--text-small);
+    font-variant-numeric: tabular-nums;
+    line-height: var(--lh-small);
+    white-space: nowrap;
+    translate: -50% 0;
+  }
+
+  .radiaal-naam p {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .radiaal-naam b {
+    color: var(--text);
+    font-weight: var(--weight-semibold);
+  }
+
+  .radiaal-naam .radiaal-melding {
+    flex-direction: row;
+    gap: 6px;
+    margin-top: 2px;
+    color: var(--text);
+  }
+
+  .radiaal-melding::before {
+    width: 7px;
+    height: 7px;
+    border-radius: var(--radius-full);
+    background: var(--botergoud);
+    content: '';
+  }
+
+  /* Eén lid uit een groep apart: een rijtje onder de naam, 28 px hoog, met een
+     streepje in de kleur van het lid als het brandt. */
+  .radiaal-leden {
+    display: flex;
+    gap: 4px;
+    margin: 0.35rem 0 0.15rem;
+  }
+
+  .radiaal-lid {
+    min-width: 1.75rem;
+    height: 1.75rem;
+    padding: 0 0.5rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-capsule);
+    color: var(--text-muted);
+    font-size: var(--text-caption);
+    font-weight: var(--weight-medium);
+    cursor: pointer;
+    transition: background var(--dur-fast) var(--ease);
+  }
+
+  .radiaal-lid[data-on] {
+    box-shadow: inset 0 -2px 0 var(--gloed);
+  }
+
+  .radiaal-lid[aria-pressed='true'] {
+    border-color: transparent;
+    background: var(--accent-soft);
+    color: var(--accent);
+  }
+
+  .radiaal-link {
+    color: var(--accent);
+  }
+}
+
+@keyframes hotspot-puls {
+  to {
+    scale: 1.7;
+    opacity: 0.55;
+  }
+}
+
+@keyframes radiaal-in {
+  from {
+    opacity: 0;
+    scale: 0.85;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hotspot[data-pending]::before {
+    animation: none;
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+}
