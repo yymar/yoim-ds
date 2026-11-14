@@ -28,3 +28,11 @@ staan ze dus zonder tokens.
 
 De CSS staat in `styles/radiaal.css`, de meetkunde (boog, wiel, ring) met tests in
 `radial.ts`. Waar de tabellen in `Lampbediening.html` en de code verschillen, wint de tabel.
+
+## Waar de code bewust afwijkt
+
+- **De kleine keuzes** (de leden van een groep, `PillRow`): in de HTML losse knopjes met een
+  rand en een streepje in de kleur van het lid. Sinds 0.10.2 één baan zoals
+  `SegmentedChoice`, met een stip per lid en het label van een `PillRow` erboven (Yoran,
+  2026-11-14: de losse knopjes vond hij niet mooi). Neem dit mee bij een volgende ronde in
+  Claude Design.

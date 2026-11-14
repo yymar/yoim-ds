@@ -1,9 +1,9 @@
 export type PillOption<T extends string> = { value: T; label: string }
 
 /**
- * Een kleine keuze in het naamkaartje van het ronde menu: een label met een rij
- * knopjes van 28 px (`.radiaal-lid`), zoals de stand van een ventilator. Eén
- * keuze tegelijk.
+ * Een kleine keuze in het naamkaartje van het ronde menu, zoals de stand van
+ * een ventilator: het label erboven, de keuzes in één baan (`.radiaal-lid`,
+ * 28 px hoog). Eén keuze tegelijk.
  */
 export function PillRow<T extends string>({
   label,
@@ -20,19 +20,21 @@ export function PillRow<T extends string>({
 }) {
   return (
     <div className="pilrij" role="group" aria-label={label}>
-      <span>{label}</span>
-      {options.map((o) => (
-        <button
-          key={o.value}
-          type="button"
-          className="radiaal-lid"
-          aria-pressed={o.value === value}
-          disabled={disabled}
-          onClick={() => onChange(o.value)}
-        >
-          {o.label}
-        </button>
-      ))}
+      <span aria-hidden="true">{label}</span>
+      <div className="pilrij-baan">
+        {options.map((o) => (
+          <button
+            key={o.value}
+            type="button"
+            className="radiaal-lid"
+            aria-pressed={o.value === value}
+            disabled={disabled}
+            onClick={() => onChange(o.value)}
+          >
+            {o.label}
+          </button>
+        ))}
+      </div>
     </div>
   )
 }

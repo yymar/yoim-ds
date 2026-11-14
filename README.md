@@ -265,7 +265,7 @@ export default async function Login(props: PageProps<'/auth/login'>) {
   | `ColorWheel` (`color-wheel`) | `hue` (0 tot 360), `saturation` (0 tot 100), `onChange`, `onCommit`, `ghost`, `disabled`, `label` | tint rond, verzadiging van midden naar rand; pijlen links en rechts tint (10°), omhoog en omlaag verzadiging (5%) |
   | `Swatch` (`swatch`) | `color`, `selected`, `label`, `onSelect`, `angle`, `disabled` | een kleurvlak in een `.radiaal-knop` op de ring |
   | `NowPlaying` (`now-playing`) | `title`, `subtitle`, `cover`, `icon` | wat er speelt, in `details`: hoes van 40 px, titel en ondertitel met een ellips |
-  | `PillRow` (`pill-row`) | `label`, `options`, `value`, `onChange`, `disabled` | een kleine keuze in `details`: een label met knopjes van 28 px (`.radiaal-lid`) |
+  | `PillRow` (`pill-row`) | `label`, `options`, `value`, `onChange`, `disabled` | een kleine keuze in `details`: het label erboven, de keuzes in één baan (`.radiaal-lid`, 28 px hoog) |
   | `PeekCard` (`peek-card`) | `title`, `value`, `line`, `alert`, `unavailable`, `onClose`, `children` | een kaartje (`.glas-dik`) 22 px onder de stip voor wat je alleen bekijkt; als kinderen een `Bar` en een link |
   | `Hotspot` (`hotspot`) | `on`, `glow`, `pending`, `unavailable`, `open`, `dim` en alles van een `<button>` | de stip op een apparaat |
 

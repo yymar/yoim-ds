@@ -9,7 +9,7 @@ export type RadialMember = {
   label: string
   name: string
   on?: boolean
-  /** De kleur van het lid als het aan is, voor het streepje onder het knopje. */
+  /** De kleur van het lid als het aan is, voor de stip in het knopje. */
   glow?: string
 }
 
@@ -45,7 +45,8 @@ export type RadialLayer = {
  * op de ring. Met `layer` wisselen de knoppen en eventueel het midden voor een
  * tweede laag, met "terug" in de opening van de boog. `details` komt in het
  * naamkaartje onder de staat: wat er speelt, een kleine keuze. Een groep heeft
- * `members`: een rij knopjes om één lid apart te sturen, "alle" brengt je terug.
+ * `members`: een baan met knopjes om één lid apart te sturen, elk met een stip
+ * in zijn kleur als het aan is; "alle" brengt je terug.
  * Escape gaat eerst terug uit de tweede laag en sluit daarna het menu.
  */
 export function RadialMenu({
@@ -180,6 +181,7 @@ export function RadialMenu({
                 aria-label={`Alleen ${m.name}`}
                 onClick={() => onMember?.(m.id)}
               >
+                <i className="radiaal-lid-stip" aria-hidden="true" />
                 {m.label}
               </button>
             ))}

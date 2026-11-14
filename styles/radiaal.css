@@ -140,9 +140,12 @@
   }
 
   @media (hover: hover) and (pointer: fine) {
-    .radiaal-knop:hover,
-    .radiaal-lid:hover {
+    .radiaal-knop:hover {
       background: var(--surface-sunken);
+    }
+
+    .radiaal-lid:hover {
+      color: var(--text);
     }
   }
 
@@ -456,35 +459,81 @@
     content: '';
   }
 
-  /* Eén lid uit een groep apart: een rijtje onder de naam, 28 px hoog, met een
-     streepje in de kleur van het lid als het brandt. */
-  .radiaal-leden {
+  /* Een kleine keuze in het naamkaartje: de leden van een groep, of een stand
+     zoals die van de ventilator. Eén baan met de keuzes erin, zoals
+     SegmentedChoice: de baan is een tint van de tekst, de gekozen keuze een
+     dekkend plaatje. */
+  .radiaal-leden,
+  .pilrij-baan {
     display: flex;
-    gap: 4px;
-    margin: 0.35rem 0 0.15rem;
+    flex-wrap: wrap;
+    gap: 2px;
+    padding: 3px;
+    border-radius: var(--radius-capsule);
+    background: color-mix(in oklab, var(--text) 7%, transparent);
   }
 
+  .radiaal-leden {
+    margin: 0.55rem 0 0.3rem;
+  }
+
+  /* 28 hoog; de ::before haalt het tikdoel naar 40 zonder dat het groter oogt.
+     Gekozen of niet, de letters zijn even vet: anders verspringt de baan. */
   .radiaal-lid {
+    position: relative;
+    display: flex;
     min-width: 1.75rem;
     height: 1.75rem;
-    padding: 0 0.5rem;
-    border: 1px solid var(--border);
+    flex: 1 1 auto;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 0 0.625rem;
     border-radius: var(--radius-capsule);
     color: var(--text-muted);
     font-size: var(--text-caption);
     font-weight: var(--weight-medium);
+    white-space: nowrap;
     cursor: pointer;
-    transition: background var(--dur-fast) var(--ease);
+    transition:
+      background var(--dur-fast) var(--ease),
+      color var(--dur-fast) var(--ease);
   }
 
-  .radiaal-lid[data-on] {
-    box-shadow: inset 0 -2px 0 var(--gloed);
+  .radiaal-lid::before {
+    position: absolute;
+    inset: -6px 0;
+    content: '';
   }
 
   .radiaal-lid[aria-pressed='true'] {
+    background: var(--segment-plaat);
+    box-shadow: inset 0 0 0 1px var(--border-strong);
+    color: var(--text);
+  }
+
+  /* De stip van een lid, zoals die in de scene: hol als het uit is, in zijn
+     eigen kleur als het brandt. */
+  .radiaal-lid-stip {
+    width: 7px;
+    height: 7px;
+    flex: none;
+    border: 1.5px solid var(--border-strong);
+    border-radius: var(--radius-full);
+  }
+
+  .radiaal-lid[data-on] .radiaal-lid-stip {
     border-color: transparent;
-    background: var(--accent-soft);
-    color: var(--accent);
+    background: var(--gloed);
+    box-shadow: 0 0 6px var(--gloed);
+  }
+
+  /* Hoog contrast tekent geen vulling; dan wijst een rand de keuze aan. */
+  @media (forced-colors: active) {
+    .radiaal-lid[aria-pressed='true'] {
+      outline: 2px solid;
+      outline-offset: -2px;
+    }
   }
 
   .radiaal-link {
@@ -533,21 +582,24 @@
     white-space: nowrap;
   }
 
-  /* Een kleine keuze: een label met knopjes van 28 px. */
+  /* Een kleine keuze met zijn label erboven. De baan is zo breed als het
+     kaartje: twee keuzes onder elkaar beginnen en eindigen op dezelfde plek. */
   .pilrij {
     display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: center;
-    gap: 4px;
-    margin-top: 0.4rem;
+    flex-direction: column;
+    align-self: stretch;
+    gap: 3px;
+    margin-top: 0.5rem;
+  }
+
+  .pilrij:last-child {
+    margin-bottom: 0.3rem;
   }
 
   .pilrij > span {
-    min-width: 3.6rem;
-    color: var(--text-muted);
+    color: var(--text-subtle);
     font-size: var(--text-caption);
-    text-align: left;
+    text-align: center;
   }
 
   /* Een kaartje onder de stip voor wat je alleen bekijkt: minstens 200 breed,

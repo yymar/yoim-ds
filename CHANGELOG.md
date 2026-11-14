@@ -1,5 +1,20 @@
 # Changelog
 
+## 0.10.2
+
+- De kleine keuzes in het ronde menu zien eruit zoals `SegmentedChoice`: één
+  baan met de keuzes erin, de gekozen keuze een dekkend plaatje. Dat geldt
+  voor de leden van een groep (`.radiaal-leden`) en voor `PillRow`. De losse
+  knopjes met een rand en een gekleurd streepje onderlangs zijn weg.
+- Een lid toont zijn stand als stip in het knopje, zoals de stip in de scene:
+  hol als het uit is, in zijn eigen kleur als het brandt.
+- `PillRow` zet zijn label boven de baan, en de baan is zo breed als het
+  naamkaartje. Twee keuzes onder elkaar beginnen en eindigen zo op dezelfde
+  plek, en het kaartje wordt smaller.
+- Het tikdoel van een keuze is 40 hoog; hij oogt nog 28.
+
+Een app hoeft niets aan te passen: de opmaak zit in de componenten.
+
 ## 0.10.1
 
 - Het ronde menu op de telefoon. De stip heeft op een aanraakscherm
